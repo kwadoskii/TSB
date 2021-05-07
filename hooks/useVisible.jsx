@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-function useVisible(initialIsVisible) {
+function useVisible(initialIsVisible = false) {
   const [isVisible, setIsVisible] = useState(initialIsVisible);
   const ref = useRef(null);
 

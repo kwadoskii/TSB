@@ -1,12 +1,11 @@
 import React from "react";
-
 import Navbar from "../components/Navbar";
 
-export default function Write() {
+export default function Dashboard() {
   return (
     <div>
       <Navbar />
-      Write
+      Dashboard
     </div>
   );
 }
