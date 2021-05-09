@@ -1,7 +1,7 @@
 {
   "navs": [
     { "title": "Dashboard", "href": "/dashboard" },
-    { "title": "Favourites", "href": "/favourites" },
+    { "title": "Saved", "href": "/saved" },
     { "title": "Settings", "href": "/settings" },
     { "title": "Sign Out", "href": "/signout" }
   ]

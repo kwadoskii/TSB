@@ -32,13 +32,10 @@ const NavLink = styled.a`
   padding: 6px 6px;
   margin: 0 2px;
   border: 3px solid transparent;
-  overflow: hidden;
   :hover {
     color: ${color.primary};
     border-radius: 5px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
     background: rgb(59 73 223 / 10%);
-    border-bottom: 3px solid ${color.primary};
+    /* border-bottom: 3px solid ${color.primary}; used for active*/
   }
 `;
