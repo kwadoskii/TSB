@@ -9,7 +9,7 @@ const imageSize = 40;
 const imageMargin = imageSize / 4;
 
 export default function ArticleCard() {
-  const cardImage = true;
+  const cardImage = false;
 
   const commentHandler = () => console.log("handler clicked");
   const likeHandler = () => console.log("handler clicked");
@@ -33,38 +33,40 @@ export default function ArticleCard() {
       )}
 
       <CardContainer>
-        <Link href="/post-url" passHref>
-          <a>
-            <ArthurHolder>
-              <Link href="/testuser" passHref>
-                <a>
-                  <Image
-                    src={
-                      "https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
-                    }
-                    alt="profile of user"
-                    width={imageSize}
-                    height={imageSize}
-                  />
-                </a>
-              </Link>
-
-              <ArthurDetails>
+        <div>
+          <Link href="/post-url" passHref>
+            <a>
+              <ArthurHolder>
                 <Link href="/testuser" passHref>
                   <a>
-                    <p>Test Arthur</p>
+                    <Image
+                      src={
+                        "https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                      }
+                      alt="profile of user"
+                      width={imageSize}
+                      height={imageSize}
+                    />
                   </a>
                 </Link>
 
-                <Link href="/post-url" passHref>
-                  <a>
-                    <span>May 6 (3 hours ago)</span>
-                  </a>
-                </Link>
-              </ArthurDetails>
-            </ArthurHolder>
-          </a>
-        </Link>
+                <ArthurDetails>
+                  <Link href="/testuser" passHref>
+                    <a>
+                      <p>Test Arthur</p>
+                    </a>
+                  </Link>
+
+                  <Link href="/post-url" passHref>
+                    <a>
+                      <span>May 6 (3 hours ago)</span>
+                    </a>
+                  </Link>
+                </ArthurDetails>
+              </ArthurHolder>
+            </a>
+          </Link>
+        </div>
 
         <Contents>
           <Link href="/post-url" passHref>

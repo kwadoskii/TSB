@@ -40,7 +40,9 @@ const HeaderContainer = styled.div`
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 70%;
+  min-width: 300px;
+  margin: 0 auto;
 `;
 
 const SearchResults = styled.div`
@@ -48,7 +50,7 @@ const SearchResults = styled.div`
   display: flex;
   flex-flow: column;
   align-items: center;
-  width: 80%;
+  width: 70%;
   min-width: 300px;
   margin: 0 auto;
 `;
