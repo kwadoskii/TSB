@@ -4,5 +4,9 @@
     { "title": "Saved", "href": "/saved" },
     { "title": "Settings", "href": "/settings" },
     { "title": "Sign Out", "href": "/signout" }
-  ]
+  ],
+  "appName": {
+    "long": "The Story Board",
+    "short": "TSB"
+  }
 }
