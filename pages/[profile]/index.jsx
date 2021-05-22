@@ -3,66 +3,71 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
-import Navbar from "../components/Navbar";
-import Title from "../components/Title";
-import { Button } from "../components/Navbar";
-import ArticleCard from "../components/ArticleCard";
-import RecentComments from "../components/RecentComments";
+import Navbar from "../../components/Navbar";
+import Title from "../../components/Title";
+import { Button } from "../../components/Navbar";
+import ArticleCard from "../../components/ArticleCard";
+import RecentComments from "../../components/RecentComments";
 
 export default function profile() {
+  const router = useRouter();
   const {
     query: { profile },
-  } = useRouter();
+  } = router;
+
+  const gotoSettings = (e) => {
+    e.preventDefault();
+
+    router.push("/settings");
+  };
 
   return (
     <>
       <Title title={"Profile"} />
       <Navbar />
       <Container>
-        <div>
-          <ProfileHolder>
-            <ProfileCard>
-              <ProfileHeader>
-                <img
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-                  alt=""
-                  width={"124px"}
-                  height={"124px"}
-                />
+        <ProfileHolder>
+          <ProfileCard>
+            <ProfileHeader>
+              <img
+                src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
+                alt=""
+                width={"124px"}
+                height={"124px"}
+              />
 
-                <Button>Edit Profile</Button>
-              </ProfileHeader>
+              <Button onClick={gotoSettings}>Edit Profile</Button>
+            </ProfileHeader>
 
-              <ProfileSection>
-                <h2>Austin Ofor ({profile})</h2>
+            <ProfileSection>
+              <h2>Austin Ofor ({profile})</h2>
 
-                <p>
-                  I'm a Software Engineer based in Lagos, Nigeria. I have a passion for
-                  web design and love to create applications.
-                </p>
+              <p>
+                I'm a Software Engineer based in Lagos, Nigeria. I have a passion for web
+                design and love to create applications.
+              </p>
 
-                <Icons>
-                  <div>
-                    <MapPin size={20} />
-                    <span>Ikeja, Lagos</span>
-                  </div>
-
-                  <div>
-                    <Gift size={20} />
-                    <span>Joined on Sep 23, 2020</span>
-                  </div>
-                </Icons>
-              </ProfileSection>
-
-              <ProfileFooter>
+              <Icons>
                 <div>
-                  <h5>Work</h5>
-                  <p>Software Engineer</p>
+                  <MapPin size={20} />
+                  <span>Ikeja, Lagos</span>
                 </div>
-              </ProfileFooter>
-            </ProfileCard>
-          </ProfileHolder>
-        </div>
+
+                <div>
+                  <Gift size={20} />
+                  <span>Joined on Sep 23, 2020</span>
+                </div>
+              </Icons>
+            </ProfileSection>
+
+            <ProfileFooter>
+              <div>
+                <h5>Work</h5>
+                <p>Software Engineer</p>
+              </div>
+            </ProfileFooter>
+          </ProfileCard>
+        </ProfileHolder>
 
         <DetailsRegion>
           <SideInfo>
@@ -81,7 +86,8 @@ export default function profile() {
           </SideInfo>
 
           <Activities>
-            <RecentComments />
+            <RecentComments profileUrl={profile} />
+            <ArticleCard />
             <ArticleCard />
           </Activities>
         </DetailsRegion>
@@ -99,18 +105,22 @@ const Container = styled.div`
 
 const ProfileHolder = styled.div`
   background: linear-gradient(180deg, rgb(40, 3, 49) 8em, transparent 8em);
+  width: 100%;
 `;
 
 const ProfileCard = styled.div`
   padding-top: 1.5em;
   display: flex;
+  width: 98%;
+  max-width: 992px;
+  margin: 0 auto;
   flex-flow: column;
   align-items: center;
 `;
 
 const ProfileHeader = styled.div`
   margin-top: 3em;
-  width: 75%;
+  width: 100%;
   min-width: 320px;
   border-radius: 5px 5px 0 0;
   box-shadow: 0 0 0 1px #08090a1a;
@@ -135,7 +145,7 @@ const ProfileHeader = styled.div`
 
 const ProfileSection = styled.div`
   margin-top: -1.5em;
-  width: 75%;
+  width: 100%;
   min-width: 320px;
   box-shadow: -1px 0 0 0 #08090a1a, 1px 0 0 0 #08090a1a, 0 1px 0 0 #08090a1a;
   background: white;
@@ -158,7 +168,7 @@ const ProfileSection = styled.div`
 const Icons = styled.div`
   color: #64707d;
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
   margin: 1em 0;
@@ -166,6 +176,7 @@ const Icons = styled.div`
   div {
     margin: 0 1em;
     display: flex;
+    min-width: fit-content;
     align-items: center;
 
     span {
@@ -178,7 +189,7 @@ const Icons = styled.div`
 const ProfileFooter = styled.div`
   background: white;
   text-align: center;
-  width: 75%;
+  width: 100%;
   min-width: 320px;
   box-shadow: -1px 0 0 0 #08090a1a, 1px 0 0 0 #08090a1a, 0 1px 0 0 #08090a1a,
     0 -1px 0 0 #08090a1a;
@@ -201,8 +212,10 @@ const ProfileFooter = styled.div`
 `;
 
 const DetailsRegion = styled.div`
-  width: 75%;
-  min-width: 320px;
+  /* width: 75%;
+  min-width: 320px; */
+  width: 98%;
+  max-width: 992px;
   margin: 1em auto;
   display: flex;
   flex-flow: row wrap;
@@ -211,7 +224,8 @@ const DetailsRegion = styled.div`
 `;
 
 const SideInfo = styled.div`
-  width: 30%;
+  /* width: 30%; */
+  min-width: fit-content;
   display: flex;
   flex: 1;
   flex-flow: column;

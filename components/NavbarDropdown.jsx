@@ -10,7 +10,7 @@ export default function NavbarDropdown() {
   return (
     <Ul>
       <Li>
-        <Link href="/profile" passHref>
+        <Link href="/kwadoskii" passHref>
           <NavLink style={{ fontWeight: "500" }}>
             Austin Ofor
             <Username>@kwadoskii</Username>

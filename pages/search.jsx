@@ -4,10 +4,12 @@ import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Nav from "../components/Nav";
 import ArticleCard from "../components/ArticleCard";
+import Title from "../components/Title";
 
 export default function Search() {
   return (
     <>
+      <Title title="Search" />
       <Navbar />
       <Container>
         <HeaderContainer>

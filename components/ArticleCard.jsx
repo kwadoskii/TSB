@@ -16,7 +16,7 @@ export default function ArticleCard({ hasImage = false }) {
   return (
     <Container>
       {hasImage && (
-        <Link href="/post-url" passHref>
+        <Link href="/kwadoskii/post-url" passHref>
           <a>
             <ImageBanner
               style={{
@@ -32,10 +32,10 @@ export default function ArticleCard({ hasImage = false }) {
 
       <CardContainer>
         <div>
-          <Link href="/post-url" passHref>
+          <Link href="/kwadoskii/post-url" passHref>
             <a>
               <ArthurHolder>
-                <Link href="/testuser" passHref>
+                <Link href="/kwadoskii" passHref>
                   <a>
                     <Image
                       src={
@@ -49,13 +49,13 @@ export default function ArticleCard({ hasImage = false }) {
                 </Link>
 
                 <ArthurDetails>
-                  <Link href="/testuser" passHref>
+                  <Link href="/kwadoskii" passHref>
                     <a>
                       <p>Test Arthur</p>
                     </a>
                   </Link>
 
-                  <Link href="/post-url" passHref>
+                  <Link href="/kwadoskii/post-url" passHref>
                     <a>
                       <span>May 6 (3 hours ago)</span>
                     </a>
@@ -67,7 +67,7 @@ export default function ArticleCard({ hasImage = false }) {
         </div>
 
         <Contents>
-          <Link href="/post-url" passHref>
+          <Link href="/kwadoskii/post-url" passHref>
             <a>
               <Title>
                 {/* The Ultimate Web Developer Resources List 🔥Awesome 200+ Resources */}
@@ -242,6 +242,8 @@ const Reactions = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  min-width: fit-content;
+  font-size: 0.9em;
   :hover {
     background: rgb(0 0 0 / 4%);
   }

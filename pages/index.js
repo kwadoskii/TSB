@@ -2,14 +2,12 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
 import Navbar from "../components/Navbar";
+import Title from "../components/Title";
 
 export default function Home() {
   return (
     <div>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Title title="Home" />
 
       <Navbar />
 
