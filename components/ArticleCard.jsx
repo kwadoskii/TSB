@@ -8,16 +8,14 @@ import color from "../constants/color";
 const imageSize = 40;
 const imageMargin = imageSize / 4;
 
-export default function ArticleCard() {
-  const cardImage = false;
-
+export default function ArticleCard({ hasImage = false }) {
   const commentHandler = () => console.log("handler clicked");
   const likeHandler = () => console.log("handler clicked");
   const saveHandler = () => console.log("handler clicked");
 
   return (
     <Container>
-      {cardImage && (
+      {hasImage && (
         <Link href="/post-url" passHref>
           <a>
             <ImageBanner
@@ -126,6 +124,7 @@ const Container = styled.div`
   border-radius: 5px;
   overflow: hidden;
   width: 100%;
+  box-shadow: 0 -1px 0 0 rgb(8 9 10 / 10%), 0 -1px 0 0 rgb(8 9 10 / 10%);
 `;
 
 const ImageBanner = styled.div``;

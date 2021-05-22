@@ -38,7 +38,9 @@ export default function Navbar() {
           <Avatar
             onClick={handleShowHideNavMenu}
             alt="user avatar"
-            src={"/vercel.svg"}
+            src={
+              "https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
+            }
             height={30}
             width={30}
           ></Avatar>
@@ -115,7 +117,7 @@ const ActionHolder = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   border: none;
   padding: 0.8em;
   background-color: ${color.primary};
