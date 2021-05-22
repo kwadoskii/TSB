@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import NavbarDropdown from "./NavbarDropdown";
 import useVisible from "../hooks/useVisible";
@@ -8,6 +9,8 @@ import color from "../constants/color";
 
 export default function Navbar() {
   const { isVisible, ref, setIsVisible } = useVisible();
+  const [searchValue, setSearchValue] = useState("");
+  const router = useRouter();
 
   console.log(isVisible);
   const handleShowHideNavMenu = () => {
@@ -19,12 +22,33 @@ export default function Navbar() {
     setIsVisible(!isVisible);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    router.push({ pathname: "/search", query: { q: searchValue } });
+  };
+
   return (
     <Container>
       <LogoHolder>
-        <Logo>TSB</Logo>
+        <Link href="/">
+          <a>
+            <Logo>TSB</Logo>
+          </a>
+        </Link>
         <SeacrhContainer>
-          <Input placeholder="Search" />
+          <form>
+            <Input
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Search"
+              value={searchValue}
+            />
+            <button
+              type="submit"
+              onClick={handleSearch}
+              style={{ display: "none" }}
+            ></button>
+          </form>
         </SeacrhContainer>
       </LogoHolder>
 
@@ -77,6 +101,8 @@ const LogoHolder = styled.div`
 `;
 
 const Logo = styled.div`
+  cursor: pointer;
+  user-select: none;
   background: ${color.black};
   padding: 5px;
   border-radius: 2px;
@@ -91,6 +117,7 @@ const SeacrhContainer = styled.div`
 `;
 
 const Input = styled.input`
+  outline: none;
   border: 1px solid #b5bdc4;
   padding: 0.7em 0.85em;
   background-color: #f9fafa;

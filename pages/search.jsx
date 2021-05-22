@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import Navbar from "../components/Navbar";
 import Nav from "../components/Nav";
@@ -7,13 +8,17 @@ import ArticleCard from "../components/ArticleCard";
 import Title from "../components/Title";
 
 export default function Search() {
+  const {
+    query: { q },
+  } = useRouter();
+
   return (
     <>
       <Title title="Search" />
       <Navbar />
       <Container>
         <HeaderContainer>
-          <h2>Search results</h2>
+          <h2>Search results ({q})</h2>
           <Nav />
         </HeaderContainer>
 
