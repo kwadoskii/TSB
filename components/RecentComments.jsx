@@ -14,7 +14,7 @@ export default function RecentComments({ profileUrl }) {
       </Header>
 
       {comments.map((c) => (
-        <ProfileComment profileUrl={profileUrl} />
+        <ProfileComment key={c} profileUrl={profileUrl} />
       ))}
 
       <Link passHref href={`${profileUrl}/comments`}>

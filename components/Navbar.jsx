@@ -12,7 +12,6 @@ export default function Navbar() {
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
-  console.log(isVisible);
   const handleShowHideNavMenu = () => {
     // if (isVisible) return setIsVisible(false);
 

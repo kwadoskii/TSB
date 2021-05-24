@@ -1,7 +1,37 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
+import NProgress from "nprogress";
+import Router from "next/router";
+
+import Title from "../components/Title";
+
+Router.onRouteChangeStart = (url) => {
+  NProgress.start();
+};
+
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  NProgress.configure({
+    parent: "#__next",
+    showSpinner: false,
+    template: `<div class="bar" style="background: tomato;" role="bar"><div class="peg" style="box-shadow: 0 0 10px tomato, 0 0 5px tomato;"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
+  });
+
+  return (
+    <>
+      <Title>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css"
+          integrity="sha512-DanfxWBasQtq+RtkNAEDTdX4Q6BPCJQ/kexi/RftcP0BcA4NIJPSi7i31Vl+Yl5OCfgZkdJmCqz+byTOIIRboQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        />
+      </Title>
+      <Component {...pageProps} />
+    </>
+  );
 }
 
-export default MyApp
+export default MyApp;
