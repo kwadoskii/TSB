@@ -31,7 +31,7 @@ export default function profile() {
             <ProfileHeader>
               <img
                 src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-                alt=""
+                alt="user avatar"
                 width={"124px"}
                 height={"124px"}
               />
