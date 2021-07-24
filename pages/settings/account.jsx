@@ -71,36 +71,28 @@ export default function Settings() {
             </Link>
           </NavContainer>
           <SettingContainer>
-            <Card header="User">
+            <Card header="Change Password">
               <div>
                 <form action="">
-                  <Input hasLabel placeholder="John Doe" name="Name" />
-                  <Input
-                    hasLabel
-                    placeholder="johndoe@example.com"
-                    type="email"
-                    name="Email"
-                  />
-                  <Input
-                    type="checkbox"
-                    name="showEmailOnProfile"
-                    checkboxText="Display email on profile"
-                  />
-                  <Input hasLabel placeholder="kwadoskii" name="Username" />
-                  <Input type="file" name="Profile image" hasLabel />
+                  <Input hasLabel type="password" name="Current password" />
+                  <Input hasLabel type="password" name="New password" />
+                  <Input hasLabel type="password" name="Confirm new password" />
+                  <Button>Change password</Button>
                 </form>
               </div>
             </Card>
 
-            <Card header="Basic">
-              <Input hasLabel placeholder="https://example.com" name="Website URL" />
+            <Card header="Export content">
+              <span>
+                You can request an export of all your content. Currently we only support
+                the export of your posts and comments. They will be emailed to your inbox.
+              </span>
               <Input
                 type="checkbox"
-                name="showEmailOnProfileEmail"
-                checkboxText="Display website on profile"
+                name="exportContent"
+                checkboxText="Request an export of your content"
               />
-              <Input hasLabel placeholder="Lagos, Nigeria" name="Location" />
-              <Input hasLabel placeholder="A short info about you" name="Bio" />
+              <Button>Submit Data Request</Button>
             </Card>
 
             <Card header="Work">
@@ -176,6 +168,6 @@ const NavContainer = styled.nav`
 
 const SettingContainer = styled.div`
   flex: 4;
-  /* width: 90%; */
+  width: 90%;
   min-width: fit-content;
 `;

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import styled from "styled-components";
 import Card from "../../components/Card";
 
@@ -8,7 +7,7 @@ import Title from "../../components/Title";
 import color from "../../constants/color";
 import Input from "../../components/Input";
 
-export default function Settings() {
+export default function Profile() {
   return (
     <>
       <Title title="Settings" />
@@ -176,6 +175,5 @@ const NavContainer = styled.nav`
 
 const SettingContainer = styled.div`
   flex: 4;
-  /* width: 90%; */
   min-width: fit-content;
 `;
