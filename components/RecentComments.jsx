@@ -42,9 +42,14 @@ const Header = styled.div`
 `;
 
 const ViewAllCommentsLink = styled.a`
+  display: inline-block;
   p {
     padding: 1em;
     margin: 0;
     color: dodgerblue;
+
+    :hover {
+      text-decoration: underline;
+    }
   }
 `;

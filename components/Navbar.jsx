@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import NavbarDropdown from "./NavbarDropdown";
 import useVisible from "../hooks/useVisible";
 import color from "../constants/color";
+import Input from "../components/Input";
 
 export default function Navbar() {
   const { isVisible, ref, setIsVisible } = useVisible();
@@ -14,8 +15,6 @@ export default function Navbar() {
 
   const handleShowHideNavMenu = () => {
     // if (isVisible) return setIsVisible(false);
-
-    console.log("object");
     setIsVisible(false);
 
     setIsVisible(!isVisible);
@@ -39,7 +38,7 @@ export default function Navbar() {
           <form>
             <Input
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search"
+              placeholder="Search..."
               value={searchValue}
             />
             <button
@@ -115,22 +114,6 @@ const SeacrhContainer = styled.div`
   flex: 1;
 `;
 
-const Input = styled.input`
-  outline: none;
-  border: 1px solid #b5bdc4;
-  padding: 0.7em 0.85em;
-  background-color: #f9fafa;
-  border-radius: 5px;
-  transition: all 2ms;
-  font-size: 14px;
-  width: 100%;
-  :focus {
-    background-color: ${color.white};
-    border-color: ${color.primary};
-    box-shadow: 1px 1px 0 ${color.primary};
-  }
-`;
-
 const ActionContainer = styled.div`
   display: flex;
   flex: 1;
@@ -152,6 +135,7 @@ export const Button = styled.button`
   border-radius: 5px;
   margin-right: 10px;
   cursor: pointer;
+  width: ${(props) => (props.fullWidth ? "100%" : "")};
   :hover {
     background-color: ${color.darkPrimary};
   }
