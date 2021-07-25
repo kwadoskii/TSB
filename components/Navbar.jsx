@@ -129,16 +129,17 @@ const ActionHolder = styled.div`
 
 export const Button = styled.button`
   border: none;
-  padding: 0.8em;
-  background-color: ${color.primary};
-  color: ${color.white};
-  font-weight: 600;
+  padding: 0.85em;
+  background-color: ${({ color: textColor }) => textColor || color.primary};
+  color: ${color.offWhite};
+  font-weight: 500;
+  font-size: 0.9em;
   border-radius: 5px;
   margin-right: 10px;
   cursor: pointer;
   width: ${(props) => (props.fullWidth ? "100%" : "")};
   :hover {
-    background-color: ${color.darkPrimary};
+    background-color: ${({ hoverColor }) => hoverColor || color.darkPrimary};
   }
 `;
 

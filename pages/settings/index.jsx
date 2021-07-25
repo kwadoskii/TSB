@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Card from "../../components/Card";
 
 import Navbar, { Button } from "../../components/Navbar";
@@ -26,7 +26,7 @@ export default function Settings() {
         <SectionHolder>
           <NavContainer>
             <Link href="/settings/profile">
-              <a>
+              <NavLink active>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -47,10 +47,11 @@ export default function Settings() {
                   ></path>
                 </svg>
                 <span> Profile </span>
-              </a>
+              </NavLink>
             </Link>
+
             <Link href="/settings/account" passHref>
-              <a>
+              <NavLink>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -67,7 +68,7 @@ export default function Settings() {
                   ></path>
                 </svg>
                 <span>Account</span>
-              </a>
+              </NavLink>
             </Link>
           </NavContainer>
           <SettingContainer>
@@ -152,30 +153,42 @@ const SectionHolder = styled.div`
 `;
 
 const NavContainer = styled.nav`
-  flex: 1;
+  flex: 1.3;
   display: flex;
   flex-flow: column;
   /* min-width: 220px; */
-  min-width: fit-content;
-  a {
-    padding: 9px;
-    display: flex;
-    align-items: center;
+  /* min-width: fit-content; */
+`;
 
-    :hover {
-      background: rgb(8 9 10 / 5%);
-      color: #323ebe;
-      border-radius: 4px;
-    }
+const NavLink = styled.a`
+  padding: 9px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 5px;
 
-    span {
-      margin-left: 6px;
-    }
+  ${({ active }) =>
+    active
+      ? css`
+          background: white;
+          font-weight: 500;
+        `
+      : css`
+          :hover {
+            background: rgb(8 9 10 / 5%);
+          }
+        `}
+
+  :hover {
+    color: #323ebe;
+  }
+
+  span {
+    margin-left: 6px;
   }
 `;
 
 const SettingContainer = styled.div`
   flex: 4;
-  /* width: 90%; */
-  min-width: fit-content;
+  min-width: 300px;
 `;

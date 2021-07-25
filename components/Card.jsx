@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Card({ children, header }) {
+export default function Card({ children, headerColor, header }) {
   return (
     <Container>
-      {header &&<Header>
-        <h3>{header}</h3>
-      </Header>}
-
-      {children}
+      {header && (
+        <Header color={headerColor}>
+          <h3>{header}</h3>
+        </Header>
+      )}
+      <div>{children}</div>
     </Container>
   );
 }
@@ -28,5 +29,6 @@ const Header = styled.div`
   h3 {
     font-size: 1.5em;
     margin: 0;
+    color: ${({ color }) => color || ""};
   }
 `;

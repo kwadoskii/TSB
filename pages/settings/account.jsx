@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Card from "../../components/Card";
 
 import Navbar, { Button } from "../../components/Navbar";
@@ -26,7 +26,7 @@ export default function Settings() {
         <SectionHolder>
           <NavContainer>
             <Link href="/settings/profile">
-              <a>
+              <NavLink>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -47,10 +47,11 @@ export default function Settings() {
                   ></path>
                 </svg>
                 <span> Profile </span>
-              </a>
+              </NavLink>
             </Link>
+
             <Link href="/settings/account" passHref>
-              <a>
+              <NavLink active>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -67,9 +68,10 @@ export default function Settings() {
                   ></path>
                 </svg>
                 <span>Account</span>
-              </a>
+              </NavLink>
             </Link>
           </NavContainer>
+
           <SettingContainer>
             <Card header="Change Password">
               <div>
@@ -83,10 +85,10 @@ export default function Settings() {
             </Card>
 
             <Card header="Export content">
-              <span>
+              <p>
                 You can request an export of all your content. Currently we only support
                 the export of your posts and comments. They will be emailed to your inbox.
-              </span>
+              </p>
               <Input
                 type="checkbox"
                 name="exportContent"
@@ -95,19 +97,19 @@ export default function Settings() {
               <Button>Submit Data Request</Button>
             </Card>
 
-            <Card header="Work">
-              <Input hasLabel placeholder="Engineer" name="Employer title" />
-              <Input hasLabel placeholder="Company Inc" name="Employer name" />
-              <Input hasLabel placeholder="University of Nigeria" name="Education" />
-              <Input
-                hasLabel
-                placeholder="https://thestoryboard.com"
-                name="Employer URL"
-              />
-            </Card>
+            <Card header="Danger Zone" headerColor="#dc1818">
+              <h3>Delete account</h3>
+              <p>Deleting your account will:</p>
+              <p>
+                Delete your profile, along with your authentication associations. <br />
+                Delete any and all content you have, such as articles, comments, your
+                reading list or chat messages. <br />
+                Allow your username to become available to anyone.
+              </p>
 
-            <Card>
-              <Button fullWidth>Save Profile Information</Button>
+              <Button color="#dc1818" hoverColor="#c20a0a">
+                Delete Account
+              </Button>
             </Card>
           </SettingContainer>
         </SectionHolder>
@@ -144,30 +146,41 @@ const SectionHolder = styled.div`
 `;
 
 const NavContainer = styled.nav`
-  flex: 1;
+  flex: 1.3;
   display: flex;
   flex-flow: column;
-  /* min-width: 220px; */
   min-width: fit-content;
-  a {
-    padding: 9px;
-    display: flex;
-    align-items: center;
+`;
 
-    :hover {
-      background: rgb(8 9 10 / 5%);
-      color: #323ebe;
-      border-radius: 4px;
-    }
+const NavLink = styled.a`
+  padding: 9px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 5px;
 
-    span {
-      margin-left: 6px;
-    }
+  ${({ active }) =>
+    active
+      ? css`
+          background: white;
+          font-weight: 500;
+        `
+      : css`
+          :hover {
+            background: rgb(8 9 10 / 5%);
+          }
+        `}
+
+  :hover {
+    color: #323ebe;
+  }
+
+  span {
+    margin-left: 6px;
   }
 `;
 
 const SettingContainer = styled.div`
   flex: 4;
-  width: 90%;
-  min-width: fit-content;
+  min-width: 300px;
 `;
