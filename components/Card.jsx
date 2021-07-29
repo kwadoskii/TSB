@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Card({ children, headerColor, header }) {
+export default function Card({ children, headerColor, header, style }) {
   return (
-    <Container>
+    <Container style={{ ...style }}>
       {header && (
         <Header color={headerColor}>
           <h3>{header}</h3>

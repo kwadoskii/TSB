@@ -156,13 +156,14 @@ const NavContainer = styled.nav`
   flex: 1.3;
   display: flex;
   flex-flow: column;
-  /* min-width: 220px; */
+  min-width: 220px;
   /* min-width: fit-content; */
 `;
 
 const NavLink = styled.a`
   padding: 9px;
   display: flex;
+  flex: 1;
   align-items: center;
   cursor: pointer;
   border-radius: 5px;
