@@ -149,7 +149,8 @@ const NavContainer = styled.nav`
   flex: 1.3;
   display: flex;
   flex-flow: column;
-  min-width: fit-content;
+  min-width: 220px;
+  /* min-width: fit-content; */
 `;
 
 const NavLink = styled.a`
