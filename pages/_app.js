@@ -3,6 +3,7 @@ import NProgress from "nprogress";
 import Router from "next/router";
 
 import Title from "../components/Title";
+import "tailwindcss/tailwind.css";
 
 Router.onRouteChangeStart = (url) => {
   NProgress.start();
