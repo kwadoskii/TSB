@@ -1,12 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import styled, { css } from "styled-components";
-import Card from "../../components/Card";
 
-import Navbar, { Button } from "../../components/Navbar";
-import Title from "../../components/Title";
+import Card from "../../components/Card";
 import color from "../../constants/color";
 import Input from "../../components/Input";
+import Navbar, { Button } from "../../components/Navbar";
+import Title from "../../components/Title";
 
 export default function Settings() {
   return (
@@ -157,13 +157,11 @@ const NavContainer = styled.nav`
   display: flex;
   flex-flow: column;
   min-width: 220px;
-  /* min-width: fit-content; */
 `;
 
 const NavLink = styled.a`
   padding: 9px;
   display: flex;
-  flex: 1;
   align-items: center;
   cursor: pointer;
   border-radius: 5px;

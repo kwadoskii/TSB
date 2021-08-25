@@ -10,12 +10,12 @@ import Title from "../../../components/Title";
 export default function comment() {
   return (
     <>
-      <Title title={"Comment"} /> {/* Get the title from the actual comment */}
+      <Title title={"Comment goes here"} /> {/* Get the title from the actual comment */}
       <Navbar />
       <Container>
         <CommentHolder>
           <Card style={{ background: "#f9fafa" }}>
-            <h1>
+            <h1 className="font-bold">
               <span>Discussion on: </span>6 Nullish coalescing operators every javascript
               programmer must know!
             </h1>
@@ -35,6 +35,8 @@ export default function comment() {
         </CommentHolder>
 
         <Main>
+          <Comment />
+          <Comment />
           <Comment />
         </Main>
       </Container>
@@ -99,4 +101,6 @@ const Main = styled.section`
   width: 98%;
   max-width: 1020px;
   margin: 0 auto;
+  box-shadow: 0 0 0 1px rgb(8 9 10 / 10%);
+  border-radius: 5px;
 `;

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 // Redirects to the settings page from /settings/profile
 
-export default function profile() {
+export default function Profile() {
   const router = useRouter();
 
   if (typeof window !== "undefined") {

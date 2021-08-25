@@ -14,9 +14,6 @@ export default function Navbar() {
   const router = useRouter();
 
   const handleShowHideNavMenu = () => {
-    // if (isVisible) return setIsVisible(false);
-    setIsVisible(false);
-
     setIsVisible(!isVisible);
   };
 
@@ -58,17 +55,16 @@ export default function Navbar() {
             </a>
           </Link>
           <Avatar
-            onClick={handleShowHideNavMenu}
             alt="user avatar"
-            src={
-              "https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-            }
             height={30}
+            onClick={handleShowHideNavMenu}
+            ref={ref}
+            src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
             width={30}
           ></Avatar>
 
           {isVisible && (
-            <NavDropdownHolder ref={ref}>
+            <NavDropdownHolder>
               <NavbarDropdown />
             </NavDropdownHolder>
           )}

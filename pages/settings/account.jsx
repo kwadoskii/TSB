@@ -8,7 +8,7 @@ import Title from "../../components/Title";
 import color from "../../constants/color";
 import Input from "../../components/Input";
 
-export default function Settings() {
+export default function Account() {
   return (
     <>
       <Title title="Settings" />
