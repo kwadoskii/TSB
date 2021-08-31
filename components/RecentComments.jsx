@@ -10,7 +10,7 @@ export default function RecentComments({ profileUrl }) {
   return (
     <Container>
       <Header>
-        <h3>Recent Comments</h3>
+        <h3 className="font-bold">Recent Comments</h3>
       </Header>
 
       {comments.map((c) => (

@@ -6,7 +6,9 @@ export default function ProfileComment({ comment, profileUrl }) {
   return (
     <Link href={`${profileUrl}/comment/${comment?.id || "12334"}`} passHref>
       <CommentLink>
-        <h4>6 Nullish coalescing operators every javascript programmer must know !</h4>
+        <h4 className="font-bold">
+          6 Nullish coalescing operators every javascript programmer must know !
+        </h4>
         <div>
           <p>Super intuitive and neat.</p>
           <span>May 21</span>

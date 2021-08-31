@@ -48,6 +48,7 @@ const Container = styled.div`
   min-height: calc(100vh - 56px);
   background-color: #eef0f1;
   padding: 0.3em 0em;
+  padding-bottom: 4em;
   width: 100%;
 `;
 
@@ -101,6 +102,7 @@ const Main = styled.section`
   width: 98%;
   max-width: 1020px;
   margin: 0 auto;
+  margin-top: -2em;
   box-shadow: 0 0 0 1px rgb(8 9 10 / 10%);
   border-radius: 5px;
 `;

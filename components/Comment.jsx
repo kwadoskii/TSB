@@ -3,9 +3,9 @@ import Image from "next/image";
 import { DotsHorizontalIcon, HeartIcon, ChatIcon } from "@heroicons/react/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/solid";
 import styled, { css } from "styled-components";
+import Link from "next/link";
 
 import Card from "./Card";
-import Link from "next/link";
 import useVisible from "../hooks/useVisible";
 
 export default function Comment() {
@@ -16,12 +16,20 @@ export default function Comment() {
     setIsVisible(!isVisible);
   };
 
+  const commentMenuData = [
+    { name: "Copy link", url: "/copy" },
+    { name: "Settings", url: "/settings" },
+    { name: "Report abuse", url: "/report_abuse" },
+    { name: "Edit", url: "/edit" },
+    { name: "Delete", url: "/delete" },
+  ];
+
   return (
     <Card
       style={{
         boxShadow: "none",
         marginBottom: 0,
-        marginTop: "-2em",
+        overflow: "unset",
         padding: "2em 5em",
       }}
     >
@@ -33,7 +41,7 @@ export default function Comment() {
         >
           <span>{!isOpen && "Austin Ofor + 1 replies"}</span>
         </Summary>
-        <div className="relative">
+        <div className="">
           <div className="absolute h-8 w-8 top-1 -left-6">
             <Link passHref href="/test">
               <a>
@@ -63,30 +71,24 @@ export default function Comment() {
                 >
                   <DotsHorizontalIcon className="h-5" />
                 </div>
-                {isVisible && (
-                  <div className="absolute right-0 top-10">
-                    <div className="bg-white z-50 border-black border-2 rounded-md overflow-hidden w-56">
-                      <ul>
-                        <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                          Copy link
-                        </li>
-                        <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                          Settings
-                        </li>
-                        <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                          Report abuse
-                        </li>
-                        <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                          Edit
-                        </li>
-                        <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                          Delete
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
               </div>
+              {isVisible && (
+                <div className="absolute right-0 top-10">
+                  <div className="bg-white z-[400] border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
+                    <ul>
+                      {commentMenuData.map((menu, i) => (
+                        <Link passHref href={menu.url} key={i}>
+                          <a>
+                            <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
+                              {menu.name}
+                            </li>
+                          </a>
+                        </Link>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
 
               <div className="p-2 pt-1">
                 <p className="text-lg">
