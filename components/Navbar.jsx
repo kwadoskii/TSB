@@ -51,7 +51,7 @@ export default function Navbar() {
         <ActionHolder>
           <Link href="/write" passHref>
             <a>
-              <Button>Write a post</Button>
+              <Button>Create post</Button>
             </a>
           </Link>
           <Avatar
@@ -79,8 +79,8 @@ const Container = styled.div`
   justify-content: space-between;
   margin: 0;
   width: 100%;
-  position: sticky;
-  top: 0px;
+  /* position: sticky;
+  top: 0px; */
   height: 56px;
   background: ${color.white};
   border-bottom: 1px solid #eaeaea;
