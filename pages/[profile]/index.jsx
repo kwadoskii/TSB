@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
-import Navbar from "../../components/Navbar";
-import Title from "../../components/Title";
-import { Button } from "../../components/Navbar";
 import ArticleCard from "../../components/ArticleCard";
+import { Button } from "../../components/Navbar";
+import Navbar from "../../components/Navbar";
 import RecentComments from "../../components/RecentComments";
+import Title from "../../components/Title";
 
-export default function profile() {
+export default function ProfilePage() {
   const router = useRouter();
   const {
     query: { profile },

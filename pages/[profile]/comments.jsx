@@ -3,7 +3,7 @@ import React from "react";
 import Title from "../../components/Title";
 import Navbar from "../../components/Navbar";
 
-export default function comments() {
+export default function CommentsPage() {
   return (
     <>
       <Title title={"Comments"} />
