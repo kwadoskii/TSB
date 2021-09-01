@@ -13,11 +13,19 @@ body {
 @tailwind components;
 
 @layer components {
-  /* .button {
-    @apply px-4 py-2 ;
-  } */
+  .my-button-transparent {
+    @apply py-2 px-3 border-2 border-gray-300 rounded-md font-semibold hover:bg-gray-100 hover:border-gray-400 transition duration-200 ease-out;
+  }
+
+  .my-screen {
+    @apply max-w-7xl relative flex flex-wrap px-1 gap-2 py-4 lg:px-6 mx-auto;
+  }
 }
 
 .my-shadow-drop {
   box-shadow: 4px 4px 0 #08090a;
+}
+
+.my-min-height {
+  min-height: calc(100vh - 56px);
 }

@@ -28,9 +28,10 @@ export default function Comment() {
     <Card
       style={{
         boxShadow: "none",
-        marginBottom: 0,
+        margin: "2.1em 0",
         overflow: "unset",
-        padding: "2em 5em",
+        // padding: "2em 5em",
+        padding: "0",
       }}
     >
       <Details isOpen={isOpen} open>
@@ -73,8 +74,8 @@ export default function Comment() {
                 </div>
               </div>
               {isVisible && (
-                <div className="absolute right-0 top-10">
-                  <div className="bg-white z-[400] border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
+                <div className="absolute right-0 top-10 z-[400]">
+                  <div className="bg-white border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
                     <ul>
                       {commentMenuData.map((menu, i) => (
                         <Link passHref href={menu.url} key={i}>
