@@ -71,8 +71,9 @@ export default function Settings() {
               </NavLink>
             </Link>
           </NavContainer>
+
           <SettingContainer>
-            <Card header="User">
+            <Card header="User" className="shadow-md">
               <div>
                 <form action="">
                   <Input hasLabel placeholder="John Doe" name="Name" />

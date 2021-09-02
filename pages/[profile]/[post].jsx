@@ -48,7 +48,7 @@ export default function PostPage() {
           <div className="relative grid md:grid-cols-1 lg:grid-cols-4 gap-2 lg:pl-16">
             {/* article */}
             <div className="lg:col-span-3 flex-grow  md:col-span-1">
-              <div className="border border-gray-300 rounded-md overflow-hidden">
+              <div className="border border-gray-300 rounded-md overflow-hidden shadow-md">
                 <article className="my-min-height border-b border-gray-300">
                   {/* image yes or no -- make image to fill across all screen size */}
                   {/* <div className="relative lg:h-80 md:h-72 h-36"> */}
@@ -176,6 +176,7 @@ export default function PostPage() {
                       <div className="">
                         <textarea
                           placeholder="Add to the discussion"
+                          name="comment"
                           className="outline-none p-3 border border-gray-300 rounded-md resize-none text-base transition duration-100 w-full placeholder-gray-400 placeholder-shown:bg-gray-50 focus:my-shadow-blue"
                           rows={5}
                         />
@@ -201,7 +202,7 @@ export default function PostPage() {
             {/* follow arthur */}
             <div className="lg:my-min-height">
               <div className="sticky top-3">
-                <div className="flex flex-col border-gray-300 rounded-md border">
+                <div className="flex flex-col border-gray-300 rounded-md border shadow-md">
                   <div className="p-4 w-full bg-yellow-900 rounded-t-md border-0"></div>
 
                   <div className="p-4 bg-gray-50 flex flex-col space-y-3 rounded-b-md">
@@ -247,7 +248,7 @@ export default function PostPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col border-gray-300 rounded-md bg-gray-50 mt-3 border last:border-b-0 overflow-hidden">
+                <div className="flex flex-col border-gray-300 rounded-md bg-gray-50 mt-3 border last:border-b-0 overflow-hidden shadow-md">
                   <div className="border-b border-gray-300 p-4">
                     <h2 className="font-bold text-xl">
                       More from{" "}

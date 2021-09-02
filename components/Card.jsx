@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Card({ children, headerColor, header, style }) {
+export default function Card({ children, headerColor, header, style, className }) {
   return (
-    <Container style={{ ...style }}>
+    <Container style={{ ...style }} className="shadow-md border border-gray-300">
       {header && (
         <Header color={headerColor}>
           <h3>{header}</h3>
@@ -16,7 +16,7 @@ export default function Card({ children, headerColor, header, style }) {
 
 const Container = styled.div`
   background: white;
-  box-shadow: 0 0 0 1px rgb(8 9 10 / 10%);
+  /* box-shadow: 0 0 0 1px rgb(8 9 10 / 10%); */
   border-radius: 5px;
   overflow: hidden;
   padding: 1.5em;

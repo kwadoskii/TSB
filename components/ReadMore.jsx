@@ -34,7 +34,7 @@ export default function ReadMore() {
   ];
 
   return (
-    <div className="bg-gray-100 px-4 py-3 mb-0 my-2 rounded-md border border-gray-300 md:pt-8 md:px-12 md:pb-5">
+    <div className="bg-gray-100 px-4 py-3 mb-0 my-2 rounded-md border border-gray-300 md:pt-8 md:px-12 md:pb-5 shadow-md">
       <h2 className="text-2xl font-bold my-3 mb-7">Read next</h2>
 
       <div className="flex gap-6 flex-col mt-2">

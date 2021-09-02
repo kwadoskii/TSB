@@ -54,7 +54,7 @@ export default function Navbar() {
           </a>
         </Link>
         <div
-          className="relative h-9 w-9 cursor-pointer border rounded-full border-gray-300 p-1"
+          className="relative w-10 h-10 cursor-pointer rounded-full none"
           onClick={handleShowHideNavMenu}
           ref={ref}
         >
