@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
 import ArticleCard from "../../components/ArticleCard";
-import { Button } from "../../components/Navbar";
 import Navbar from "../../components/Navbar";
 import RecentComments from "../../components/RecentComments";
 import Title from "../../components/Title";
@@ -36,7 +35,12 @@ export default function ProfilePage() {
                 height={"124px"}
               />
 
-              <Button onClick={gotoSettings}>Edit Profile</Button>
+              <button
+                className="border-none p-3 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end -mt-11 lg:mr-8 mr-3"
+                onClick={gotoSettings}
+              >
+                Edit profile
+              </button>
             </ProfileHeader>
 
             <ProfileSection>
@@ -134,12 +138,6 @@ const ProfileHeader = styled.div`
     border-radius: 50%;
     margin: -4em auto 0;
     display: block;
-  }
-
-  ${Button} {
-    align-self: flex-end;
-    margin-top: -2.6em;
-    margin-right: 2.1em;
   }
 `;
 

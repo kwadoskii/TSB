@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import NavbarDropdown from "./NavbarDropdown";
 import useVisible from "../hooks/useVisible";
-import color from "../constants/color";
 import Input from "../components/Input";
+import Image from "next/image";
 
 export default function Navbar() {
   const { isVisible, ref, setIsVisible } = useVisible();
@@ -24,136 +23,55 @@ export default function Navbar() {
   };
 
   return (
-    <Container>
-      <LogoHolder>
+    <nav className="border-b border-gray-300 z-10 bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-4 lg:px-6 mx-auto">
+      <div className="flex justify-start items-center flex-1 gap-2">
         <Link href="/">
           <a>
-            <Logo>TSB</Logo>
+            <p className="cursor-pointer select-none bg-black p-[5px] rounded font-semibold text-white text-lg">
+              TSB
+            </p>
           </a>
         </Link>
-        <SeacrhContainer>
+
+        <div className="flex-grow-0 w-full lg:w-1/2">
           <form>
             <Input
               onChange={(e) => setSearchValue(e.target.value)}
               placeholder="Search..."
               value={searchValue}
             />
-            <button
-              type="submit"
-              onClick={handleSearch}
-              style={{ display: "none" }}
-            ></button>
+            <button type="submit" onClick={handleSearch} className="hidden"></button>
           </form>
-        </SeacrhContainer>
-      </LogoHolder>
+        </div>
+      </div>
 
-      <ActionContainer>
-        <ActionHolder>
-          <Link href="/write" passHref>
-            <a>
-              <Button>Create post</Button>
-            </a>
-          </Link>
-          <Avatar
+      <div className="flex items-center">
+        <Link href="/write" passHref>
+          <a>
+            <button className="border-none p-3 bg-blue-700 text-white font-medium text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out">
+              Create post
+            </button>
+          </a>
+        </Link>
+        <div
+          className="relative h-9 w-9 cursor-pointer border rounded-full border-gray-300 p-1"
+          onClick={handleShowHideNavMenu}
+          ref={ref}
+        >
+          <Image
             alt="user avatar"
-            height={30}
-            onClick={handleShowHideNavMenu}
-            ref={ref}
+            className="rounded-full"
+            layout="fill"
             src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-            width={30}
-          ></Avatar>
+          />
+        </div>
 
-          {isVisible && (
-            <NavDropdownHolder>
-              <NavbarDropdown />
-            </NavDropdownHolder>
-          )}
-        </ActionHolder>
-      </ActionContainer>
-    </Container>
+        {isVisible && (
+          <div className="absolute left-auto top-14 right-6 bg-white my-shadow-drop text-black border-2 border-black rounded-md z-[400] sm:w-[250px] w-10/12">
+            <NavbarDropdown />
+          </div>
+        )}
+      </div>
+    </nav>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  width: 100%;
-  /* position: sticky;
-  top: 0px; */
-  height: 56px;
-  background: ${color.white};
-  border-bottom: 1px solid #eaeaea;
-  padding: 0.7em 1.5em;
-  z-index: 10;
-`;
-
-const LogoHolder = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const Logo = styled.div`
-  cursor: pointer;
-  user-select: none;
-  background: ${color.black};
-  padding: 5px;
-  border-radius: 2px;
-  font-weight: bolder;
-  margin-right: 15px;
-  color: ${color.white};
-  font-size: 20px;
-`;
-
-const SeacrhContainer = styled.div`
-  flex: 1;
-`;
-
-const ActionContainer = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-`;
-
-const ActionHolder = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const Button = styled.button`
-  border: none;
-  padding: 0.85em;
-  background-color: ${({ color: textColor }) => textColor || color.primary};
-  color: ${color.offWhite};
-  font-weight: 500;
-  font-size: 0.9em;
-  border-radius: 5px;
-  margin-right: 10px;
-  cursor: pointer;
-  width: ${(props) => (props.fullWidth ? "100%" : "")};
-  :hover {
-    background-color: ${({ hoverColor }) => hoverColor || color.darkPrimary};
-  }
-`;
-
-const Avatar = styled.img`
-  cursor: pointer;
-  border-radius: 50%;
-`;
-
-const NavDropdownHolder = styled.div`
-  position: absolute;
-  left: auto;
-  top: 56px;
-  right: 1rem;
-  background: ${color.white};
-  box-shadow: 4px 4px 0 ${color.dark};
-  color: ${color.dark};
-  border: 2px solid ${color.dark};
-  border-radius: 5px;
-  z-index: 400;
-  min-width: 250px;
-`;

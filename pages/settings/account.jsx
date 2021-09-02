@@ -3,7 +3,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import Card from "../../components/Card";
 
-import Navbar, { Button } from "../../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Title from "../../components/Title";
 import color from "../../constants/color";
 import Input from "../../components/Input";
@@ -79,7 +79,8 @@ export default function Account() {
                   <Input hasLabel type="password" name="Current password" />
                   <Input hasLabel type="password" name="New password" />
                   <Input hasLabel type="password" name="Confirm new password" />
-                  <Button>Change password</Button>
+
+                  <button className="my-button">Change password</button>
                 </form>
               </div>
             </Card>
@@ -94,7 +95,7 @@ export default function Account() {
                 name="exportContent"
                 checkboxText="Request an export of your content"
               />
-              <Button>Submit Data Request</Button>
+              <button className="my-button">Submit Data Request</button>
             </Card>
 
             <Card header="Danger Zone" headerColor="#dc1818">
@@ -107,9 +108,9 @@ export default function Account() {
                 Allow your username to become available to anyone.
               </p>
 
-              <Button color="#dc1818" hoverColor="#c20a0a">
+              <button className="my-button bg-red-600 hover:bg-red-700 mt-5">
                 Delete Account
-              </Button>
+              </button>
             </Card>
           </SettingContainer>
         </SectionHolder>

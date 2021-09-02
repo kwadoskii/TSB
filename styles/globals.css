@@ -18,7 +18,7 @@ body {
   }
 
   .my-screen {
-    @apply max-w-7xl relative flex flex-wrap px-1 gap-2 py-4 lg:px-6 mx-auto;
+    @apply max-w-7xl relative flex flex-wrap px-1 gap-2 py-1 lg:py-4 lg:px-6 mx-auto;
   }
 
   .my-shadow-blue {
@@ -28,6 +28,10 @@ body {
 
   .my-shadow-drop {
     box-shadow: 4px 4px 0 #08090a;
+  }
+
+  .my-button {
+    @apply border-none p-3 bg-blue-700 text-white font-medium text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out;
   }
 
   .my-min-height {

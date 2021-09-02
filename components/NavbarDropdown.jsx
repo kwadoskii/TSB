@@ -8,15 +8,17 @@ export default function NavbarDropdown() {
   const navs = config.navs;
 
   return (
-    <Ul>
-      <Li>
-        <Link href="/kwadoskii" passHref>
-          <NavLink style={{ fontWeight: "500" }}>
-            Austin Ofor
-            <Username>@kwadoskii</Username>
-          </NavLink>
-        </Link>
-      </Li>
+    <ul className="list-none m-0">
+      <div className="p-1 border-b border-gray-300">
+        <li className="py-0 cursor-pointer last:pt-[0.3em] last:border-gray-400 first:pb-[0.3em]  rounded-md hover:bg-gray-100 hover:text-blue-600">
+          <Link href="/kwadoskii" passHref>
+            <NavLink style={{ fontWeight: "500" }}>
+              Austin Ofor
+              <Username>@kwadoskii</Username>
+            </NavLink>
+          </Link>
+        </li>
+      </div>
       {navs.map((n) => (
         <Li key={n.href}>
           <Link href={n.href} passHref>
@@ -24,7 +26,7 @@ export default function NavbarDropdown() {
           </Link>
         </Li>
       ))}
-    </Ul>
+    </ul>
   );
 }
 
@@ -33,12 +35,6 @@ const Username = styled.span`
   color: rgb(136 136 136);
   padding: 0 0.25em;
   font-size: 13px;
-`;
-
-const Ul = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 5px;
 `;
 
 const Li = styled.li`

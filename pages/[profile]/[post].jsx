@@ -24,7 +24,7 @@ export default function PostPage() {
       <Navbar />
 
       <main className="bg-gray-200">
-        <section className="max-w-7xl relative flex flex-wrap px-1 gap-2 py-4 lg:px-6 mx-auto">
+        <section className="my-screen">
           {/* navs */}
           <div className="fixed flex items-center space-y-7 lg:w-20 lg:flex-col lg:block lg:left-10 lg:top-1/4 justify-center">
             <div className="flex p-1 h-10 w-10 rounded-full flex-col items-center hover:bg-gray-300 hover:text-gray-800 text-gray-600 cursor-pointer">
@@ -51,7 +51,8 @@ export default function PostPage() {
               <div className="border border-gray-300 rounded-md overflow-hidden">
                 <article className="my-min-height border-b border-gray-300">
                   {/* image yes or no -- make image to fill across all screen size */}
-                  <div className="relative lg:h-80 md:h-72 h-36">
+                  {/* <div className="relative lg:h-80 md:h-72 h-36"> */}
+                  <div className="relative h-[200px] sm:h-[280px] md:h-[350px] xl:h-[380px] 2xl:h-[400px]">
                     <Image
                       src="https://res.cloudinary.com/practicaldev/image/fetch/s--OfyhQsDc--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5412klb67fxqqzoe8mjn.png"
                       objectFit="cover"
@@ -152,7 +153,10 @@ export default function PostPage() {
                 </article>
 
                 {/* comment area */}
-                <div className="bg-white py-2 px-3 md:pt-8 md:px-12 md:pb-5">
+                <div
+                  className="bg-white py-2 px-3 md:pt-8 md:px-12 md:pb-5"
+                  id="comments"
+                >
                   <div className="flex justify-between">
                     <h2 className="font-bold text-2xl">Discussion (8)</h2>
                     {/* <button className="my-button-transparent">Subscribe</button> */}

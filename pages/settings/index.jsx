@@ -5,7 +5,7 @@ import styled, { css } from "styled-components";
 import Card from "../../components/Card";
 import color from "../../constants/color";
 import Input from "../../components/Input";
-import Navbar, { Button } from "../../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Title from "../../components/Title";
 
 export default function Settings() {
@@ -116,7 +116,9 @@ export default function Settings() {
             </Card>
 
             <Card>
-              <Button fullWidth>Save Profile Information</Button>
+              <button className="border-none p-3 bg-blue-700 text-white font-medium text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out w-full">
+                Save Profile Information
+              </button>
             </Card>
           </SettingContainer>
         </SectionHolder>
