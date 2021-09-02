@@ -33,7 +33,7 @@ export default function CommentPage() {
             </div>
           </div>
 
-          <section className="-mt-10 py-2 px-10 bg-white rounded-md border border-gray-200 mx-auto w-full lg:w-10/12">
+          <section className="-mt-10 py-2 px-10 md:px-4 bg-white rounded-md border border-gray-200 mx-auto w-full lg:w-10/12">
             <Comment />
             <Comment />
             <Comment />
