@@ -12,7 +12,7 @@ export default function CommentPage() {
       <Navbar />
       <main className="my-min-height bg-white">
         <div className="my-screen">
-          <div className="w-9/12 mx-auto">
+          <div className="w-11/12 lg:w-9/12 mx-auto">
             <div className="rounded-md border border-gray-300 p-5 pb-12 bg-gray-50">
               <h1 className="font-bold text-2xl">
                 <span className="text-gray-500 font-normal">Discussion on: </span>6

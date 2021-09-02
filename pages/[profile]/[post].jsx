@@ -10,6 +10,13 @@ import Footer from "../../components/Footer";
 import ReadMore from "../../components/ReadMore";
 
 export default function PostPage() {
+  const tags = [
+    { name: "politics", url: "/t/politics", bgColor: "bg-yellow-500", textBlack: true },
+    { name: "football", url: "/t/football", bgColor: "bg-purple-400", textBlack: false },
+    { name: "music", url: "/t/music", bgColor: "bg-green-800", textBlack: false },
+    { name: "crime", url: "/t/crime", bgColor: "bg-blue-700", textBlack: false },
+  ];
+
   return (
     <>
       {/* update article title */}
@@ -40,7 +47,6 @@ export default function PostPage() {
 
           <div className="relative grid md:grid-cols-1 lg:grid-cols-4 gap-2 lg:pl-16">
             {/* article */}
-
             <div className="lg:col-span-3 flex-grow  md:col-span-1">
               <div className="border border-gray-300 rounded-md overflow-hidden">
                 <article className="my-min-height border-b border-gray-300">
@@ -60,30 +66,18 @@ export default function PostPage() {
                     </h2>
 
                     <div className="flex space-x-2 my-3 mt-2">
-                      <Link passHref href="/tag">
-                        <a className="bg-yellow-500 rounded-md p-1 text-sm">
-                          <span className="text-gray-300">#</span>
-                          politics
-                        </a>
-                      </Link>
-                      <Link passHref href="/tag">
-                        <a className="bg-purple-400 rounded-md p-1 text-sm text-white">
-                          <span className="text-gray-300">#</span>
-                          football
-                        </a>
-                      </Link>
-                      <Link passHref href="/tag">
-                        <a className="bg-green-800 rounded-md p-1 text-sm text-white">
-                          <span className="text-gray-300">#</span>
-                          music
-                        </a>
-                      </Link>
-                      <Link passHref href="/tag">
-                        <a className="bg-blue-700 rounded-md p-1 text-sm text-white">
-                          <span className="text-gray-300">#</span>
-                          crime
-                        </a>
-                      </Link>
+                      {tags.map((tag, i) => (
+                        <Link passHref href={tag.url} key={i}>
+                          <a
+                            className={`${tag.bgColor} rounded-md p-1 text-sm ${
+                              !tag.textBlack && "text-white"
+                            }`}
+                          >
+                            <span className="text-gray-300">#</span>
+                            {tag.name}
+                          </a>
+                        </Link>
+                      ))}
                     </div>
 
                     {/* arthur details */}
@@ -161,7 +155,7 @@ export default function PostPage() {
                 <div className="bg-white py-2 px-3 md:pt-8 md:px-12 md:pb-5">
                   <div className="flex justify-between">
                     <h2 className="font-bold text-2xl">Discussion (8)</h2>
-                    <button className="my-button-transparent">Subscribe</button>
+                    {/* <button className="my-button-transparent">Subscribe</button> */}
                   </div>
 
                   <div className="flex items-center gap-5 mt-5">
@@ -178,7 +172,7 @@ export default function PostPage() {
                       <div className="">
                         <textarea
                           placeholder="Add to the discussion"
-                          className="outline-none p-3 border border-gray-300 rounded-md resize-none text-base transition duration-100 w-full hover:my-shadow-blue placeholder-gray-400 placeholder-shown:bg-gray-50 focus:my-shadow-blue"
+                          className="outline-none p-3 border border-gray-300 rounded-md resize-none text-base transition duration-100 w-full placeholder-gray-400 placeholder-shown:bg-gray-50 focus:my-shadow-blue"
                           rows={5}
                         />
                       </div>
@@ -201,7 +195,7 @@ export default function PostPage() {
             </div>
 
             {/* follow arthur */}
-            <div className="my-min-height">
+            <div className="lg:my-min-height">
               <div className="sticky top-3">
                 <div className="flex flex-col border-gray-300 rounded-md border">
                   <div className="p-4 w-full bg-yellow-900 rounded-t-md border-0"></div>
