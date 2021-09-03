@@ -1,20 +1,17 @@
 import React from "react";
 import Link from "next/link";
-import styled from "styled-components";
-import { Heart, MessageSquare } from "react-feather";
-
-import color from "../constants/color";
-
-const imageSize = 40;
-const imageMargin = imageSize / 4;
+import Image from "next/image";
+import { HeartIcon, ChatAltIcon } from "@heroicons/react/outline";
 
 export default function ArticleCard({ hasImage = false }) {
   const commentHandler = () => console.log("handler clicked");
   const likeHandler = () => console.log("handler clicked");
   const saveHandler = () => console.log("handler clicked");
 
+  const tags = ["next", "tailwind", "javascript", "react"];
+
   return (
-    <Container>
+    <div className="w-full rounded-md border border-gray-300 overflow-hidden shadow-md mt-2">
       {hasImage && (
         <Link href="/kwadoskii/post-url" passHref>
           <a>
@@ -30,221 +27,81 @@ export default function ArticleCard({ hasImage = false }) {
         </Link>
       )}
 
-      <CardContainer>
-        <div>
+      <div className="bg-white rounded-md p-4 flex w-full gap-2 items-start focus:border-blue-700">
+        <Link href="/kwadoskii" passHref>
+          <a>
+            <div className="w-9 h-9 relative border rounded-full">
+              <Image
+                src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                alt="profile of user"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          </a>
+        </Link>
+
+        <div className="flex-grow flex flex-col gap-1">
+          <div className="flex-grow-0">
+            <Link href="/kwadoskii" passHref>
+              <a>
+                <p className="text-gray-800 text-sm font-medium py-2 pb-1 px-1 hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out -mt-3">
+                  Test Arthur
+                </p>
+                <span className="text-xs text-gray-500 block px-1">
+                  May 6 (3 hours ago)
+                </span>
+              </a>
+            </Link>
+          </div>
+
           <Link href="/kwadoskii/post-url" passHref>
             <a>
-              <ArthurHolder>
-                <Link href="/kwadoskii" passHref>
-                  <a>
-                    <Image
-                      src={
-                        "https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
-                      }
-                      alt="profile of user"
-                      width={imageSize}
-                      height={imageSize}
-                    />
-                  </a>
-                </Link>
-
-                <ArthurDetails>
-                  <Link href="/kwadoskii" passHref>
-                    <a>
-                      <p>Test Arthur</p>
-                    </a>
-                  </Link>
-
-                  <Link href="/kwadoskii/post-url" passHref>
-                    <a>
-                      <span>May 6 (3 hours ago)</span>
-                    </a>
-                  </Link>
-                </ArthurDetails>
-              </ArthurHolder>
-            </a>
-          </Link>
-        </div>
-
-        <Contents>
-          <Link href="/kwadoskii/post-url" passHref>
-            <a>
-              <Title>
-                {/* The Ultimate Web Developer Resources List 🔥Awesome 200+ Resources */}
-                I Built a VSCode Inspired Developer Portfolio
-              </Title>
+              <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl">
+                A multi-line CSS only Typewriter effect
+              </h2>
             </a>
           </Link>
 
-          <Tags>
-            <Link href="/t/javacript">
-              <a>
-                <span>#</span>javascript
-              </a>
-            </Link>
-            <Link href="/tag">
-              <a>
-                <span>#</span>css
-              </a>
-            </Link>
-            <Link href="/tag">
-              <a>
-                <span>#</span>lagos
-              </a>
-            </Link>
-            <Link href="/tag">
-              <a>
-                <span>#</span>coder
-              </a>
-            </Link>
-          </Tags>
+          <div className="my-1 flex text-gray-400 text-sm gap-1">
+            {tags.map((tag, i) => (
+              <Link href={`/t/${tag}`} key={i}>
+                <a className="p-1 hover:text-black">
+                  <span className="opacity-40">#</span>
+                  {tag}
+                </a>
+              </Link>
+            ))}
+          </div>
 
-          <ActionsHolder>
-            <ReactionsAndComments>
-              <Reactions onClick={likeHandler}>
-                <Heart size={21} strokeWidth={2} />
+          <div className="flex flex-wrap items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div
+                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-2 hover:bg-gray-50"
+                onClick={likeHandler}
+              >
+                <HeartIcon className="h-6 text-red-500" />
                 <p>345 reactions</p>
-              </Reactions>
+              </div>
 
-              <Reactions onClick={commentHandler}>
-                <MessageSquare size={21} strokeWidth={2} />
+              <div
+                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
+                onClick={commentHandler}
+              >
+                <ChatAltIcon className="h-6 text-gray-500" />
                 <p>3 comments</p>
-              </Reactions>
-            </ReactionsAndComments>
+              </div>
+            </div>
 
-            <Save onClick={saveHandler}>Save</Save>
-          </ActionsHolder>
-        </Contents>
-      </CardContainer>
-    </Container>
+            <button
+              className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
+              onClick={saveHandler}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
-
-const Container = styled.div`
-  border-radius: 5px;
-  overflow: hidden;
-  width: 100%;
-  box-shadow: 0 -1px 0 0 rgb(8 9 10 / 10%), 0 -1px 0 0 rgb(8 9 10 / 10%);
-`;
-
-const ImageBanner = styled.div``;
-
-const CardContainer = styled.div`
-  background: ${color.white};
-  border-radius: 5px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  box-shadow: 0 0 0 1px rgb(8 9 10 / 10%);
-  margin-bottom: 0.5em;
-  padding: 1em;
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-`;
-
-const ArthurHolder = styled.div`
-  display: flex;
-  margin-bottom: 5px;
-`;
-
-const Image = styled.img`
-  border-radius: 100%;
-  border: 1px solid ${color.light};
-  margin-right: ${imageMargin}px;
-`;
-
-const ArthurDetails = styled.div`
-  p {
-    margin: 0;
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #4d5760;
-  }
-  span {
-    font-size: 0.75em;
-    margin: 0;
-    color: #64707d;
-    display: block;
-  }
-`;
-
-const Contents = styled.div`
-  padding-left: calc(${imageSize + imageMargin}px);
-`;
-
-const Title = styled.h2`
-  margin: 0;
-  :hover {
-    color: ${color.primary};
-  }
-`;
-
-const Tags = styled.div`
-  margin: 5px 0;
-  color: #64707d;
-  font-size: 0.8em;
-  display: flex;
-  width: 35%;
-  justify-content: space-between;
-  a {
-    padding: 0.25em;
-    :hover {
-      color: ${color.black};
-    }
-    span {
-      opacity: 0.4;
-    }
-  }
-`;
-
-const ActionsHolder = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  color: #74797e;
-  margin: 0.6em 0;
-  align-items: center;
-  justify-content: space-between;
-  p {
-    margin: 0;
-    margin-left: 5px;
-    display: inline;
-  }
-`;
-
-const ReactionsAndComments = styled.div`
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Save = styled.button`
-  border: none;
-  padding: 0.7em 1em;
-  background: #d2d6db;
-  border-radius: 5px;
-  color: #363d44;
-  font-size: 0.9em;
-  cursor: pointer;
-  outline: none;
-  box-shadow: 0 1px 3px #0000000d;
-  :hover {
-    color: #08090a;
-    box-shadow: 0 2px 5px #0000000d;
-    background: #b5bdc4;
-  }
-`;
-
-const Reactions = styled.div`
-  padding: 0.5em;
-  border-radius: 5px;
-  color: #08090a;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  min-width: fit-content;
-  font-size: 0.9em;
-  :hover {
-    background: rgb(0 0 0 / 4%);
-  }
-`;
