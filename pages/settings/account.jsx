@@ -18,7 +18,7 @@ export default function Account() {
           <h2>
             Settings for{" "}
             <Link passHref href="/kwadoskii">
-              <Highlight>@Kwadoskii</Highlight>
+              <a className="text-blue-700 font-semibold">@Kwadoskii</a>
             </Link>
           </h2>
         </SectionHolder>
@@ -130,10 +130,6 @@ const Container = styled.div`
     font-size: 1.8em;
     padding: 9px;
   }
-`;
-
-const Highlight = styled.a`
-  color: ${color.primary};
 `;
 
 const SectionHolder = styled.div`

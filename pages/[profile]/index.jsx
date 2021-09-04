@@ -1,15 +1,15 @@
 import React from "react";
 import { useRouter } from "next/router";
-import styled from "styled-components";
 import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
 import ArticleCard from "../../components/ArticleCard";
 import Navbar from "../../components/Navbar";
 import RecentComments from "../../components/RecentComments";
 import Title from "../../components/Title";
+import Footer from "../../components/Footer";
 import Image from "next/image";
 
-export default function ProfilePage() {
+export default function ProfilePage({ commentsOnly = false }) {
   const router = useRouter();
   const {
     query: { profile },
@@ -26,8 +26,8 @@ export default function ProfilePage() {
       <Title title={"Profile"} />
       <Navbar />
 
-      <div className="my-min-height p-0 bg-gray-200 pb-8 relative">
-        <ProfileHolder className="absolute top-0 w-full h-[230px] bg-my-purple"></ProfileHolder>
+      <main className="my-min-height p-0 bg-gray-200 pb-8 relative">
+        <div className="absolute top-0 w-full h-[230px] bg-my-purple"></div>
         <div className="pt-6 max-w-5xl mx-auto flex-col items-center md:px-6 px-3 relative">
           <div className="pt-12 lg:pt-20">
             <div className="w-full rounded-t-md border border-gray-300 flex bg-white pb-9 relative items-start flex-col gap-0">
@@ -81,8 +81,8 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 mt-2 max-w-5xl mx-auto md:px-6 px-3 relative items-start">
-          <div className="flex p-4 flex-col col-span-full md:col-span-1 bg-gray-50 rounded-md border border-gray-300 text-gray-800 gap-4 shadow-md">
+        <div className="grid grid-cols-6 gap-3 mt-2 max-w-5xl mx-auto md:px-6 px-3 relative items-start">
+          <div className="flex p-4 flex-col col-span-full md:col-span-2 bg-gray-50 rounded-md border border-gray-300 text-gray-800 gap-4 shadow-md">
             <div className="flex flex-wrap items-center gap-2">
               <Book size={21} className="text-gray-500" />
               <span>2 posts published</span>
@@ -97,17 +97,19 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="flex flex-col flex-wrap col-span-full md:col-span-3 gap-3">
-            <RecentComments profileUrl={profile} />
-            <ArticleCard />
-            <ArticleCard />
+          <div className="flex flex-col flex-wrap col-span-full md:col-span-4 gap-3">
+            <RecentComments profileUrl={profile} commentsOnly={commentsOnly} />
+            {!commentsOnly && (
+              <>
+                <ArticleCard />
+                <ArticleCard />
+              </>
+            )}
           </div>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </>
   );
 }
-
-const ProfileHolder = styled.div`
-  /* background: linear-gradient(180deg, rgb(40, 3, 49) 12em, transparent 12em); */
-`;

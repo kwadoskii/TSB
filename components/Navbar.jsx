@@ -23,7 +23,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="border-b border-gray-300 z-10 bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-4 lg:px-6 mx-auto">
+    <nav className="border-b border-gray-300 z-10 bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-4 lg:px-16 mx-auto">
       <div className="flex justify-start items-center flex-1 gap-2">
         <Link href="/">
           <a>
@@ -67,7 +67,7 @@ export default function Navbar() {
         </div>
 
         {isVisible && (
-          <div className="absolute left-auto top-14 right-6 bg-white my-shadow-drop text-black border-2 border-black rounded-md z-[400] sm:w-[250px] w-10/12">
+          <div className="absolute left-auto top-14 right-2 lg:right-16 bg-white my-shadow-drop text-black border-2 border-black rounded-md z-[400] sm:w-[250px] w-10/12">
             <NavbarDropdown />
           </div>
         )}
