@@ -1,5 +1,3 @@
-import React from "react";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 
 import Navbar from "../components/Navbar";
@@ -12,52 +10,27 @@ export default function Search() {
     query: { q },
   } = useRouter();
 
+  const searchResults = [1, 2, 3, 4, 9, 9];
+
   return (
     <>
       <Title title="Search" />
       <Navbar />
-      <Container>
-        <HeaderContainer>
-          <h2>Search results ({q})</h2>
-          <Nav />
-        </HeaderContainer>
 
-        <SearchResults>
-          <ArticleCard />
-          <ArticleCard />
-          <ArticleCard />
-          <ArticleCard />
-        </SearchResults>
-      </Container>
+      <div className="bg-gray-100 my-min-height">
+        <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto">
+          <div className="flex flex-wrap justify-between items-center">
+            <h2>Search results ({q})</h2>
+            <Nav />
+          </div>
+
+          <div className="flex flex-col">
+            {searchResults.map((sr, i) => (
+              <ArticleCard key={i} />
+            ))}
+          </div>
+        </div>
+      </div>
     </>
   );
 }
-
-const Container = styled.div`
-  background: #eef0f1;
-  padding: 0 20px;
-  width: 100%;
-  display: flex;
-  flex-flow: column wrap;
-  min-height: calc(100vh - 56px);
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  align-items: center;
-  width: 70%;
-  min-width: 300px;
-  margin: 0 auto;
-`;
-
-const SearchResults = styled.div`
-  flex: 1;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  width: 70%;
-  min-width: 300px;
-  margin: 0 auto;
-`;
