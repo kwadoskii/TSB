@@ -90,11 +90,13 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
           <div className="flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-2 hover:bg-gray-50"
+                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
                 onClick={likeHandler}
               >
                 <HeartIcon className="h-6 text-red-500" />
-                <p>345 reactions</p>
+                <p>
+                  345 <span className="hidden md:inline">reactions</span>
+                </p>
               </div>
 
               <div
@@ -102,7 +104,9 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
                 onClick={commentHandler}
               >
                 <ChatAltIcon className="h-6 text-gray-500" />
-                <p>3 comments</p>
+                <p>
+                  3 <span className="hidden md:inline">comments</span>
+                </p>
               </div>
             </div>
 

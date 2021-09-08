@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { DotsHorizontalIcon, HeartIcon, ChatIcon } from "@heroicons/react/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/solid";
-import styled, { css } from "styled-components";
 import Link from "next/link";
 
 import useVisible from "../hooks/useVisible";
@@ -25,17 +24,20 @@ export default function Comment() {
 
   return (
     <div className="bg-white my-4 p-0">
-      <Details isOpen={isOpen} open>
-        <Summary
+      <details className="relative" isOpen={isOpen} open>
+        <summary
+          className={`cursor-pointer text-gray-500 italic text-sm bg-gray-50 p-2 rounded-md ${
+            isOpen && "absolute top-10 bg-transparent left-0 py-0"
+          }`}
           onClick={() => {
-            setIsOpen(!isOpen);
+            setIsOpen((prevState) => !prevState);
           }}
         >
           <span>{!isOpen && "Austin Ofor + 1 replies"}</span>
-        </Summary>
+        </summary>
         <div className="flex gap-1">
           <Link passHref href="/test">
-            <a>
+            <a className="h-0">
               <div className="relative w-8 h-8 top-0 left-0">
                 <Image
                   alt="commenter"
@@ -109,32 +111,7 @@ export default function Comment() {
             </div>
           </div>
         </div>
-      </Details>
+      </details>
     </div>
   );
 }
-
-const Details = styled.details`
-  position: relative;
-
-  ${({ isOpen }) =>
-    isOpen &&
-    css`
-      & summary {
-       position: absolute;
-       top: 40px;
-       background: none;
-       left: 0px;
-       padding: 0 0.9em;
-    `}
-`;
-
-const Summary = styled.summary`
-  cursor: pointer;
-  color: #64707d;
-  font-style: italic;
-  font-size: 0.875em;
-  background: #f9fafa;
-  padding: 0.5em;
-  border-radius: 5px;
-`;

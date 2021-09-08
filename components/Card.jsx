@@ -1,34 +1,15 @@
-import React from "react";
-import styled from "styled-components";
-
-export default function Card({ children, headerColor, header, style, className }) {
+export default function Card({ children, headerColor, header, style }) {
   return (
-    <Container style={{ ...style }} className="shadow-md border border-gray-300">
+    <div
+      className="bg-white rounded-md overflow-hidden p-6 mb-7 shadow-md border border-gray-300"
+      style={{ ...style }}
+    >
       {header && (
-        <Header color={headerColor}>
-          <h3>{header}</h3>
-        </Header>
+        <div className="mb-6" style={{ color: headerColor || "black" }}>
+          <h3 className="text-2xl m-0">{header}</h3>
+        </div>
       )}
       <div>{children}</div>
-    </Container>
+    </div>
   );
 }
-
-const Container = styled.div`
-  background: white;
-  /* box-shadow: 0 0 0 1px rgb(8 9 10 / 10%); */
-  border-radius: 5px;
-  overflow: hidden;
-  padding: 1.5em;
-  margin-bottom: 1.8em;
-`;
-
-const Header = styled.div`
-  margin-bottom: 1.5em;
-
-  h3 {
-    font-size: 1.5em;
-    margin: 0;
-    color: ${({ color }) => color || ""};
-  }
-`;

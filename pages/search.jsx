@@ -24,7 +24,7 @@ export default function Search() {
             <Nav />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col mb-10">
             {searchResults.map((sr, i) => (
               <ArticleCard key={i} />
             ))}

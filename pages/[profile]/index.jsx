@@ -23,7 +23,7 @@ export default function ProfilePage({ commentsOnly = false }) {
 
   return (
     <>
-      <Title title={"Profile"} />
+      <Title title="Profile" />
       <Navbar />
 
       <main className="my-min-height p-0 bg-gray-200 pb-8 relative">
@@ -97,13 +97,13 @@ export default function ProfilePage({ commentsOnly = false }) {
             </div>
           </div>
 
-          <div className="flex flex-col flex-wrap col-span-full md:col-span-4 gap-3">
+          <div className="flex flex-col flex-wrap col-span-full md:col-span-4 gap-2">
             <RecentComments profileUrl={profile} commentsOnly={commentsOnly} />
             {!commentsOnly && (
-              <>
+              <div>
                 <ArticleCard />
                 <ArticleCard />
-              </>
+              </div>
             )}
           </div>
         </div>

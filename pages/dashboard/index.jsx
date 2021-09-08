@@ -26,6 +26,8 @@ export default function DashboardIndexPage() {
           <div className="py-3 pb-5">
             <h2 className="font-bold text-2xl">Dashboard </h2>
           </div>
+
+          {/* smallcard */}
           <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
             {data.map((d, i) => (
               <SmallCard key={i} title={d.count} subtitle={d.name} />

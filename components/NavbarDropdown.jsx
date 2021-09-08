@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 
 import config from "../constants/config.json";
@@ -11,9 +10,9 @@ export default function NavbarDropdown({
   const navs = config.navs;
 
   return (
-    <ul className="list-none m-0">
+    <div className="list-none m-0">
       <div className="p-1 border-b border-gray-200">
-        <li className="cursor-pointer p-1 rounded-md hover:bg-gray-100 hover:text-blue-600">
+        <div className="cursor-pointer p-1 rounded-md hover:bg-gray-100 hover:text-blue-600">
           <Link href={`/${username}`} passHref>
             <a className="flex cursor-pointer flex-col py-2 px-1 font-medium">
               {`${firstname} ${lastname}`}
@@ -22,7 +21,7 @@ export default function NavbarDropdown({
               </span>
             </a>
           </Link>
-        </li>
+        </div>
       </div>
 
       <div className="p-1">
@@ -58,6 +57,6 @@ export default function NavbarDropdown({
           </div>
         ) : null
       )}
-    </ul>
+    </div>
   );
 }

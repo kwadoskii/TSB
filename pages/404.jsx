@@ -1,88 +1,38 @@
-import React from "react";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 
-import color from "../constants/color";
 import Title from "../components/Title";
+import Link from "next/link";
 
 export default function FourOFour() {
   const router = useRouter();
 
   const handleHome = (e) => {
     e.preventDefault();
-    router.replace("/", "/");
+    router.replace("/");
   };
 
   return (
     <>
       <Title title={"oops page not found"} />
 
-      <Container>
-        <Holder>
-          <Inner>
-            <p>404</p>
-          </Inner>
-        </Holder>
+      <div className="w-full h-[92vh] flex flex-col items-center justify-center gap-3">
+        <div className="bg-blue-500 rounded-2xl flex items-center justify-center p-2 w-10/12 md:w-3/5 lg:w-1/2 h-2/5 lg:h-3/5">
+          <div className="bg-black text-white h-[85%] w-[90%] rounded-xl flex items-center justify-center">
+            <p className="text-7xl lg:text-9xl my-7 mx-0 font-bold">404</p>
+          </div>
+        </div>
 
-        <p>This page does not exist</p>
-        <Anchor onClick={handleHome} href="/">
-          Return to Home Page
-        </Anchor>
-      </Container>
+        <p className="text-gray-700">This page does not exist</p>
+        <Link passHref href="/">
+          <a
+            className="text-base md:text-lg mt-0 underline text-blue-700 cursor-pointer hover:text-blue-800 opacity-90"
+            onClick={handleHome}
+            href="/"
+          >
+            Go to Home Page
+          </a>
+        </Link>
+      </div>
     </>
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-
-  > p {
-    font-size: 1.15em;
-    margin: 1.8em 0;
-  }
-`;
-
-const Holder = styled.div`
-  background: dodgerblue;
-  border-radius: 2em;
-  padding: 0.3em;
-  height: 46%;
-  width: 46%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 300px;
-  max-width: 420px;
-`;
-
-const Inner = styled.div`
-  background: black;
-  color: white;
-  height: 90%;
-  width: 90%;
-  border-radius: 1em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  p {
-    font-size: 7em;
-    font-weight: bolder;
-  }
-`;
-
-const Anchor = styled.a`
-  font-size: 1.1em;
-  margin-top: 0;
-  text-decoration: underline;
-  color: ${color.primary};
-  cursor: pointer;
-  :hover {
-    color: ${color.darkPrimary};
-    opacity: 0.9;
-  }
-`;

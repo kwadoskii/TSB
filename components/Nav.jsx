@@ -1,41 +1,25 @@
-import React from "react";
 import Link from "next/link";
-import styled from "styled-components";
-
-import color from "../constants/color";
 
 export default function Nav() {
   return (
-    <NavHolder>
+    <nav className="flex flex-wrap items-center gap-1">
       <Link href="#" passHref>
-        <NavLink>Most Relevant</NavLink>
+        <a className="p-1 py-0 my-0 border-[3px] border-transparent hover:text-blue-700 rounded-md hover:bg-purple-100">
+          Most Relevant
+        </a>
       </Link>
 
       <Link href="#" passHref>
-        <NavLink>Two</NavLink>
+        <a className="p-1 py-0 my-0 border-[3px] border-transparent hover:text-blue-700 rounded-md hover:bg-purple-100">
+          Two
+        </a>
       </Link>
 
       <Link href="#" passHref>
-        <NavLink>Three</NavLink>
+        <a className="p-1 py-0 my-0 border-[3px] border-transparent hover:text-blue-700 rounded-md hover:bg-purple-100">
+          Three
+        </a>
       </Link>
-    </NavHolder>
+    </nav>
   );
 }
-
-const NavHolder = styled.nav`
-  display: flex;
-  flex-flow: row wrap;
-`;
-
-const NavLink = styled.a`
-  font-size: 1em;
-  padding: 6px 6px;
-  margin: 0 2px;
-  border: 3px solid transparent;
-  :hover {
-    color: ${color.primary};
-    border-radius: 5px;
-    background: rgb(59 73 223 / 10%);
-    /* border-bottom: 3px solid ${color.primary}; used for active*/
-  }
-`;
