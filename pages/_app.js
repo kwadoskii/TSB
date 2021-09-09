@@ -1,12 +1,12 @@
-import "../styles/globals.css";
 import NProgress from "nprogress";
 import Router from "next/router";
-
 import Title from "../components/Title";
+
+import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 
 Router.onRouteChangeStart = (url) => {
-  NProgress.start();
+  if (location.pathname !== url) NProgress.start();
 };
 
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
   NProgress.configure({
     parent: "#__next",
     showSpinner: false,
-    template: `<div class="bar" style="background: tomato;" role="bar"><div class="peg" style="box-shadow: 0 0 10px tomato, 0 0 5px tomato;"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
+    template: `<div class="bar" style="background: black;" role="bar"><div class="peg" style="box-shadow: 0 0 10px black, 0 0 5px black;"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
   });
 
   return (

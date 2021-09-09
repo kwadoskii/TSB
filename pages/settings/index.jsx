@@ -6,14 +6,14 @@ import Navbar from "../../components/Navbar";
 import Title from "../../components/Title";
 import SettingsSidebar from "../../components/SettingsSidebar";
 
-export default function Settings() {
+export default function SettingsPage() {
   return (
     <>
       <Title title="Settings" />
       <Navbar />
 
       <main className="my-min-height bg-gray-100">
-        <div className="flex gap-4 flex-wrap px-1 py-1 lg:py-4 lg:px-6 mx-auto max-w-5xl relative ">
+        <div className="px-1 py-1 lg:py-4 lg:px-6 mx-auto max-w-5xl relative flex gap-4 flex-col">
           <div>
             <h2 className="my-3 mx-0 text-2xl lg:text-3xl">
               Settings for{" "}

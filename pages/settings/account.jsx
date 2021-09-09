@@ -13,7 +13,7 @@ export default function AccountPage() {
       <Navbar />
 
       <main className="my-min-height bg-gray-100">
-        <div className="flex gap-4 flex-wrap px-1 py-1 lg:py-4 lg:px-6 mx-auto max-w-5xl relative ">
+        <div className="flex gap-4 flex-col px-1 py-1 lg:py-4 lg:px-6 mx-auto max-w-5xl relative ">
           <div>
             <h2 className="my-3 mx-0 text-2xl lg:text-3xl">
               Settings for{" "}

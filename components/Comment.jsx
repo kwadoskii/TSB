@@ -24,7 +24,7 @@ export default function Comment() {
 
   return (
     <div className="bg-white my-4 p-0">
-      <details className="relative" isOpen={isOpen} open>
+      <details className="relative" open>
         <summary
           className={`cursor-pointer text-gray-500 italic text-sm bg-gray-50 p-2 rounded-md ${
             isOpen && "absolute top-10 bg-transparent left-0 py-0"

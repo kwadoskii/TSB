@@ -51,7 +51,8 @@ export default function SettingsSidebar() {
     },
   ];
 
-  const { asPath } = useRouter();
+  let { asPath } = useRouter();
+  asPath = asPath === "/settings" ? "/settings/profile" : asPath;
 
   return (
     <aside className="flex flex-col gap-0">
