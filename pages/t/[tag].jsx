@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
+import TagCard from "../../components/TagCard";
 import Title from "../../components/Title";
 
 export default function TagPage() {
@@ -9,8 +10,16 @@ export default function TagPage() {
     <>
       <Title title={query.tag} />
       <Navbar />
-      <div className="flex items-center justify-center my-min-height">
-        <p className="text-9xl font-black">{query.tag}</p>
+
+      <div className="bg-gray-100">
+        <TagCard
+          barColor="gold"
+          name={query.tag}
+          subtitle="lorem ispsum dolum test one to three"
+        />
+        <div className="flex items-center justify-center my-min-height">
+          <p className="text-9xl font-black">{query.tag}</p>
+        </div>
       </div>
     </>
   );
