@@ -39,35 +39,36 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
       )}
 
       <div
-        className={`bg-white p-4 flex w-full gap-2 items-start ${
+        className={`bg-white p-3 flex flex-col w-full gap-1 items-start ${
           hasImage ? "rounded-b-md" : "rounded-md"
         }`}
       >
-        <Link href="/kwadoskii" passHref>
-          <a>
-            <div className="w-9 h-9 relative border rounded-full">
-              <Image
-                src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
-                alt="profile of user"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-          </a>
-        </Link>
-
-        <div className="flex-grow flex flex-col gap-1">
-          <div className="flex-grow-0">
+        <div className="flex items-center">
+          <Link href="/kwadoskii" passHref>
+            <a>
+              <div className="w-9 h-9 relative border rounded-full">
+                <Image
+                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                  alt="profile of user"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            </a>
+          </Link>
+          <div className="flex-grow-0 flex flex-col gap-0 ml-2">
             <Link href="/kwadoskii" passHref>
               <a>
-                <p className="text-gray-800 text-sm font-medium py-2 pb-1 px-1 hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out -mt-3">
+                <p className="text-gray-800 text-sm font-medium hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out">
                   Test Arthur
                 </p>
               </a>
             </Link>
-            <span className="text-xs text-gray-500 block px-1">May 6 (3 hours ago)</span>
+            <span className="text-xs text-gray-500 block">May 6 (3 hours ago)</span>
           </div>
+        </div>
 
+        <div className="flex flex-col md:pl-9 w-full">
           <Link href="/kwadoskii/post-url" passHref>
             <a>
               <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl">
@@ -76,7 +77,7 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
             </a>
           </Link>
 
-          <div className="my-1 flex text-gray-400 text-sm gap-1">
+          <div className="flex text-gray-400 text-sm gap-1">
             {tags.map((tag, i) => (
               <Link href={`/t/${tag}`} key={i}>
                 <a className="p-1 hover:text-black">
@@ -93,8 +94,8 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
                 className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
                 onClick={likeHandler}
               >
-                <HeartIcon className="h-6 text-red-500" />
-                <p>
+                <HeartIcon className="h-5 text-red-500" />
+                <p className="text-sm">
                   345 <span className="hidden md:inline">reactions</span>
                 </p>
               </div>
@@ -103,8 +104,8 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
                 className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
                 onClick={commentHandler}
               >
-                <ChatAltIcon className="h-6 text-gray-500" />
-                <p>
+                <ChatAltIcon className="h-5 text-gray-500" />
+                <p className="text-sm">
                   3 <span className="hidden md:inline">comments</span>
                 </p>
               </div>
