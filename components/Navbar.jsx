@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <nav className="border-b border-gray-300 z-10">
-      <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-4 lg:px-6 mx-auto max-w-7xl relative">
+      <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-5 lg:px-6 mx-auto max-w-7xl relative">
         <div className="flex justify-start items-center flex-1 gap-2">
           <Link href="/">
             <a>
@@ -49,13 +49,13 @@ export default function Navbar() {
         <div className="flex items-center">
           <Link href="/write" passHref>
             <a>
-              <button className="border-none p-3 bg-blue-700 text-white font-medium text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out">
-                Create post
+              <button className="border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center flex">
+                Create Post
               </button>
             </a>
           </Link>
           <div
-            className="relative w-10 h-10 cursor-pointer rounded-full none"
+            className="relative w-9 h-9 cursor-pointer rounded-full none"
             onClick={handleShowHideNavMenu}
             ref={ref}
           >

@@ -16,7 +16,7 @@ export default function Input({
       )}
       {type !== "checkbox" ? (
         <input
-          className="outline-none border border-gray-300 p-3 bg-gray-50 rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue"
+          className="outline-none border border-gray-300 p-3 bg-gray-50 rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue h-10 placeholder-gray-500"
           {...props}
           name={nameFormatted}
           id={nameFormatted}
