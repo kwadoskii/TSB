@@ -29,17 +29,13 @@ export default function TagCard({ barColor, name, subtitle, large = false }) {
               objectFit="cover"
             />
           </div>
-          <div>
+          <div className="flex-grow">
             <div className="flex gap-2 justify-between items-center">
-              <h3 className="text-3xl font-bold">Publish Subscribe Pattern</h3>
+              <h3 className="text-3xl font-bold">{name}</h3>
               <button className="my-button px-5 m-0 py-2 text-base">Follow</button>
             </div>
 
-            <p className="pt-5 md:w-9/12 text-gray-800">
-              Use this tag to write about anything regarding the publish-subscribe
-              pattern, event-driven development or messaging protocols. could be
-              associated with #eventdriven
-            </p>
+            <p className="pt-5 md:w-9/12 text-gray-800">{subtitle}</p>
           </div>
         </div>
       )}

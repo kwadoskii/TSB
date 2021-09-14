@@ -46,7 +46,7 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
         <div className="flex items-center">
           <Link href="/kwadoskii" passHref>
             <a>
-              <div className="w-9 h-9 relative border rounded-full">
+              <div className="w-8 h-8 relative border rounded-full">
                 <Image
                   src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
                   alt="profile of user"

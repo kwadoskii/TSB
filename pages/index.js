@@ -1,55 +1,77 @@
-import Head from "next/head";
-import styles from "../styles/Home.module.css";
-
+import Feed from "../components/Feed";
+import Image from "next/image";
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Title title="Home" />
-
       <Navbar />
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="#">TSB</a>
-        </h1>
+      <main>
+        <div className="bg-gray-100 my-min-height">
+          <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto">
+            <div className="grid grid-cols-9 gap-5 my-0">
+              <div className="col-span-2 relative">
+                <div className="min-h-screen rounded-md sticky top-8 flex flex-col gap-3">
+                  <div className="h-52 w-full relative">
+                    <Link passHref href="https://www.google.com">
+                      <a target="_blank" referrerPolicy="no-referrer">
+                        <Image
+                          src="https://www.lindaikejisblog.com/photos/shares/thumbs/614103d96f046.png"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="h-52 w-full relative">
+                    <Link passHref href="https://www.google.com">
+                      <a target="_blank" referrerPolicy="no-referrer">
+                        <Image
+                          src="https://www.lindaikejisblog.com/photos/shares/thumbs/614103d96f046.png"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="h-52 w-full relative">
+                    <Link passHref href="https://www.google.com">
+                      <a target="_blank" referrerPolicy="no-referrer">
+                        <Image
+                          src="https://www.lindaikejisblog.com/photos/shares/thumbs/614103d96f046.png"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                  <div className="h-52 w-full relative">
+                    <Link passHref href="https://www.google.com">
+                      <a target="_blank" referrerPolicy="no-referrer">
+                        <Image
+                          src="https://www.lindaikejisblog.com/photos/shares/thumbs/614103d96f046.png"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </div>
 
-        <p className={styles.description}>A forum to write, learn and earn.</p>
+              <div className="col-span-5">
+                <Feed />
+              </div>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Write &rarr;</h3>
-            <p>Capture stories and happening around you.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Read about other people's stories.</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Earn &rarr;</h3>
-            <p>Get paid for being active every week.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            style={{ visibility: "hidden" }}
-          ></a>
+              <div className="col-span-2"></div>
+            </div>
+          </div>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a href="https://github.com/kwadoskii" target="_blank" rel="noopener noreferrer">
-          Powered by @kwadoskii
-        </a>
-      </footer>
-    </div>
+    </>
   );
 }
