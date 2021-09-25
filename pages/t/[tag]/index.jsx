@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Advert from "../../../components/Advert";
 import Feed from "../../../components/Feed";
 import Navbar from "../../../components/Navbar";
 import TagCard from "../../../components/TagCard";
@@ -22,24 +23,12 @@ export default function TagPage() {
           </div>
 
           <div className="grid grid-cols-9 gap-5 my-8">
-            <div className="col-span-2 relative">
-              <div className="h-2/3 rounded-md sticky top-8">
-                <div className="h-full w-full relative">
-                  <Link passHref href="https://www.google.com">
-                    <a target="_blank" referrerPolicy="no-referrer">
-                      <Image
-                        src="https://www.lindaikejisblog.com/photos/shares/thumbs/614103d96f046.png"
-                        layout="fill"
-                        objectFit="contain"
-                      />
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <div className="col-span-2 relative">{/* <Advert /> */}</div>
+
             <div className="col-span-5">
               <Feed tag={tag} data={[1, 1, 1, 11, 1, , 1, 1]} />
             </div>
+
             <div className="col-span-2"></div>
           </div>
         </div>
