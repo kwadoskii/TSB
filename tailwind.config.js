@@ -16,8 +16,10 @@ module.exports = {
         15: "repeat(15, minmax(0, 1fr))",
         16: "repeat(16, minmax(0, 1fr))",
         post: "4em 1fr",
+        small: "2.5em 1fr",
+        tiny: "1em 1fr",
       },
-      shadow: {
+      boxShadow: {
         soft: "-2px -2px 4px 0px #c2c6c9;",
       },
     },
