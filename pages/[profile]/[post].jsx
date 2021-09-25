@@ -28,7 +28,7 @@ export default function PostPage() {
       <main className="bg-gray-100 relative">
         <section className="my-screen grid gap-3 md:grid-cols-post lg:pt-3 pt-0 md:pt-2 px-0">
           <aside className="md:block md:row-end-[initial] md:w-[4em]">
-            <div className="fixed bottom-0 z-[100] left-0 right-0 bg-white rounded-t-md px-4 py-1 my-shadow-top-soft md:block md:shadow-none md:bg-transparent md:p-0 md:relative md:min-h-full">
+            <div className="fixed bottom-0 z-[100] left-0 right-0 bg-white rounded-t-md px-4 py-1 shadow-soft md:block md:shadow-none md:bg-transparent md:p-0 md:relative md:min-h-full">
               <div className="flex justify-between md:flex-col md:gap-8 md:w-full md:sticky right-0 top-32">
                 <div className="flex items-center gap-1 text-gray-400 md:flex-col md:gap-0">
                   <div className="rounded-full border-[3px] border-transparent hover:bg-red-100 md:flex-col p-1 cursor-pointer">
