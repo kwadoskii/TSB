@@ -16,6 +16,8 @@ function MyApp({ Component, pageProps }) {
   NProgress.configure({
     parent: "#__next",
     showSpinner: false,
+    // trickle: true,
+    // minimum: 3,
     template: `<div class="bar" style="background: black;" role="bar"><div class="peg" style="box-shadow: 0 0 10px black, 0 0 5px black;"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
   });
 
