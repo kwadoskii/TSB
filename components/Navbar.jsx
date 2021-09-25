@@ -27,8 +27,8 @@ export default function Navbar() {
       <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-5 lg:px-6 mx-auto max-w-7xl relative">
         <div className="flex justify-start items-center flex-1 gap-2">
           <Link href="/">
-            <a>
-              <p className="cursor-pointer select-none bg-black p-[5px] rounded font-semibold text-white text-lg">
+            <a className="outline-none">
+              <p className="cursor-pointer select-none bg-black p-[5px] rounded font-semibold text-white text-lg outline-none">
                 TSB
               </p>
             </a>
@@ -48,7 +48,7 @@ export default function Navbar() {
 
         <div className="flex items-center">
           <Link href="/write" passHref>
-            <a>
+            <a className="outline-none">
               <button className="border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center flex">
                 Create Post
               </button>

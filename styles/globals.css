@@ -2,8 +2,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 * {
@@ -28,6 +28,10 @@ body {
 
   .my-shadow-drop {
     box-shadow: 4px 4px 0 #08090a;
+  }
+
+  .my-shadow-top-soft {
+    box-shadow: -2px -2px 4px 0px #c2c6c9;
   }
 
   .my-button {
