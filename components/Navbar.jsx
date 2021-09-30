@@ -68,7 +68,7 @@ export default function Navbar() {
           </div>
 
           {isVisible && (
-            <div className="absolute left-auto top-14 right-2 lg:right-6 bg-white my-shadow-drop text-black border-2 border-black rounded-md z-[400] md:w-[250px] w-10/12">
+            <div className="absolute left-auto top-14 right-2 lg:right-6 bg-white my-shadow-drop text-black border border-black rounded-md z-[400] md:w-[250px] w-10/12">
               <NavbarDropdown />
             </div>
           )}

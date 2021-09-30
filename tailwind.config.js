@@ -10,6 +10,12 @@ module.exports = {
           DEFAULT: "rgb(40, 3, 49)",
         },
       },
+      gridColumn: {
+        "span-13": "span 13 / span 13",
+        "span-14": "span 14 / span 14",
+        "span-15": "span 15 / span 15",
+        "span-16": "span 16 / span 16",
+      },
       gridTemplateColumns: {
         13: "repeat(13, minmax(0, 1fr))",
         14: "repeat(14, minmax(0, 1fr))",
@@ -19,6 +25,7 @@ module.exports = {
         small: "2.5em 1fr",
         tiny: "1em 1fr",
       },
+
       boxShadow: {
         soft: "-2px -2px 4px 0px #c2c6c9;",
       },

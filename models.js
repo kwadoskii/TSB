@@ -21,6 +21,7 @@ const post = [
         textBlack: false,
       },
     ],
+    slug: "lorem-ipsum",
     arthur: "123",
     banner: "http://imageurl.com",
     timestamp: "12-2-22",
