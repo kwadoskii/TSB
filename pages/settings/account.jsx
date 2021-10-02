@@ -43,9 +43,8 @@ export default function AccountPage() {
 
               <Card header="Export content">
                 <p>
-                  You can request an export of all your content. Currently we only support
-                  the export of your posts and comments. They will be emailed to your
-                  inbox.
+                  You can request an export of all your content. Currently we only support the
+                  export of your posts and comments. They will be emailed to your inbox.
                 </p>
                 <Input
                   type="checkbox"
@@ -56,16 +55,16 @@ export default function AccountPage() {
               </Card>
 
               <Card header="Danger Zone" headerColor="#dc1818">
-                <h3>Delete account</h3>
+                <h3 className="text-lg -mt-2 text-red-600 mb-3">Delete account</h3>
                 <p>Deleting your account will:</p>
                 <p>
                   Delete your profile, along with your authentication associations. <br />
-                  Delete any and all content you have, such as articles, comments, your
-                  reading list or chat messages. <br />
+                  Delete any and all content you have, such as articles, comments, your reading list
+                  or chat messages. <br />
                   Allow your username to become available to anyone.
                 </p>
 
-                <button className="my-button bg-red-600 hover:bg-red-700 mt-5">
+                <button className="border-none p-3 text-white font-medium text-sm mr-3 cursor-pointer rounded-md transition duration-100 ease-out bg-red-600 hover:bg-red-700 mt-5">
                   Delete Account
                 </button>
               </Card>

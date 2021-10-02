@@ -11,7 +11,7 @@ export default function Input({
   const nameFormatted = name?.toLowerCase().split(" ").join("_");
 
   return (
-    <div className={`${noVerticalMargin ? "my-0 mx-0" : "my-6 mx-0"}`}>
+    <div className={`w-full ${!noVerticalMargin && "my-6 mx-0"}`}>
       {hasLabel && (
         <label className="block mb-2 font-medium" htmlFor={nameFormatted}>
           {name}

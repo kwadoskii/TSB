@@ -44,29 +44,45 @@ export default function Sidebar({
     );
 
   return (
-    <div className="flex flex-col col-span-full md:col-span-1">
-      <div
-        className={`flex cursor-pointer  rounded-md p-2 mb-2 hover:text-blue-700 ${
-          selected === "" ? "bg-white shadow-sm font-semibold" : "hover:bg-gray-200"
-        }`}
-        onClick={() => onItemSelect("")}
-      >
-        all {displayName}
+    <>
+      <div className="hidden md:flex flex-col col-span-full md:col-span-1">
+        <div
+          className={`flex cursor-pointer  rounded-md p-2 mb-2 hover:text-blue-700 ${
+            selected === "" ? "bg-white shadow-sm font-semibold" : "hover:bg-gray-200"
+          }`}
+          onClick={() => onItemSelect("")}
+        >
+          all {displayName}
+        </div>
+
+        {data.map((d, i) => (
+          <div
+            key={i}
+            className={`flex cursor-pointer  rounded-md p-2 mb-2 hover:text-blue-700 ${
+              d?.name === selected ? "bg-white shadow-sm font-semibold" : "hover:bg-gray-200"
+            }`}
+            onClick={() => onItemSelect(d.name)}
+          >
+            <p className={`flex-grow ${d.name === selected ? "font-medium" : ""}`}>
+              #{d?.[textProperty]}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {data.map((d, i) => (
-        <div
-          key={i}
-          className={`flex cursor-pointer  rounded-md p-2 mb-2 hover:text-blue-700 ${
-            d?.name === selected ? "bg-white shadow-sm font-semibold" : "hover:bg-gray-200"
-          }`}
-          onClick={() => onItemSelect(d.name)}
+      <div className="block md:hidden">
+        <select
+          className="w-full rounded-md border border-gray-300 p-2 outline-none z-50"
+          onChange={(e) => onItemSelect(e.target.value)}
         >
-          <p className={`flex-grow ${d.name === selected ? "font-medium" : ""}`}>
-            #{d?.[textProperty]}
-          </p>
-        </div>
-      ))}
-    </div>
+          <option value="">all {displayName}</option>
+          {data.map((d, i) => (
+            <option value={d.name} key={i}>
+              #{d.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 }

@@ -274,24 +274,22 @@ export default function SavedPage() {
             </div>
 
             <div className="col-span-full lg:col-span-1">
-              <div className="flex flex-col lg:flex-row lg:gap-3 items-center">
+              <div className="flex">
                 {/* <button className="px-3 border-2 border-gray-300 rounded-md font-semibold hover:border-gray-400 transition duration-200 ease-out hover:bg-gray-200 py-[0.4em]">
                   View archive
                 </button> */}
-                <div className="flex-grow">
-                  <Input
-                    noVerticalMargin
-                    placeholder="Enter some text to filter on..."
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-                </div>
+                <Input
+                  noVerticalMargin
+                  placeholder="Enter some text to filter on..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-16 gap-4 mt-5">
-            <div className="col-span-3">
+          <div className="grid grid-cols-16 md:gap-2 lg:gap-4 md:mt-5">
+            <div className="col-span-full md:col-span-4 lg:col-span-3 my-2 md:m-0">
               <Sidebar
                 notLinked
                 data={tags}
@@ -301,7 +299,7 @@ export default function SavedPage() {
               />
             </div>
 
-            <div className="col-span-13">
+            <div className="col-span-full md:col-span-12 lg:col-span-13">
               <div className="border border-gray-200 rounded-md bg-white px-5 py-4">
                 {Array.isArray(filteredPost) && filteredPost.length > 0 ? (
                   filteredPost.map((p, i) => {
@@ -329,21 +327,21 @@ export default function SavedPage() {
                             </a>
                           </Link>
 
-                          <div className="flex gap-2 items-center text-gray-500 text-sm">
+                          <div className="flex flex-col md:flex-row gap-2 md:items-center text-gray-500 text-sm">
                             <Link passHref href={`/${p.arthur.username}`}>
                               <a className="hover:text-blue-800 text-gray-800">
                                 <p className="text-sm font-semibold">{p.arthur.name}</p>
                               </a>
                             </Link>
                             <p>
-                              <span className="text-gray-300">• </span>
+                              <span className="hidden md:inline text-gray-300">• </span>
                               {months[createdTime.getMonth()] +
                                 " " +
                                 createdTime.getDate() +
                                 " '" +
                                 createdTime.getFullYear().toString().substring(2) +
                                 " "}
-                              <span className="text-gray-300">• </span>
+                              <span className="hidden md:inline text-gray-300">• </span>
                             </p>
                             <div className="flex gap-2">
                               {p.tags.map((tag, i) => (
