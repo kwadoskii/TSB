@@ -197,22 +197,43 @@ export default function SavedPage() {
   ];
 
   const [postss, setPostss] = useState(posts);
-  const [filteredPost, setFilteredPost] = useState(postss);
   const [tags, setTags] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
 
   useEffect(() => {
-    setFilteredPost(postss);
-    filterTags(filteredPost);
+    setPostss(postss);
+    filterTags(postss);
   }, []);
 
-  const handleSearch = (text) => {
-    text = text.toLowerCase();
-    setSearchValue(text);
-    setFilteredPost(postss.filter((p) => p.title.toLowerCase().includes(text))); //check for tags too
+  const getPageData = () => {
+    let searchText = searchValue.toLowerCase().trim().replace(/\\/g, "");
+    let filtered = postss;
+
+    if (searchText.length > 1 || selectedTag) {
+      filtered = selectedTag
+        ? postss.filter((p) => p.tags.filter((t) => t.name === selectedTag).length > 0)
+        : postss;
+
+      filtered = searchText
+        ? filtered.filter((p) =>
+            p.title.toLowerCase().search(searchText) > -1 ||
+            p.tags.filter((t) => t.name.toLowerCase().search(searchText) > -1).length > 0 ||
+            p.arthur.name.toLowerCase().search(searchText) > -1
+              ? p
+              : null
+          )
+        : filtered;
+    }
+
+    return { totalCount: filtered.length, data: filtered };
   };
 
-  const filterTags = (posts = []) => {
+  const handleTagSelect = (tag) => {
+    setSelectedTag(tag);
+  };
+
+  const filterTags = (posts) => {
     const tagLists = new Set();
 
     posts.forEach((p) => {
@@ -238,6 +259,8 @@ export default function SavedPage() {
     );
   };
 
+  const { data: filteredPost, totalCount } = getPageData();
+
   return (
     <>
       <Title title="Saved Articles" />
@@ -247,7 +270,7 @@ export default function SavedPage() {
         <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto ">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-full lg:col-span-1">
-              <h2 className="font-bold text-xl md:text-3xl">Saved posts ({filteredPost.length})</h2>
+              <h2 className="font-bold text-xl md:text-3xl">Saved posts ({totalCount})</h2>
             </div>
 
             <div className="col-span-full lg:col-span-1">
@@ -260,7 +283,7 @@ export default function SavedPage() {
                     noVerticalMargin
                     placeholder="Enter some text to filter on..."
                     value={searchValue}
-                    onChange={(e) => handleSearch(e.target.value)}
+                    onChange={(e) => setSearchValue(e.target.value)}
                   />
                 </div>
               </div>
@@ -269,7 +292,13 @@ export default function SavedPage() {
 
           <div className="grid grid-cols-16 gap-4 mt-5">
             <div className="col-span-3">
-              <Sidebar notLinked data={[{ name: "all tags", id: 0 }, ...tags]} />
+              <Sidebar
+                notLinked
+                data={tags}
+                selected={selectedTag}
+                onItemSelect={handleTagSelect}
+                displayName="tags"
+              />
             </div>
 
             <div className="col-span-13">
@@ -318,7 +347,7 @@ export default function SavedPage() {
                             </p>
                             <div className="flex gap-2">
                               {p.tags.map((tag, i) => (
-                                <Link passHref href={`/${p.arthur.username}`} key={i}>
+                                <Link passHref href={`/t/${tag.name}`} key={i}>
                                   <a className="hover:text-gray-900">
                                     <p key={tag._id}>{`#${tag.name}`}</p>
                                   </a>
@@ -333,7 +362,7 @@ export default function SavedPage() {
                 ) : (
                   <div className="flex flex-col justify-center items-center my-20">
                     <p className="text-gray-700 font-bold text-lg">
-                      Nothing saved posts from search filter 🤔
+                      No saved posts from search filter 🤔
                     </p>
                     <div>
                       <p className="flex gap-2 items-center mt-4">
