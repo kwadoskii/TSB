@@ -358,18 +358,18 @@ export default function SavedPage() {
                     );
                   })
                 ) : (
-                  <div className="flex flex-col justify-center items-center my-20">
+                  <div className="flex flex-col justify-center items-center my-24">
                     <p className="text-gray-700 font-bold text-lg">
                       No saved posts from search filter 🤔
                     </p>
-                    <div>
-                      <p className="flex gap-2 items-center mt-4">
-                        Click the bookmark reaction{" "}
-                        <span className="inline-block">
-                          <SaveIcon className="h-6 text-gray-500" />
-                        </span>{" "}
-                        when viewing a post to add it to your saved post.
-                      </p>
+                    <div className="w-full">
+                      <div className="mt-2">
+                        <p className="w-5/6 text-center mx-auto text-gray-500">
+                          Click the <span className="font-bold">bookmark reaction</span>{" "}
+                          <SaveIcon className="h-6 text-gray-500 inline" /> when viewing a post to
+                          add it to your saved post.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
