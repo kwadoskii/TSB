@@ -24,10 +24,22 @@ export default function Search() {
             <Nav />
           </div>
 
-          <div className="flex flex-col mb-10">
-            {searchResults.map((sr, i) => (
-              <ArticleCard key={i} />
-            ))}
+          <div className="grid grid-cols-9 gap-5 my-0">
+            <div className="col-span-2 relative">
+              <div className="min-h-screen rounded-md sticky top-8 hidden md:flex flex-col gap-3">
+                {/* <Advert />
+                  <Advert />
+                  <Advert /> */}
+              </div>
+            </div>
+
+            <div className="col-span-full md:col-span-5">
+              {searchResults.map((sr, i) => (
+                <ArticleCard key={i} />
+              ))}
+            </div>
+
+            <div className="col-span-2 hidden md:flex"></div>
           </div>
         </div>
       </div>

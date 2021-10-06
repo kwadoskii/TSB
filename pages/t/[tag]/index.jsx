@@ -19,13 +19,18 @@ export default function TagPage() {
       <div className="bg-gray-100 my-min-height">
         <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto">
           <div>
-            <TagCard barColor="gold" name={query.tag} subtitle="lorem ispsum dolum test one to three" large />
+            <TagCard
+              barColor="gold"
+              name={query.tag}
+              subtitle="lorem ispsum dolum test one to three"
+              large
+            />
           </div>
 
-          <div className="grid grid-cols-9 gap-5 my-8">
+          <div className="grid grid-cols-9 gap-5 my-2 md:my-8">
             <div className="col-span-2 relative">{/* <Advert /> */}</div>
 
-            <div className="col-span-5">
+            <div className="col-span-full md:col-span-5">
               <Feed tag={tag} data={[1, 1, 1, 11, 1, , 1, 1]} />
             </div>
 
