@@ -7,8 +7,8 @@ export default function RecentComments({ profileUrl, commentsOnly = false }) {
   const comments = [1, 2, 3, 4, 5, 6, 9];
 
   return (
-    <div className="shadow-md border border-gray-300 rounded-md bg-white">
-      <div className="border-b border-t p-4 border-gray-300">
+    <div className="shadow-md border border-gray-300 rounded-md bg-white overflow-hidden">
+      <div className="border-b p-4 border-gray-300">
         {!commentsOnly ? (
           <h3 className="font-bold">Recent Comments</h3>
         ) : (
