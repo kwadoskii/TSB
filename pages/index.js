@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 import Advert from "../components/Advert";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Title title="Home" />
