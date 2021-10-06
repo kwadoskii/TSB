@@ -1,3 +1,5 @@
+import { XIcon } from "@heroicons/react/outline";
+
 export default function Input({
   checkboxText,
   name,
@@ -6,6 +8,7 @@ export default function Input({
   noVerticalMargin = false,
   value,
   onChange,
+  clearButton = false, //use redux to implement this
   ...props
 }) {
   const nameFormatted = name?.toLowerCase().split(" ").join("_");
@@ -18,15 +21,25 @@ export default function Input({
         </label>
       )}
       {type !== "checkbox" ? (
-        <input
-          className="outline-none border border-gray-300 p-3 bg-white rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue h-10 placeholder-gray-500"
-          {...props}
-          name={nameFormatted}
-          id={nameFormatted}
-          type={type}
-          value={value}
-          onChange={onChange}
-        />
+        <div className="relative">
+          <input
+            className="outline-none border border-gray-300 p-3 bg-white rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue h-10 placeholder-gray-500 pr-8"
+            {...props}
+            name={nameFormatted}
+            id={nameFormatted}
+            type={type}
+            value={value}
+            onChange={onChange}
+          />
+          {clearButton && value && (
+            <div
+              className="flex items-center cursor-pointer absolute right-2 top-1/4"
+              onClick={() => onChange({ target: { value: "" } })} //clear value on click
+            >
+              <XIcon className="h-5 text-gray-400 hover:text-gray-700 bg-white" />
+            </div>
+          )}
+        </div>
       ) : (
         <div className="p-1 rounded-md transition duration-100 cursor-pointer flex items-center hover:bg-gray-50 ease-out">
           <input

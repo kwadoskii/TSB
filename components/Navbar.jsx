@@ -22,6 +22,8 @@ export default function Navbar() {
     router.push({ pathname: "/search", query: { q: searchValue } });
   };
 
+  const handleInputChange = (e) => setSearchValue(e.target.value);
+
   return (
     <nav className="border-b border-gray-300 z-10">
       <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-5 lg:px-6 mx-auto max-w-7xl relative">
@@ -37,9 +39,10 @@ export default function Navbar() {
           <div className="flex-grow-0 w-full lg:w-1/2">
             <form>
               <Input
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={handleInputChange}
                 placeholder="Search..."
                 value={searchValue}
+                clearButton
               />
               <button type="submit" onClick={handleSearch} className="hidden"></button>
             </form>
