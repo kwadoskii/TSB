@@ -35,7 +35,7 @@ body {
   }
 
   .my-feed-link {
-    @apply cursor-pointer text-gray-700 hover:text-blue-700 hover:rounded-md hover:bg-purple-100 p-2 transition duration-100 ease-in-out;
+    @apply cursor-pointer text-gray-700 hover:text-blue-700 hover:rounded-t-md hover:bg-gray-50 pb-1 pt-1 px-3 transition duration-100 ease-out;
   }
 
   .my-min-height {
