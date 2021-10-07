@@ -1,4 +1,5 @@
 import { XIcon } from "@heroicons/react/outline";
+import { useRef } from "react";
 
 export default function Input({
   checkboxText,
@@ -12,6 +13,7 @@ export default function Input({
   ...props
 }) {
   const nameFormatted = name?.toLowerCase().split(" ").join("_");
+  const inputRef = useRef(null);
 
   return (
     <div className={`w-full ${!noVerticalMargin && "my-6 mx-0"}`}>
@@ -30,11 +32,15 @@ export default function Input({
             type={type}
             value={value}
             onChange={onChange}
+            ref={inputRef}
           />
           {clearButton && value && (
             <div
               className="flex items-center cursor-pointer absolute right-2 top-1/4"
-              onClick={() => onChange({ target: { value: "" } })} //clear value on click
+              onClick={() => {
+                inputRef.current.value = "";
+                inputRef.current.focus();
+              }}
             >
               <XIcon className="h-5 text-gray-400 hover:text-gray-700 bg-white" />
             </div>
