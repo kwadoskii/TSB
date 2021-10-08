@@ -115,45 +115,46 @@ export default function PostPage() {
                         </div>
 
                         {/* newsletter */}
-                        <div className="mt-10 mb-3 text-lg md:text-xl text-black border-gray-300">
+                        <div className="mt-10 mb-3 border-gray-300 prose-lg lg:prose-xl prose-blue">
                           <p>
                             Most of the time out javascript code becomes clumsier if we inserted the
                             multiple null checks for the several entities. Those checks are kind of
-                            mandatory and if those checks were removed then this happens.
-                            <br />
-                            <br />
+                            mandatory and if those checks were removed then this happens.{" "}
+                          </p>
+                          <p>
                             Thanks, the SS redirect helped me. Lorem ipsum dolor, sit amet
                             consectetur adipisicing elit. Obcaecati natus et ipsum adipisci, fugit
                             quis doloremque, esse perferendis rem, distinctio nisi minima! Dicta,
                             maiores. Dolores illo commodi animi iure aperiam.
-                            <br />
-                            <br />
+                          </p>
+                          <p>
                             This is most useful operator in day to day life. Whether you are dealing
                             with async API calls or dealing with blocking tasks, we easily assume
                             the key will be present in the response of an API or output JSON object
                             of any operation But, what if key is absent of undefined. Here is the
                             trick
-                            <br />
-                            <br />
+                          </p>
+                          <p>
                             This my small try to explain you all the usage of some operators which
                             could possibly make your code neater and smaller rather than your
                             previous code 🤗Please let me know your thoughts in comments 🙏hanks For
                             Reading ...
-                            <br />
+                          </p>
+                          <p>
                             Understanding the scoping of variables is pretty important while coding.
                             Variables declared with let are specifically blocked scope. Whereas, if
                             you used var then you can hoist it anywhere in your code, but using var
                             should be avoided as much as possible (suggested by many !).
-                            <br />
-                            <br />
+                          </p>
+                          <p>
                             I often find the behavior of the this is pretty confusing in javascript
                             for me. Coming from the background of java and PHP, I assumed that I
                             will definitely feel at home if I used it but, then I was pretty
                             confused when getting started with the React or ES6. After several weird
                             things, I left it and then approached the programming in javascript
                             using functional approach.
-                            <br />
-                            <br />
+                          </p>
+                          <p>
                             It is still pretty confusing for me to know how this works, but if you
                             wanna use it then know it perfectly.
                           </p>
