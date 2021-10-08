@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Feed({ tag = "", data = [..."hell"] }) {
-  // border-b-4 border-blue-600
   const router = useRouter();
   const path = router.asPath;
   const formattedTag = tag === "" ? "/" : "/t/" + tag + "/";
@@ -27,41 +26,28 @@ export default function Feed({ tag = "", data = [..."hell"] }) {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-2 md:mb-6">
         <h3 className="text-xl text-gray-800 font-bold">Posts</h3>
         <div className="hidden sm:grid grid-flow-col gap-0">
           {navs.map(({ name, sortUrl }) => (
-            <div
-              key={name}
-              className={`my-feed-link ${selected === name.toLocaleLowerCase() && "font-bold text-blue-700"}`}
-              onClick={() => {
-                router.push(formattedTag + postfixUrl);
-              }}
-            >
-              {name}
+            <div className="relative">
+              <div
+                key={name}
+                onClick={() => {
+                  router.push(formattedTag + sortUrl);
+                }}
+                className={`"w-full inline-flex flex-col relative cursor-pointer overflow-hidden transition duration-100 ease-out after:right-3 after:left-3 after:absolute after:bottom-0" ${
+                  selected === name.toLowerCase()
+                    ? "font-semibold text-blue-700 after:h-[4px] after:bg-blue-700 after:rounded-lg after:bottom-0 hover:after:right-0 hover:after:left-0 hover:after:w-full"
+                    : ""
+                }`}
+              >
+                <p className="text-gray-700 hover:text-blue-700 hover:rounded-md hover:bg-gray-50 pb-2 pt-1 px-3">
+                  {name}
+                </p>
+              </div>
             </div>
           ))}
-          {/* <div
-            className={`my-feed-link ${path.split("/").pop() === "week" && "font-bold text-blue-700"}`}
-            onClick={() => {
-              router.push(`${formattedTag}top/week`);
-              setSelected("week");
-            }}
-          >
-            Week
-          </div>
-          <div className="my-feed-link" onClick={() => router.push(`${formattedTag}top/month`)}>
-            Month
-          </div>
-          <div className="my-feed-link" onClick={() => router.push(`${formattedTag}top/year`)}>
-            Year
-          </div>
-          <div className="my-feed-link" onClick={() => router.push(`${formattedTag}/top/infinity`)}>
-            Infinity
-          </div>
-          <div className="my-feed-link" onClick={() => router.push(`${formattedTag}/top/latest`)}>
-            Latest
-          </div> */}
         </div>
 
         <select

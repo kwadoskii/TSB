@@ -24,6 +24,7 @@ module.exports = {
         post: "4em 1fr",
         small: "2.5em 1fr",
         tiny: "1em 1fr",
+        write: "64px 1fr",
       },
 
       boxShadow: {
