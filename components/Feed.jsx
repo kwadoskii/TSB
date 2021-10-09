@@ -30,9 +30,8 @@ export default function Feed({ tag = "", data = [..."hell"] }) {
         <h3 className="text-xl text-gray-800 font-bold">Posts</h3>
         <div className="hidden sm:grid grid-flow-col gap-0">
           {navs.map(({ name, sortUrl }) => (
-            <div className="relative">
+            <div className="relative" key={name}>
               <div
-                key={name}
                 onClick={() => {
                   router.push(formattedTag + sortUrl);
                 }}

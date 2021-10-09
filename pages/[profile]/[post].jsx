@@ -115,7 +115,7 @@ export default function PostPage() {
                         </div>
 
                         {/* newsletter */}
-                        <div className="mt-10 mb-3 border-gray-300 prose-lg lg:prose-xl prose-blue">
+                        <div className="mx-auto mt-10 mb-3 border-gray-300 prose-lg lg:prose-xl prose-blue">
                           <p>
                             Most of the time out javascript code becomes clumsier if we inserted the
                             multiple null checks for the several entities. Those checks are kind of

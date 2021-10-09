@@ -24,7 +24,13 @@ module.exports = {
         post: "4em 1fr",
         small: "2.5em 1fr",
         tiny: "1em 1fr",
-        write: "64px 1fr",
+        write: "64px 7fr 3fr",
+      },
+      gridTemplateRows: {
+        write: "min-content 1fr min-content",
+      },
+      height: {
+        writeContent: "calc(100vh - 88px - 56px)",
       },
 
       boxShadow: {
