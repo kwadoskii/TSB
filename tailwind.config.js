@@ -5,6 +5,19 @@ module.exports = {
 
   theme: {
     extend: {
+      typography: {
+        default: {
+          css: {
+            pre: null,
+            code: null,
+            "code::before": null,
+            "code::after": null,
+            "pre code": null,
+            "pre code::before": null,
+            "pre code::after": null,
+          },
+        },
+      },
       colors: {
         "my-purple": {
           DEFAULT: "rgb(40, 3, 49)",
