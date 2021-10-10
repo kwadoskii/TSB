@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import marked from "marked";
 import sanitizeHtml from "sanitize-html";
+import hljs from "highlight.js";
 
 import Title from "../components/Title";
 
@@ -23,14 +24,22 @@ export default function Write() {
     titleRef.current?.focus();
   }, []);
 
+  marked.setOptions({
+    highlight: function (code, lang) {
+      return hljs.highlightAuto(code, [lang]).value;
+    },
+  });
+
   return (
     <>
       <Title title="Write post">
         <link
           rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/atom-one-dark-reasonable.min.css"
+          integrity="sha512-RwXJS3k4Z0IK6TGoL3pgQlA9g2THFhKL7z9TYWdAI8u6xK0AUuMWieJuWgTRayywC9A94ifUj1RzjDa1NIlUIg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
         />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
       </Title>
 
       <div className="bg-gray-100">
