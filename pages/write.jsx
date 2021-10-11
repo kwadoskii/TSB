@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import marked from "marked";
-import sanitizeHtml from "sanitize-html";
+import sanitizeHtml, { defaults } from "sanitize-html";
 import hljs from "highlight.js";
 
 import Title from "../components/Title";
@@ -15,6 +15,7 @@ export default function Write() {
   const contentRef = useRef(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [postTags, setPostTags] = useState("");
   const [editMode, setEditMode] = useState(true);
   const [bannerLink, setBannerLink] = useState("");
   const [minHeight, setMinHeight] = useState("");
@@ -28,6 +29,7 @@ export default function Write() {
     highlight: function (code, lang) {
       return hljs.highlightAuto(code, [lang]).value;
     },
+    gfm: true,
   });
 
   return (
@@ -128,7 +130,7 @@ export default function Write() {
                               id="changeBanner"
                               className="hidden"
                               onChange={() => {
-                                console.log("Image uploaded");
+                                console.log("Image changed");
                                 setBannerLink(
                                   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/j65tbwm3c6t379ed64by.png"
                                 );
@@ -169,6 +171,17 @@ export default function Write() {
                       type="text"
                       className="outline-none placeholder-gray-400 font-mono rounded-md"
                       placeholder="Add up to 4 tags..."
+                      value={postTags}
+                      onChange={(e) => {
+                        setPostTags(e.target.value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === ",") {
+                          e.preventDefault();
+                          setPostTags(postTags + ", ");
+                        }
+                        if (e.key === " ") e.preventDefault();
+                      }}
                     />
 
                     <div
@@ -212,14 +225,24 @@ export default function Write() {
                 <div className="w-10/12 mx-auto mt-8 flex flex-col">
                   <h2 className="text-black text-5xl font-extrabold">{title}</h2>
                   <div className="mb-8 mt-4 text-sm text-gray-500 flex gap-2">
-                    <span>#hello</span>
-                    <span>#music</span>
-                    <span>#celebrity</span>
-                    <span>#entertainment</span>
+                    {postTags.split(",").map((tag) => {
+                      tag = tag.trim();
+                      return tag !== "" ? (
+                        <span className="text-gray-600">
+                          <span className="text-gray-400 opacity-85">#</span>
+                          {tag}
+                        </span>
+                      ) : null;
+                    })}
                   </div>
                   <div
                     className="prose prose-blue"
-                    dangerouslySetInnerHTML={{ __html: marked(sanitizeHtml(content), {}) }}
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(marked(content), {
+                        allowedTags: [...defaults.allowedTags, "img", "a", "hr"],
+                        allowedAttributes: false,
+                      }),
+                    }}
                   ></div>
                 </div>
               </div>
