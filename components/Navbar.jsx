@@ -6,6 +6,7 @@ import NavbarDropdown from "./NavbarDropdown";
 import useVisible from "../hooks/useVisible";
 import Input from "../components/Input";
 import Image from "next/image";
+import { BellIcon, PlusIcon } from "@heroicons/react/outline";
 
 export default function Navbar() {
   const { isVisible, ref, setIsVisible } = useVisible();
@@ -49,14 +50,26 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-2 md:gap-4">
           <Link href="/write" passHref>
-            <a className="outline-none">
-              <button className="border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm mr-3 cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center flex">
-                Create Post
-              </button>
+            <a className="outline-none border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center md:flex hidden">
+              Create Post
             </a>
           </Link>
+
+          <Link href="/write" passHref>
+            <a className="bg-gray-900 text-white rounded-lg p-1 md:hidden">
+              <PlusIcon className="h-6" />
+            </a>
+          </Link>
+
+          <div className="text-gray-700 relative cursor-pointer rounded-full hover:bg-gray-100 p-1 hover:text-gray-900">
+            <BellIcon className="h-7" />
+            <span className="bg-red-600 text-white absolute rounded-md p-1 text-xs -top-2 -right-2">
+              110
+            </span>
+          </div>
+
           <div
             className="relative w-9 h-9 cursor-pointer rounded-full none"
             onClick={handleShowHideNavMenu}

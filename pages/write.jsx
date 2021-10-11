@@ -193,10 +193,6 @@ export default function Write() {
                         className="flex-grow outline-none placeholder-shown:font-mono rounded-md placeholder-gray-400 resize-none text-lg mt-3 w-full h-full"
                         data-gramm_editor="false"
                         onChange={(e) => {
-                          console.log(
-                            parseInt(contentDivRef.current.style.minHeight.substr(0, 3)),
-                            contentRef.current.scrollHeight
-                          );
                           setContent(e.target.value);
                           setMinHeight(contentRef.current.scrollHeight + "px");
                         }}
