@@ -83,7 +83,7 @@ export default function Write() {
               </div>
 
               <div
-                className="absolute top-2 right-3 p-[10px] cursor-pointer hover:bg-gray-200 rounded-lg"
+                className="absolute -top-1 md:top-2 right-3 p-[10px] cursor-pointer hover:bg-gray-200 rounded-lg"
                 onClick={() => route.back()}
               >
                 <XIcon className="h-5 text-gray-700" />
@@ -226,7 +226,7 @@ export default function Write() {
                   <h2 className="text-black text-5xl font-extrabold">{title}</h2>
                   <div className="mb-8 mt-4 text-sm text-gray-500 flex gap-2">
                     {postTags.split(",").map((tag) => {
-                      tag = tag.trim();
+                      tag = tag.trim().toLowerCase();
                       return tag !== "" ? (
                         <span className="text-gray-600">
                           <span className="text-gray-400 opacity-85">#</span>

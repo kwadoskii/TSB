@@ -14,6 +14,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Intro
 
+```python
+def function(foo):
+    print(foo)
+```
+
 - [ ] Run `> npm-install` to install the project dependencies
 - [x] Install gulp.js via the Mac terminal or Gitbash on a PC `> npm install -g gulp`
 - [ ] Run the Gulp command `> gulp`
@@ -41,3 +46,19 @@ prints
 `hello 12`
 
 Peace out!!!
+
+### Get the List of Department without Manager
+
+To get all the department that has no manager assign to them we have to make use of `joins` to join the related tables we need to make use.
+
+We would ben using three tables `departments`, `locations` and `countries`.
+Run the code below to see it in action.
+
+```sql
+select l.city || c.country_name, d.department_name
+from departments d, locations l, countries c
+where d.location_id = l.location_id
+and d.manager_id is null;
+```
+
+That would be all for today.

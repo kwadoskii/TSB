@@ -9,13 +9,13 @@ export default function Nav() {
 
       <div>
         <a className="p-1 py-0 my-0 border-[3px] border-transparent hover:text-blue-700 rounded-md hover:bg-purple-100 cursor-pointer">
-          Two
+          Latest
         </a>
       </div>
 
       <div>
         <a className="p-1 py-0 my-0 border-[3px] border-transparent hover:text-blue-700 rounded-md hover:bg-purple-100 cursor-pointer">
-          Three
+          Oldest
         </a>
       </div>
     </nav>
