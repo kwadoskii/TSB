@@ -26,7 +26,7 @@ export default function Navbar() {
   const handleInputChange = (e) => setSearchValue(e.target.value);
 
   return (
-    <nav className="border-b border-gray-300 z-10">
+    <nav className="border-b border-gray-300 z-10 select-none">
       <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-5 lg:px-6 mx-auto max-w-7xl relative">
         <div className="flex justify-start items-center flex-1 gap-2">
           <Link href="/">
@@ -58,12 +58,15 @@ export default function Navbar() {
           </Link>
 
           <Link href="/write" passHref>
-            <a className="bg-gray-900 text-white rounded-lg p-1 md:hidden">
+            <a className="bg-blue-700 text-white rounded-lg p-1 md:hidden">
               <PlusIcon className="h-6" />
             </a>
           </Link>
 
-          <div className="text-gray-700 relative cursor-pointer rounded-full hover:bg-gray-100 p-1 hover:text-gray-900">
+          <div
+            className="text-gray-700 relative cursor-pointer rounded-full hover:bg-gray-100 p-1 hover:text-gray-900"
+            onClick={() => router.push("/notifications")}
+          >
             <BellIcon className="h-7" />
             <span className="bg-red-600 text-white absolute rounded-md p-1 text-xs -top-2 -right-2">
               110

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { HeartIcon, DotsHorizontalIcon, SaveIcon } from "@heroicons/react/solid";
+import { HeartIcon, DotsHorizontalIcon, BookmarkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
 import Comment from "../../components/Comment";
@@ -41,7 +41,7 @@ export default function PostPage() {
 
                   <div className="flex items-center gap-1 text-gray-400 md:flex-col md:gap-0">
                     <div className="rounded-full border-[3px] border-transparent hover:bg-blue-100 p-1 cursor-pointer">
-                      <SaveIcon className="h-8 hover:text-blue-600" />
+                      <BookmarkIcon className="h-8 hover:text-blue-600" />
                     </div>
                     <p className="text-sm">17</p>
                   </div>

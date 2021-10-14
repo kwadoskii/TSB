@@ -33,7 +33,7 @@ def function(foo):
 - `console.table`
 - `console.warn`
 
-![Console.log](https://gentle-eyrie-89056.herokuapp.com/_next/image?url=https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fydpav198t18pvae5x144.jpg&w=1920&q=75)
+![Egusi Soup](https://www.nairaland.com/attachments/14372142_inshot20211012125616600_jpeg8347a0d760394d6f70f2528d70a436c8)
 
 I may not talk alot here, because the topic is pretty straight forward and speaks for its self.
 
@@ -59,6 +59,17 @@ select l.city || c.country_name, d.department_name
 from departments d, locations l, countries c
 where d.location_id = l.location_id
 and d.manager_id is null;
+```
+
+```sql
+SELECT MAX(ROW_KEY) FROM CS_00_CUS_CTC_X;
+--
+ALTER TABLE CS_00_CUS ENABLE ALL TRIGGERS;
+--
+SELECT * FROM CS_00_DCS
+WHERE DOC_K NOT IN
+(SELECT ROW_KEY FROM CS_00_DCR WHERE CUS_TP_DM = 'J')
+AND CUS_K = '1014625';
 ```
 
 That would be all for today.

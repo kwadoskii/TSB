@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import { SaveIcon } from "@heroicons/react/outline";
+import { BookmarkIcon } from "@heroicons/react/outline";
 
 export default function SavedPage() {
   const posts = [
@@ -291,7 +291,7 @@ export default function SavedPage() {
           <div className="grid grid-cols-16 md:gap-2 lg:gap-4 md:mt-5">
             <div className="col-span-full md:col-span-4 lg:col-span-3 my-2 md:m-0">
               <Sidebar
-                notLinked
+                hasLinks={false}
                 data={tags}
                 selected={selectedTag}
                 onItemSelect={handleTagSelect}
@@ -366,8 +366,8 @@ export default function SavedPage() {
                       <div className="mt-2">
                         <p className="w-5/6 text-center mx-auto text-gray-500">
                           Click the <span className="font-bold">bookmark reaction</span>{" "}
-                          <SaveIcon className="h-6 text-gray-500 inline" /> when viewing a post to
-                          add it to your saved post.
+                          <BookmarkIcon className="h-6 text-gray-500 inline" /> when viewing a post
+                          to add it to your saved post.
                         </p>
                       </div>
                     </div>

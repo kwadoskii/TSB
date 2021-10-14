@@ -6,15 +6,13 @@ module.exports = {
   theme: {
     extend: {
       typography: {
-        default: {
+        DEFAULT: {
           css: {
-            pre: null,
-            code: null,
-            "code::before": null,
-            "code::after": null,
-            "pre code": null,
-            "pre code::before": null,
-            "pre code::after": null,
+            img: {
+              borderRadius: "0.375rem",
+              marginLeft: "auto",
+              marginRight: "auto",
+            },
           },
         },
       },
