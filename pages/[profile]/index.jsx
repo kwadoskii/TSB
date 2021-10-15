@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "next/router";
 import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
@@ -55,8 +54,8 @@ export default function ProfilePage({ commentsOnly = false }) {
               <h2 className="text-4xl font-black">Austin Ofor ({profile})</h2>
 
               <p className="w-3/4 mx-auto text-lg py-1">
-                I'm a Software Engineer based in Lagos, Nigeria. I have a passion for web design and love to
-                create applications.
+                I'm a Software Engineer based in Lagos, Nigeria. I have a passion for web design and
+                love to create applications.
               </p>
 
               <div className="flex row flex-wrap text-gray-500 justify-center items-center my-4">

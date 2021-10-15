@@ -10,20 +10,21 @@ const initialData = [
 ];
 
 export default function Sidebar({
-  notLinked = false,
   data = initialData,
-  selected,
-  onItemSelect,
-  idProperty = "id",
-  textProperty = "name",
   displayName,
+  hasLinks = false,
+  idProperty = "id",
+  hasCount = true,
+  onItemSelect,
+  selected,
+  textProperty = "name",
 }) {
   const { asPath } = useRouter();
 
-  if (notLinked === false)
-    //linked sidebars
+  if (hasLinks === true)
+    //sidebar nav with links
     return (
-      <div className="flex flex-col col-span-full md:col-span-1">
+      <div className="flex flex-col col-span-full">
         {data.map((d, i) => (
           <Link passHref href={d.url} key={i}>
             <a
@@ -36,7 +37,7 @@ export default function Sidebar({
               >
                 {d.name}
               </p>
-              <p className="rounded bg-gray-300 p-1 text-xs">{d.count}</p>
+              {hasCount && <p className="rounded bg-gray-300 p-1 text-xs">{d.count}</p>}
             </a>
           </Link>
         ))}
