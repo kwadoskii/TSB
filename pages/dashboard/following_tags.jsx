@@ -73,13 +73,18 @@ export default function following_tags() {
             <h2 className="font-bold text-2xl">Dashboard » Following tags</h2>
           </div>
 
-          <div className="grid grid-cols-5 my-4 gap-3">
-            <Sidebar />
+          <div className="grid md:grid-cols-5 my-4 gap-3">
+            <Sidebar hasLinks />
 
             <div className="col-span-full md:col-span-4">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
                 {tags.map((tag) => (
-                  <TagCard key={tag.id} name={tag.name} barColor={tag.barColor} subtitle={tag.excerpt} />
+                  <TagCard
+                    key={tag.id}
+                    name={tag.name}
+                    barColor={tag.barColor}
+                    subtitle={tag.excerpt}
+                  />
                 ))}
               </div>
             </div>

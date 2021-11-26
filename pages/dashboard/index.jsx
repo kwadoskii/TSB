@@ -34,8 +34,8 @@ export default function DashboardIndexPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-5 my-4 gap-3">
-            <Sidebar />
+          <div className="grid md:grid-cols-5 my-4 gap-3">
+            <Sidebar hasLinks />
 
             {/* content */}
             <div className="flex flex-col col-span-full md:col-span-4">
@@ -55,8 +55,8 @@ export default function DashboardIndexPage() {
 
                     <div className="flex flex-col gap-5">
                       <p>
-                        This is where you can manage your posts, but you haven't written
-                        anything yet.
+                        This is where you can manage your posts, but you haven't written anything
+                        yet.
                       </p>
 
                       <Link passHref href="/write">

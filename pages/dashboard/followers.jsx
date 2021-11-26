@@ -45,8 +45,8 @@ export default function followers() {
             <h2 className="font-bold text-2xl">Dashboard » Followers</h2>
           </div>
 
-          <div className="grid grid-cols-5 my-4 gap-3">
-            <Sidebar />
+          <div className="grid md:grid-cols-5 my-4 gap-3">
+            <Sidebar hasLinks />
 
             <div className="flex flex-col col-span-full md:col-span-4">
               <div className="grid grid-cols-3 gap-1 lg:gap-3">

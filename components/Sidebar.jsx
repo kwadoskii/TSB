@@ -24,7 +24,7 @@ export default function Sidebar({
   if (hasLinks === true)
     //sidebar nav with links
     return (
-      <div className="flex flex-col col-span-full">
+      <div className="flex flex-col">
         {data.map((d, i) => (
           <Link passHref href={d.url} key={i}>
             <a
