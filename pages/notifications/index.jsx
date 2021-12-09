@@ -2,14 +2,24 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import Title from "../../components/Title";
 import Link from "next/link";
-import Image from "next/image";
-import Card from "../../components/Card";
+import Reacted from "../../components/notification/reacted";
+import CommentMention from "../../components/notification/CommentMention";
+import NewPost from "../../components/notification/NewPost";
 
 export default function NotificationPage() {
   const data = [
     { name: "All", url: "/notifications" },
     { name: "Comments", url: "/notifications/comments" },
     { name: "Posts", url: "/notifications/posts" },
+  ];
+
+  const notifications = [
+    { type: "mention" },
+    { type: "reacted" },
+    { type: "newPost" },
+    { type: "reacted" },
+    { type: "newPost" },
+    { type: "reacted" },
   ];
 
   return (
@@ -32,17 +42,14 @@ export default function NotificationPage() {
             <div className="col-span-full md:col-span-4 lg:col-span-3">
               <Sidebar hasLinks data={data} hasCount={false} />
             </div>
+
             <div className="col-span-full md:col-span-8 lg:col-span-9">
-              <Card className="grid grid-cols-small">
-                <div className="relative h-12 w-12">
-                  <Image
-                    className="rounded-full"
-                    src="https://res.cloudinary.com/practicaldev/image/fetch/s--yG9NaJlu--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/161327/2ff05281-db58-4dcb-946a-4b679e4a266b.jpeg"
-                    objectFit="cover"
-                    layout="fill"
-                  />
-                </div>
-              </Card>
+              {notifications.map((notification, i) => {
+                if (notification.type === "mention") return <CommentMention key={i} />;
+                if (notification.type === "newPost") return <NewPost key={i} />;
+
+                return <Reacted key={i} />;
+              })}
             </div>
           </div>
         </div>

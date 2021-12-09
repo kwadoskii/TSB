@@ -2,9 +2,9 @@ import Link from "next/link";
 import config from "../constants/config.json";
 
 export default function NavbarDropdown({
-  username = "lemon1",
-  firstname = "Lemon",
-  lastname = "Uno",
+  username = "kwadoskii",
+  firstname = "Austin",
+  lastname = "Davies",
 }) {
   const navs = config.navs;
 
@@ -26,9 +26,7 @@ export default function NavbarDropdown({
           i !== navs.length - 1 ? (
             <li className="cursor-pointer rounded-md hover:bg-gray-100 hover:text-blue-600" key={i}>
               <Link href={n.href} passHref>
-                <a className="flex cursor-pointer flex-col p-2">
-                  <p>{n.title}</p>
-                </a>
+                <a className="flex cursor-pointer flex-col p-2">{n.title}</a>
               </Link>
             </li>
           ) : null
@@ -40,9 +38,7 @@ export default function NavbarDropdown({
           <div className="p-2 border-t border-gray-200" key={i}>
             <li className="cursor-pointer rounded-md hover:bg-gray-100 hover:text-blue-600">
               <Link href={n.href} passHref>
-                <a className="flex cursor-pointer flex-col p-2">
-                  <p>{n.title}</p>
-                </a>
+                <a className="flex cursor-pointer flex-col p-2">{n.title}</a>
               </Link>
             </li>
           </div>
