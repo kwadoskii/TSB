@@ -2,7 +2,7 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import Title from "../../components/Title";
 import Link from "next/link";
-import Reacted from "../../components/notification/reacted";
+import Reacted from "../../components/notification/Reacted";
 import CommentMention from "../../components/notification/CommentMention";
 import NewPost from "../../components/notification/NewPost";
 
