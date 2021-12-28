@@ -5,7 +5,7 @@
     { "title": "Tags", "href": "/tags" },
     { "title": "Settings", "href": "/settings" },
     { "title": "Leaderboard", "href": "/leaderboard" },
-    { "title": "Sign Out", "href": "/signout" }
+    { "title": "Sign Out", "href": "/confirm_logout" }
   ],
   "appName": {
     "long": "The Story Board",
