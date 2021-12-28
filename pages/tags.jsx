@@ -16,7 +16,7 @@ export default function TagPage({ tags }) {
         <div className="max-w-7xl relative px-2 gap-2 py-1 pb-6 lg:px-6 mx-auto">
           <div className="py-1.5 pb-5 flex justify-between items-center mb-3 md:mb-6 mt-2">
             <h2 className="md:text-3xl font-bold">Top tags</h2>
-            <Link passHref href="/following_tags">
+            <Link passHref href="/dashboard/following_tags">
               <a className="p-2 px-3.5 font-semibold text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-200/75 transition-all duration-200 ease-out">
                 Following tags
               </a>
