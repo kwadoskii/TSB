@@ -51,11 +51,23 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="/write" passHref>
+          {/* <Link href="/write" passHref>
             <a className="outline-none border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center md:flex hidden">
               Create Post
             </a>
-          </Link>
+          </Link> */}
+          <div className="flex items-center gap-2">
+            <Link href="/enter" passHref>
+              <a className="outline-none border-none py-3 px-4 text-gray-600 font-medium text md:text-sm cursor-pointer rounded-md hover:bg-blue-100/90 hover:text-blue-500 transition duration-100 ease-out h-10 items-center md:flex hidden">
+                Log in
+              </a>
+            </Link>
+            <Link href="/enter?state=new" passHref>
+              <a className="outline-none border-none py-3 px-4 bg-white text-blue-600 ring-1 ring-blue-600 font-bold text-xl text md:text-sm cursor-pointer rounded-md hover:bg-blue-600 hover:text-white transition duration-100 ease-out h-10 items-center md:flex hidden">
+                Create account
+              </a>
+            </Link>
+          </div>
 
           <Link href="/write" passHref>
             <a className="bg-blue-700 text-white rounded-lg p-1 md:hidden">
