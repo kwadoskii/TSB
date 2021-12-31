@@ -20,7 +20,6 @@ Router.events.on("routeChangeError", progress.finish);
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Component {...pageProps} />
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -33,6 +32,7 @@ function MyApp({ Component, pageProps }) {
         theme="colored"
         pauseOnHover
       />
+      <Component {...pageProps} />
     </>
   );
 }
