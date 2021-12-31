@@ -6,6 +6,9 @@ import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import SmallCard from "../../components/SmallCard";
 import Title from "../../components/Title";
+import authService from "../../apis/authService";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function DashboardIndexPage() {
   const data = [
@@ -14,9 +17,19 @@ export default function DashboardIndexPage() {
     { name: "Total comments", count: "11" },
   ];
 
-  const posts = [1, 3];
+  const [loading, setLoading] = useState(true);
 
-  return (
+  const posts = [1, 3];
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
+
+  return loading ? null : (
     <>
       <Navbar />
       <Title title="Dashboard" />

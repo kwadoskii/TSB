@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Image from "next/image";
 import Radium from "radium";
 import { server } from "../config/server";
+import api from "../apis/base";
 
 export default function TagPage({ tags }) {
   return (
@@ -43,7 +44,10 @@ export default function TagPage({ tags }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { data: tags } = await fetch(`${server}/tags`, { method: "GET" }).then((res) => res.json());
+  // const { data: tags } = await fetch(`${server}/tags`, { method: "GET" }).then((res) => res.json());
+  const {
+    data: { data: tags },
+  } = await api.get("/tags");
 
   return {
     props: {

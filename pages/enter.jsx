@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { register as registerApi } from "../apis/user";
+import Joi from "joi";
+import auth from "../apis/authService";
 
 export default function EnterPage() {
   const [username, setUsername] = useState("");
@@ -15,23 +18,89 @@ export default function EnterPage() {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
 
+  const [errors, setErrors] = useState({});
+
   const [loginUsername, setLoginUsername] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+
+  const [disableButton, setDisableButton] = useState(false);
 
   const router = useRouter();
   const { state } = router.query;
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+  const validateRegistration = Joi.object({
+    firstname: Joi.string().min(2).max(255).required().label("Firstname").trim(),
+    lastname: Joi.string().required().min(2).max(255).label("Lastname").trim(),
+    username: Joi.string().required().min(5).max(255).label("Username").trim().lowercase(),
+    email: Joi.string()
+      .required()
+      .min(5)
+      .max(512)
+      .trim()
+      .email({ tlds: { allow: false } })
+      .label("Email"),
+    password: Joi.string().required().min(6).max(1024).label("Password").trim(),
+  });
 
-    if (confirmPassword !== password) toast.info("Passwords does not match.");
-    console.log({ username, password, confirmPassword, firstname, lastname, email });
+  const validateData = () => {
+    const options = { abortEarly: false };
+    const { error } = validateRegistration.validate(
+      { username, firstname, lastname, email, password },
+      options
+    );
+
+    const errorObj = {};
+
+    if (error !== undefined) error.details.map((e) => (errorObj[e.path] = e.message));
+
+    return Object.keys(errorObj).length === 0 ? null : errorObj;
   };
 
-  const handleLogin = (e) => {
+  const handleRegister = async (e) => {
+    setDisableButton(true);
+    e.preventDefault();
+    setErrors(validateData());
+
+    if (confirmPassword !== password) return toast.info("Passwords does not match.");
+
+    if (!errors)
+      try {
+        const user = { username, password, email, firstname, lastname };
+        const {
+          data: { data },
+          status,
+        } = await registerApi(user);
+
+        if (status === 201) {
+          localStorage.setItem("token", data.token);
+          router.push("/");
+        }
+      } catch (error) {
+        if (error.status === 409) return toast.error(error.data.message);
+        setDisableButton(false);
+
+        return toast.error(error.data.message.join(", "));
+      }
+  };
+
+  const handleLogin = async (e) => {
+    setDisableButton(true);
     e.preventDefault();
 
-    console.log({ loginUsername, loginPassword });
+    try {
+      const {
+        data: { data },
+        status,
+      } = await auth.login(loginUsername, loginPassword);
+
+      if (status === 200) {
+        auth.loginWithJwt(data.token);
+        router.replace(data.user.username);
+      }
+    } catch (error) {
+      toast.error(error.data);
+      setDisableButton(false);
+    }
   };
 
   //page for new users
@@ -55,6 +124,7 @@ export default function EnterPage() {
                     noVerticalMargin
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    error={errors && errors["username"]}
                   />
                   <Input
                     hasLabel
@@ -63,6 +133,7 @@ export default function EnterPage() {
                     placeholder="●●●●●●●●●"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    error={errors && errors["password"]}
                   />
                   <Input
                     hasLabel
@@ -71,6 +142,7 @@ export default function EnterPage() {
                     placeholder="●●●●●●●●●"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    error={errors && errors["password"]}
                   />
                   <Input
                     hasLabel
@@ -78,6 +150,7 @@ export default function EnterPage() {
                     placeholder="John"
                     value={firstname}
                     onChange={(e) => setFirstname(e.target.value)}
+                    error={errors && errors["firstname"]}
                   />
                   <Input
                     hasLabel
@@ -85,6 +158,7 @@ export default function EnterPage() {
                     placeholder="Doe"
                     value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
+                    error={errors && errors["lastname"]}
                   />
                   <Input
                     hasLabel
@@ -93,6 +167,7 @@ export default function EnterPage() {
                     placeholder="johndoe@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    error={errors && errors["email"]}
                   />
 
                   <button
@@ -141,9 +216,12 @@ export default function EnterPage() {
                 />
 
                 <button
-                  className="bg-blue-700 px-4 py-2.5 rounded-md items-center font-semibold text-white hover:bg-blue-800 transition-all duration-200 ease-out w-full outline-none"
+                  className={`bg-blue-700 px-4 py-2.5 rounded-md items-center font-semibold text-white hover:bg-blue-800 transition-all duration-200 ease-out w-full outline-none ${
+                    disableButton && "bg-blue-300 cursor-not-allowed hover:bg-blue-300"
+                  }`}
                   type="submit"
                   onClick={handleLogin}
+                  disabled={disableButton}
                 >
                   Login
                 </button>
