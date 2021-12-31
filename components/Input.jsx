@@ -9,7 +9,8 @@ export default function Input({
   noVerticalMargin = false,
   value,
   onChange,
-  clearButton = false, //use redux to implement this
+  clearButton = false,
+  error, //use redux to implement this
   ...props
 }) {
   const nameFormatted = name?.toLowerCase().split(" ").join("_");
@@ -34,6 +35,7 @@ export default function Input({
             onChange={onChange}
             ref={inputRef}
           />
+          {error && <p className="text-xs text-red-600 pl-1 mt-0.5">{error.replace(/"/g, "")}</p>}
           {clearButton && value && (
             <div
               className="flex items-center cursor-pointer absolute right-2 top-1/4"
