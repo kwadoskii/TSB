@@ -1,5 +1,6 @@
 // import { useRouter } from "next/router";
 // import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
+import { profile as profileApi } from "../../apis/user";
 
 import ProfilePage from ".";
 
@@ -108,6 +109,18 @@ import ProfilePage from ".";
 //   );
 // }
 
-export default function comments() {
-  return <ProfilePage commentsOnly />;
+export default function comments({ profileDetails, token }) {
+  return <ProfilePage commentsOnly profileDetails={profileDetails} token={token} />;
+}
+
+export async function getServerSideProps({ req, params }) {
+  const {
+    data: { data, status },
+  } = await profileApi(params.profile, req.cookies.token);
+
+  if (status === "error") return { notFound: true };
+
+  return {
+    props: { profileDetails: data, token: req.cookies.token },
+  };
 }

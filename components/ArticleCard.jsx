@@ -22,7 +22,7 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
   };
 
   return (
-    <div className="w-full rounded-md border border-gray-300 overflow-hidden shadow-md mt-2 active:border-blue-700 relative">
+    <div className="w-full rounded-md border border-gray-300 overflow-hidden shadow-md mb-2 active:border-blue-700 relative">
       {hasImage && (
         <Link href="/kwadoskii/post-url" passHref>
           <a>
