@@ -1,6 +1,7 @@
 import api from "./base";
 import jwtDecode from "jwt-decode";
 import { server } from "../config/server";
+import Cookies from "js-cookie";
 
 const apiEndpoint = server + "/login";
 const tokenKey = "token";
@@ -15,14 +16,22 @@ const login = async (username, password) => {
 
 const loginWithJwt = (jwt) => {
   localStorage.setItem(tokenKey, jwt);
+  Cookies.set(tokenKey, jwt, { expires: 30 });
 };
 
 const logout = () => {
   localStorage.removeItem(tokenKey);
+  Cookies.remove(tokenKey);
 };
 
-const getCurrentUser = () => {
-  const jwt = localStorage.getItem(tokenKey);
+const getCurrentUser = (token = "") => {
+  let jwt = "";
+
+  if (!token) {
+    jwt = localStorage.getItem(tokenKey);
+  } else {
+    jwt = Cookies.get(tokenKey);
+  }
 
   if (!jwt) return null;
 
@@ -38,7 +47,7 @@ const getCurrentUser = () => {
 };
 
 function getJwt() {
-  return localStorage.getItem(tokenKey);
+  return localStorage.getItem(tokenKey) || Cookies.get(tokenKey);
 }
 
 export default {
