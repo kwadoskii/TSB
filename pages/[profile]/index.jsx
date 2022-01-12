@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
+import { MapPin, Gift, Book, MessageSquare, Hash, User } from "react-feather";
 
 import ArticleCard from "../../components/ArticleCard";
 import Navbar from "../../components/Navbar";
@@ -7,8 +7,11 @@ import RecentComments from "../../components/RecentComments";
 import Title from "../../components/Title";
 import Footer from "../../components/Footer";
 import Image from "next/image";
+import { profile as profileApi } from "../../apis/user";
+import authService from "../../apis/authService";
+import dayjs from "dayjs";
 
-export default function ProfilePage({ commentsOnly = false }) {
+export default function ProfilePage({ commentsOnly = false, profileDetails, token }) {
   const router = useRouter();
   const {
     query: { profile },
@@ -32,7 +35,7 @@ export default function ProfilePage({ commentsOnly = false }) {
             <div className="w-full rounded-t-md border border-gray-300 flex bg-white pb-9 relative items-start flex-col gap-0">
               <div className="relative w-24 h-24 md:w-32 md:h-32 lg:h-40 lg:w-40 mx-auto border-[5px] rounded-full border-my-purple -mt-12 md:-mt-14 lg:-mt-20 md:border-[6px]">
                 <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
+                  src={profileDetails.profileImage}
                   alt="user avatar"
                   layout="fill"
                   objectFit="cover"
@@ -40,33 +43,38 @@ export default function ProfilePage({ commentsOnly = false }) {
                 />
               </div>
 
-              <div className="absolute top-3 right-3">
-                <button
-                  className="border-none p-3 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end items-start"
-                  onClick={gotoSettings}
-                >
-                  Edit profile
-                </button>
-              </div>
+              {authService.getCurrentUser(token)?._id === profileDetails._id && (
+                <div className="absolute top-3 right-3">
+                  <button
+                    className="border-none p-3 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end items-start"
+                    onClick={gotoSettings}
+                  >
+                    Edit profile
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="w-full bg-white border-r border-l border-gray-300 text-center py-6 px-1">
-              <h2 className="text-4xl font-black">Austin Ofor ({profile})</h2>
+              <h2 className="text-4xl font-black">
+                {profileDetails.firstname + " " + profileDetails.lastname} ({profile})
+              </h2>
 
-              <p className="w-3/4 mx-auto text-lg py-1">
-                I'm a Software Engineer based in Lagos, Nigeria. I have a passion for web design and
-                love to create applications.
-              </p>
+              <p className="w-3/4 mx-auto text-lg py-1">{profileDetails.bio}</p>
 
               <div className="flex row flex-wrap text-gray-500 justify-center items-center my-4">
-                <div className="my-0 mx-4 flex min-w-min items-center">
-                  <MapPin size={20} />
-                  <span className="ml-1 text-sm">Ikeja, Lagos</span>
-                </div>
+                {profileDetails.location && (
+                  <div className="my-0 mx-4 flex min-w-min items-center">
+                    <MapPin size={20} />
+                    <span className="ml-1 text-sm">{profileDetails.location}</span>
+                  </div>
+                )}
 
                 <div className="my-0 mx-4 flex min-w-min items-center">
                   <Gift size={20} />
-                  <span className="ml-1 text-sm">Joined on Sep 23, 2020</span>
+                  <span className="ml-1 text-sm">
+                    Joined on {dayjs(profileDetails.joined).format("MMM DD, YYYY")}
+                  </span>
                 </div>
               </div>
             </div>
@@ -74,8 +82,12 @@ export default function ProfilePage({ commentsOnly = false }) {
 
           <div className="bg-white text-center w-full border rounded-b-md border-gray-300 shadow-md">
             <div className="my-8 text-gray-500">
-              <h5 className="font-medium text-sm">Work</h5>
-              <p className="text-gray-800">Software Engineer</p>
+              {profileDetails.occupation?.position && (
+                <>
+                  <h5 className="font-medium text-sm">Work</h5>
+                  <p className="text-gray-800">{profileDetails.occupation?.position}</p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -84,20 +96,27 @@ export default function ProfilePage({ commentsOnly = false }) {
           <div className="flex p-4 flex-col col-span-full md:col-span-2 bg-gray-50 rounded-md border border-gray-300 text-gray-800 gap-4 shadow-md">
             <div className="flex flex-wrap items-center gap-2">
               <Book size={21} className="text-gray-500" />
-              <span>2 posts published</span>
+              <span>{profileDetails.posts?.length || 0} posts published</span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <MessageSquare size={21} className="text-gray-500" />
-              <span>11 comments written</span>
+              <span>{profileDetails.comments?.length || 0} comments written</span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Hash size={21} className="text-gray-500" />
-              <span>21 tags followed</span>
+              <span>{profileDetails.followingTags?.length || 0} tags followed</span>
             </div>
           </div>
 
           <div className="flex flex-col flex-wrap col-span-full md:col-span-4 gap-2">
-            <RecentComments profileUrl={profile} commentsOnly={commentsOnly} />
+            {profileDetails.comments.length > 0 && (
+              <RecentComments
+                profileUrl={profile}
+                commentsOnly={commentsOnly}
+                comments={profileDetails.comments}
+              />
+            )}
+
             {!commentsOnly && (
               <div>
                 <ArticleCard />
@@ -111,4 +130,16 @@ export default function ProfilePage({ commentsOnly = false }) {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ req, params }) {
+  const {
+    data: { data, status },
+  } = await profileApi(params.profile, req.cookies.token);
+
+  if (status === "error") return { notFound: true };
+
+  return {
+    props: { profileDetails: data, token: req.cookies.token },
+  };
 }

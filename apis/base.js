@@ -4,6 +4,7 @@ import { server } from "../config/server";
 
 const api = axios.create({
   baseURL: server,
+  validateStatus: false,
 });
 
 api.interceptors.response.use(null, (error) => {

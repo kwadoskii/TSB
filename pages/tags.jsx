@@ -4,10 +4,10 @@ import Link from "next/link";
 import Footer from "../components/Footer";
 import Image from "next/image";
 import Radium from "radium";
-import { server } from "../config/server";
 import api from "../apis/base";
+import dynamic from "next/dynamic";
 
-export default function TagPage({ tags }) {
+const TagPage = ({ tags }) => {
   return (
     <>
       <Title title="Tags" />
@@ -41,20 +41,7 @@ export default function TagPage({ tags }) {
       <Footer />
     </>
   );
-}
-
-export async function getServerSideProps(ctx) {
-  // const { data: tags } = await fetch(`${server}/tags`, { method: "GET" }).then((res) => res.json());
-  const {
-    data: { data: tags },
-  } = await api.get("/tags");
-
-  return {
-    props: {
-      tags,
-    },
-  };
-}
+};
 
 const TagCardx = ({ color, name, paragraph, count = 0, imageUrl }) => {
   return (
@@ -94,5 +81,20 @@ const TagCardx = ({ color, name, paragraph, count = 0, imageUrl }) => {
     </div>
   );
 };
-
 const TagCard = Radium(TagCardx);
+
+export async function getServerSideProps(ctx) {
+  const {
+    data: { data: tags },
+  } = await api.get("/tags");
+
+  return {
+    props: {
+      tags,
+    },
+  };
+}
+
+export default dynamic(() => Promise.resolve(TagPage), {
+  ssr: false,
+});

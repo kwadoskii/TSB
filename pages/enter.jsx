@@ -72,7 +72,8 @@ export default function EnterPage() {
         } = await registerApi(user);
 
         if (status === 201) {
-          localStorage.setItem("token", data.token);
+          auth.loginWithJwt(data.token);
+          // localStorage.setItem("token", data.token);
           router.push("/");
         }
       } catch (error) {
