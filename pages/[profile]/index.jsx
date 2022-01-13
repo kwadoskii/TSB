@@ -35,7 +35,10 @@ export default function ProfilePage({ commentsOnly = false, profileDetails, toke
             <div className="w-full rounded-t-md border border-gray-300 flex bg-white pb-9 relative items-start flex-col gap-0">
               <div className="relative w-24 h-24 md:w-32 md:h-32 lg:h-40 lg:w-40 mx-auto border-[5px] rounded-full border-my-purple -mt-12 md:-mt-14 lg:-mt-20 md:border-[6px]">
                 <Image
-                  src={profileDetails?.profileImage}
+                  src={
+                    profileDetails?.profileImage ||
+                    "https://res.cloudinary.com/practicaldev/image/fetch/s--rIMJB0Lh--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/881jdm7sdnril6hn3f3l.PNG"
+                  }
                   alt="user avatar"
                   layout="fill"
                   objectFit="cover"
