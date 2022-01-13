@@ -25,7 +25,7 @@ export default function ProfilePage({ commentsOnly = false, profileDetails, toke
 
   return (
     <>
-      <Title title="Profile" />
+      <Title title={profileDetails.username} />
       <Navbar />
 
       <main className="my-min-height p-0 bg-gray-200 pb-8 relative">
@@ -119,8 +119,19 @@ export default function ProfilePage({ commentsOnly = false, profileDetails, toke
 
             {!commentsOnly && (
               <div>
-                <ArticleCard />
-                <ArticleCard />
+                {profileDetails.posts.map((post) => (
+                  <ArticleCard
+                    articleDetails={post}
+                    key={post._id}
+                    userPost={authService.getCurrentUser(token)?._id === profileDetails._id}
+                    user={{
+                      firstname: profileDetails.firstname,
+                      lastname: profileDetails.lastname,
+                      profileImage: profileDetails.profileImage,
+                      username: profileDetails.username,
+                    }}
+                  />
+                ))}
               </div>
             )}
           </div>

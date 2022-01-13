@@ -1,17 +1,30 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { HeartIcon, ChatAltIcon, DotsHorizontalIcon } from "@heroicons/react/outline";
+import { HeartIcon as SolidHeartIcon } from "@heroicons/react/solid";
 import useVisible from "../hooks/useVisible";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { getPostComments, getPostLikes } from "../apis/post";
 
-export default function ArticleCard({ hasImage = false, userPost = false }) {
+export default function ArticleCard({ hasImage = false, userPost = false, articleDetails, user }) {
   const commentHandler = () => console.log("handler clicked");
   const likeHandler = () => console.log("handler clicked");
   const saveHandler = () => console.log("handler clicked");
 
   const { isVisible, ref, setIsVisible } = useVisible();
 
-  const tags = ["next", "tailwind", "javascript", "react"];
+  const [comments, setComments] = useState("");
+  const [likes, setLikes] = useState("");
+
+  dayjs.extend(relativeTime);
+
+  let formatedCreatedAt =
+    dayjs().format("YYYY") === dayjs(articleDetails.createdAt).format("YYYY")
+      ? dayjs(articleDetails.createdAt).format("MMM DD")
+      : dayjs(articleDetails.createdAt).format("YYYY MMM DD");
+
   const menuData = [
     { name: "Edit", url: "/edit" },
     { name: "Delete", url: "/delete" },
@@ -21,17 +34,29 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
     setIsVisible(!isVisible);
   };
 
+  useEffect(async () => {
+    const {
+      data: { data: comments },
+    } = await getPostComments(articleDetails._id);
+    const {
+      data: { data: likes },
+    } = await getPostLikes(articleDetails._id);
+    setComments(comments);
+    setLikes(likes);
+  }, []);
+
   return (
     <div className="w-full rounded-md border border-gray-300 overflow-hidden shadow-md mb-2 active:border-blue-700 relative">
-      {hasImage && (
-        <Link href="/kwadoskii/post-url" passHref>
+      {hasImage && articleDetails?.banner && (
+        <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>
             <div className="w-full h-[230px] relative">
               <Image
                 alt="banner"
                 layout="fill"
                 objectFit="cover"
-                src="https://res.cloudinary.com/practicaldev/image/fetch/s--rIMJB0Lh--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/881jdm7sdnril6hn3f3l.PNG"
+                // src="https://res.cloudinary.com/practicaldev/image/fetch/s--rIMJB0Lh--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/881jdm7sdnril6hn3f3l.PNG"
+                src={articleDetails?.banner}
               />
             </div>
           </a>
@@ -44,45 +69,48 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
         }`}
       >
         <div className="flex items-center">
-          <Link href="/kwadoskii" passHref>
+          <Link href={user?.username || "/"} passHref>
             <a>
-              <div className="w-8 h-8 relative border rounded-full">
+              <div className="w-9 h-9 relative">
                 <Image
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                  src={user?.profileImage}
                   alt="profile of user"
                   layout="fill"
+                  className="rounded-full"
                   objectFit="cover"
                 />
               </div>
             </a>
           </Link>
           <div className="flex-grow-0 flex flex-col gap-0 ml-2">
-            <Link href="/kwadoskii" passHref>
+            <Link href={user?.username || "/"} passHref>
               <a>
                 <p className="text-gray-800 text-sm font-medium hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out">
-                  Test Arthur
+                  {`${user?.firstname} ${user?.lastname}`}
                 </p>
               </a>
             </Link>
-            <span className="text-xs text-gray-500 block">May 6 (3 hours ago)</span>
+            <span className="text-xs text-gray-500 block">
+              {formatedCreatedAt} ({dayjs(articleDetails.createdAt).fromNow()})
+            </span>
           </div>
         </div>
 
         <div className="flex flex-col md:pl-9 w-full">
-          <Link href="/kwadoskii/post-url" passHref>
+          <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
             <a>
-              <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl">
-                A multi-line CSS only Typewriter effect
+              <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl line-clamp-2">
+                {articleDetails.title}
               </h2>
             </a>
           </Link>
 
           <div className="flex text-gray-400 text-sm gap-1">
-            {tags.map((tag, i) => (
-              <Link href={`/t/${tag}`} key={i}>
+            {articleDetails.tags.map((tag) => (
+              <Link href={`/t/${tag.name.toLowerCase()}`} key={tag._id}>
                 <a className="p-1 hover:text-black">
                   <span className="opacity-40">#</span>
-                  {tag}
+                  {tag.name.toLowerCase()}
                 </a>
               </Link>
             ))}
@@ -96,7 +124,8 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
               >
                 <HeartIcon className="h-5 text-red-500" />
                 <p className="text-sm">
-                  345 <span className="hidden md:inline">reactions</span>
+                  {likes?.length}{" "}
+                  <span className="hidden md:inline">reaction{likes?.length > 1 && "s"}</span>
                 </p>
               </div>
 
@@ -106,7 +135,8 @@ export default function ArticleCard({ hasImage = false, userPost = false }) {
               >
                 <ChatAltIcon className="h-5 text-gray-500" />
                 <p className="text-sm">
-                  3 <span className="hidden md:inline">comments</span>
+                  {comments?.length}{" "}
+                  <span className="hidden md:inline">comment{comments?.length > 1 && "s"}</span>
                 </p>
               </div>
             </div>
