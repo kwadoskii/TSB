@@ -21,9 +21,9 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
   dayjs.extend(relativeTime);
 
   let formatedCreatedAt =
-    dayjs().format("YYYY") === dayjs(articleDetails.createdAt).format("YYYY")
-      ? dayjs(articleDetails.createdAt).format("MMM DD")
-      : dayjs(articleDetails.createdAt).format("YYYY MMM DD");
+    dayjs().format("YYYY") === dayjs(articleDetails?.createdAt).format("YYYY")
+      ? dayjs(articleDetails?.createdAt).format("MMM DD")
+      : dayjs(articleDetails?.createdAt).format("YYYY MMM DD");
 
   const menuData = [
     { name: "Edit", url: "/edit" },
@@ -37,10 +37,10 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
   useEffect(async () => {
     const {
       data: { data: comments },
-    } = await getPostComments(articleDetails._id);
+    } = await getPostComments(articleDetails?._id);
     const {
       data: { data: likes },
-    } = await getPostLikes(articleDetails._id);
+    } = await getPostLikes(articleDetails?._id);
     setComments(comments);
     setLikes(likes);
   }, []);
@@ -91,7 +91,7 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
               </a>
             </Link>
             <span className="text-xs text-gray-500 block">
-              {formatedCreatedAt} ({dayjs(articleDetails.createdAt).fromNow()})
+              {formatedCreatedAt} ({dayjs(articleDetails?.createdAt).fromNow()})
             </span>
           </div>
         </div>
@@ -100,13 +100,13 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
           <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
             <a>
               <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl line-clamp-2">
-                {articleDetails.title}
+                {articleDetails?.title}
               </h2>
             </a>
           </Link>
 
           <div className="flex text-gray-400 text-sm gap-1">
-            {articleDetails.tags.map((tag) => (
+            {articleDetails?.tags.map((tag) => (
               <Link href={`/t/${tag.name.toLowerCase()}`} key={tag._id}>
                 <a className="p-1 hover:text-black">
                   <span className="opacity-40">#</span>
