@@ -4,10 +4,13 @@ import Link from "next/link";
 import Footer from "../components/Footer";
 import Image from "next/image";
 import Radium from "radium";
-import api from "../apis/base";
 import dynamic from "next/dynamic";
+import { getTags } from "../apis/tag";
+import { getUserFollowingTags, followTag, unfollowTag } from "../apis/user";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-const TagPage = ({ tags }) => {
+const TagPage = ({ tags, followingTags: { tags: followingTags }, token }) => {
   return (
     <>
       <Title title="Tags" />
@@ -25,13 +28,17 @@ const TagPage = ({ tags }) => {
           </div>
 
           <div className="mt-3 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tags.map((t, i) => (
+            {tags.map((tag) => (
               <TagCard
-                name={t.name}
-                paragraph={t.description}
-                color={t.backgroundColor}
-                imageUrl={t.image}
-                key={i}
+                // name={t.name}
+                // paragraph={t.description}
+                // color={t.backgroundColor}
+                // imageUrl={t.image}
+                tag={tag}
+                key={tag._id}
+                followed={followingTags.some((f) => f._id === tag._id)}
+                onFollow={() => followTag(tag._id, token)}
+                onUnfollow={() => unfollowTag(tag._id, token)}
               />
             ))}
           </div>
@@ -43,36 +50,64 @@ const TagPage = ({ tags }) => {
   );
 };
 
-const TagCardx = ({ color, name, paragraph, count = 0, imageUrl }) => {
+const TagCardx = ({ count = 0, tag, followed, onFollow, onUnfollow }) => {
+  const [_followed, setFollowed] = useState(followed);
+
+  const handleFollow = async () => {
+    const { data, status } = await onFollow();
+    if (status === 200 && data.status === "success") return setFollowed(true);
+
+    return toast.error("Could not follow this tag.");
+  };
+
+  const handleUnfollow = async () => {
+    const { data, status } = await onUnfollow();
+    if (status === 200 && data.status === "success") return setFollowed(false);
+
+    return toast.error("Could not unfollow this tag.");
+  };
+
   return (
     <div className="rounded-md shadow-md border-gray-200 overflow-hidden">
-      <div className="h-4" style={{ backgroundColor: color + "e6" }}></div>
+      <div className="h-4" style={{ backgroundColor: tag?.backgroundColor + "e6" }}></div>
       <div className="p-6 bg-white flex flex-col">
-        <Link passHref href={`/t/${name.toLowerCase()}`}>
+        <Link passHref href={`/t/${tag?.name.toLowerCase()}`}>
           <a>
             <h2
               className="text-lg font-bold text-gray-600 cursor-pointer p-1 px-1.5 grow rounded-md group border border-opacity-0 w-min hover:text-gray-900 hover:border transition-all duration-200 ease-out"
-              style={{ ":hover": { background: color + "26", border: `1px solid ${color}` } }}
+              style={{
+                ":hover": {
+                  background: tag?.backgroundColor + "26",
+                  border: `1px solid ${tag?.backgroundColor}`,
+                },
+              }}
             >
-              <span className="" style={{ color: color + "e6" }}>
+              <span className="" style={{ color: tag?.backgroundColor + "e6" }}>
                 #
               </span>
-              {name.toLowerCase()}
+              {tag?.name.toLowerCase()}
             </h2>
           </a>
         </Link>
 
         <div className="px-2">
-          <p className="my-2 mb-1 text-gray-800">{paragraph}</p>
+          <p className="my-2 mb-1 text-gray-800">{tag?.paragraph}</p>
 
           <p className="text-gray-500 text-sm">{count + " posts published"}</p>
 
           <div className="flex justify-between mt-2.5 items-center">
-            <button className="my-button-transparent !px-4 !py-1.5">Follow</button>
+            <button
+              className={`my-button-transparent !px-4 !py-1.5 ${
+                !_followed && "bg-gray-300/80 hover:bg-gray-400/70 hover:border-transparent"
+              }`}
+              onClick={_followed ? handleUnfollow : handleFollow}
+            >
+              {_followed ? "Following" : "Follow"}
+            </button>
 
-            {imageUrl && (
+            {tag?.imageUrl && (
               <div className="h-14 w-14 relative rotate-6">
-                <Image src={imageUrl} objectFit="contain" layout="fill" />
+                <Image src={tag?.imageUrl} objectFit="contain" layout="fill" />
               </div>
             )}
           </div>
@@ -83,14 +118,20 @@ const TagCardx = ({ color, name, paragraph, count = 0, imageUrl }) => {
 };
 const TagCard = Radium(TagCardx);
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps({ req }) {
   const {
     data: { data: tags },
-  } = await api.get("/tags");
+  } = await getTags();
+
+  const {
+    data: { data: followingTags },
+  } = await getUserFollowingTags(req.cookies.token);
 
   return {
     props: {
+      followingTags,
       tags,
+      token: req.cookies.token,
     },
   };
 }
