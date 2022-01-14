@@ -99,15 +99,24 @@ export default function ProfilePage({ commentsOnly = false, profileDetails, toke
           <div className="flex p-4 flex-col col-span-full md:col-span-2 bg-gray-50 rounded-md border border-gray-300 text-gray-800 gap-4 shadow-md">
             <div className="flex flex-wrap items-center gap-2">
               <Book size={21} className="text-gray-500" />
-              <span>{profileDetails.posts?.length || 0} posts published</span>
+              <span>
+                {profileDetails.posts?.length || 0} post{profileDetails.posts?.length > 1 && "s"}{" "}
+                published
+              </span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <MessageSquare size={21} className="text-gray-500" />
-              <span>{profileDetails.comments?.length || 0} comments written</span>
+              <span>
+                {profileDetails.comments?.length || 0} comment
+                {profileDetails.comments?.length > 1 && "s"} written
+              </span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Hash size={21} className="text-gray-500" />
-              <span>{profileDetails.followingTags?.length || 0} tags followed</span>
+              <span>
+                {profileDetails.followingTags?.tagId?.length || 0} tag
+                {profileDetails.followingTags?.tagId?.length > 1 && "s"} followed
+              </span>
             </div>
           </div>
 
