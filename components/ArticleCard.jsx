@@ -7,18 +7,25 @@ import useVisible from "../hooks/useVisible";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getPostComments, getPostLikes } from "../apis/post";
+import { toast } from "react-toastify";
 
-export default function ArticleCard({ hasImage = false, userPost = false, articleDetails, user }) {
-  const commentHandler = () => console.log("handler clicked");
-  const likeHandler = () => console.log("handler clicked");
-  const saveHandler = () => console.log("handler clicked");
+export default function ArticleCard({
+  hasImage = false,
+  userPost = false,
+  articleDetails,
+  user,
+  liked,
+  onLike,
+  onUnlike,
+}) {
+  dayjs.extend(relativeTime);
 
   const { isVisible, ref, setIsVisible } = useVisible();
 
   const [comments, setComments] = useState("");
-  const [likes, setLikes] = useState("");
-
-  dayjs.extend(relativeTime);
+  const [likesCount, setLikesCount] = useState("");
+  const [currentUser, setCurrentUser] = useState();
+  const [_liked, setLiked] = useState(liked);
 
   let formatedCreatedAt =
     dayjs().format("YYYY") === dayjs(articleDetails?.createdAt).format("YYYY")
@@ -34,6 +41,29 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
     setIsVisible(!isVisible);
   };
 
+  const commentHandler = () => console.log("handler clicked");
+  const saveHandler = () => console.log("handler clicked");
+
+  const handleLike = async () => {
+    const { data, status } = await onLike();
+    if (status === 200 && data.status === "success") {
+      setLikesCount(likesCount + 1);
+      return setLiked(true);
+    }
+
+    return toast.error("Could not like post.");
+  };
+
+  const handleUnlike = async () => {
+    const { data, status } = await onUnlike();
+    if (status === 200 && data.status === "success") {
+      setLikesCount(likesCount - 1);
+      return setLiked(false);
+    }
+
+    return toast.error("Could not unlike post.");
+  };
+
   useEffect(async () => {
     const {
       data: { data: comments },
@@ -41,8 +71,10 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
     const {
       data: { data: likes },
     } = await getPostLikes(articleDetails?._id);
+
     setComments(comments);
-    setLikes(likes);
+    setLikesCount(likes.length);
+    setCurrentUser(authService.getCurrentUser());
   }, []);
 
   return (
