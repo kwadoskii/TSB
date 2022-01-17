@@ -28,9 +28,10 @@ const getCurrentUser = (token = "") => {
   let jwt = "";
 
   if (!token) {
-    jwt = localStorage.getItem(tokenKey);
-  } else {
+    // jwt = localStorage.getItem(tokenKey);
     jwt = Cookies.get(tokenKey);
+  } else {
+    jwt = token;
   }
 
   if (!jwt) return null;
