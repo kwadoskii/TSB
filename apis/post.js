@@ -15,4 +15,10 @@ const getPostLikes = (postId) => {
   return api.get(`${apiEndpoint}/${postId}/likes`);
 };
 
-export { getCommentById, getPostComments, getPostLikes };
+const likePost = (postId, token) =>
+  api.post(`${apiEndpoint}/like/${postId}`, {}, { headers: { "x-auth-token": "JWT " + token } });
+
+const unlikePost = (postId, token) =>
+  api.post(`${apiEndpoint}/unlike/${postId}`, {}, { headers: { "x-auth-token": "JWT " + token } });
+
+export { getCommentById, getPostComments, getPostLikes, likePost, unlikePost };

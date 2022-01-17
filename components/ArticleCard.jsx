@@ -7,18 +7,26 @@ import useVisible from "../hooks/useVisible";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getPostComments, getPostLikes } from "../apis/post";
+import authService from "../apis/authService";
+import { toast } from "react-toastify";
 
-export default function ArticleCard({ hasImage = false, userPost = false, articleDetails, user }) {
-  const commentHandler = () => console.log("handler clicked");
-  const likeHandler = () => console.log("handler clicked");
-  const saveHandler = () => console.log("handler clicked");
+export default function ArticleCard({
+  hasImage = false,
+  userPost = false,
+  articleDetails,
+  user,
+  liked,
+  onLike,
+  onUnlike,
+}) {
+  dayjs.extend(relativeTime);
 
   const { isVisible, ref, setIsVisible } = useVisible();
 
   const [comments, setComments] = useState("");
-  const [likes, setLikes] = useState("");
-
-  dayjs.extend(relativeTime);
+  const [likesCount, setLikesCount] = useState("");
+  const [currentUser, setCurrentUser] = useState();
+  const [_liked, setLiked] = useState(liked);
 
   let formatedCreatedAt =
     dayjs().format("YYYY") === dayjs(articleDetails?.createdAt).format("YYYY")
@@ -34,6 +42,29 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
     setIsVisible(!isVisible);
   };
 
+  const commentHandler = () => console.log("handler clicked");
+  const saveHandler = () => console.log("handler clicked");
+
+  const handleLike = async () => {
+    const { data, status } = await onLike();
+    if (status === 200 && data.status === "success") {
+      setLikesCount(likesCount + 1);
+      return setLiked(true);
+    }
+
+    return toast.error("Could not like post.");
+  };
+
+  const handleUnlike = async () => {
+    const { data, status } = await onUnlike();
+    if (status === 200 && data.status === "success") {
+      setLikesCount(likesCount - 1);
+      return setLiked(false);
+    }
+
+    return toast.error("Could not unlike post.");
+  };
+
   useEffect(async () => {
     const {
       data: { data: comments },
@@ -41,8 +72,10 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
     const {
       data: { data: likes },
     } = await getPostLikes(articleDetails?._id);
+
     setComments(comments);
-    setLikes(likes);
+    setLikesCount(likes.length);
+    setCurrentUser(authService.getCurrentUser());
   }, []);
 
   return (
@@ -120,12 +153,22 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
             <div className="flex items-center gap-2">
               <div
                 className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
-                onClick={likeHandler}
+                onClick={
+                  authService.getCurrentUser()
+                    ? _liked
+                      ? () => handleUnlike()
+                      : () => handleLike()
+                    : () => toast.info("Login or register to like a post.")
+                }
               >
-                <HeartIcon className="h-5 text-red-500" />
+                {_liked ? (
+                  <SolidHeartIcon className="h-5 text-red-500" />
+                ) : (
+                  <HeartIcon className="h-5 text-red-500" />
+                )}
                 <p className="text-sm">
-                  {likes?.length}{" "}
-                  <span className="hidden md:inline">reaction{likes?.length > 1 && "s"}</span>
+                  {likesCount}{" "}
+                  <span className="hidden md:inline">reaction{likesCount > 1 && "s"}</span>
                 </p>
               </div>
 
@@ -141,12 +184,14 @@ export default function ArticleCard({ hasImage = false, userPost = false, articl
               </div>
             </div>
 
-            <button
-              className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
-              onClick={saveHandler}
-            >
-              Save
-            </button>
+            {currentUser && (
+              <button
+                className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
+                onClick={saveHandler}
+              >
+                Save
+              </button>
+            )}
           </div>
         </div>
       </div>
