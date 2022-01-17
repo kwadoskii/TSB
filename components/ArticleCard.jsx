@@ -7,6 +7,7 @@ import useVisible from "../hooks/useVisible";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getPostComments, getPostLikes } from "../apis/post";
+import authService from "../apis/authService";
 import { toast } from "react-toastify";
 
 export default function ArticleCard({
@@ -152,12 +153,22 @@ export default function ArticleCard({
             <div className="flex items-center gap-2">
               <div
                 className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
-                onClick={likeHandler}
+                onClick={
+                  authService.getCurrentUser()
+                    ? _liked
+                      ? () => handleUnlike()
+                      : () => handleLike()
+                    : () => toast.info("Login or register to like a post.")
+                }
               >
-                <HeartIcon className="h-5 text-red-500" />
+                {_liked ? (
+                  <SolidHeartIcon className="h-5 text-red-500" />
+                ) : (
+                  <HeartIcon className="h-5 text-red-500" />
+                )}
                 <p className="text-sm">
-                  {likes?.length}{" "}
-                  <span className="hidden md:inline">reaction{likes?.length > 1 && "s"}</span>
+                  {likesCount}{" "}
+                  <span className="hidden md:inline">reaction{likesCount > 1 && "s"}</span>
                 </p>
               </div>
 
@@ -173,12 +184,14 @@ export default function ArticleCard({
               </div>
             </div>
 
-            <button
-              className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
-              onClick={saveHandler}
-            >
-              Save
-            </button>
+            {currentUser && (
+              <button
+                className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
+                onClick={saveHandler}
+              >
+                Save
+              </button>
+            )}
           </div>
         </div>
       </div>

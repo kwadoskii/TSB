@@ -9,6 +9,7 @@ import { getTags } from "../apis/tag";
 import { getUserFollowingTags, followTag, unfollowTag } from "../apis/user";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import authService from "../apis/authService";
 
 const TagPage = ({ tags, followingTags: { tags: followingTags }, token }) => {
   return (
@@ -28,15 +29,11 @@ const TagPage = ({ tags, followingTags: { tags: followingTags }, token }) => {
           </div>
 
           <div className="mt-3 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tags.map((tag) => (
+            {tags?.map((tag) => (
               <TagCard
-                // name={t.name}
-                // paragraph={t.description}
-                // color={t.backgroundColor}
-                // imageUrl={t.image}
                 tag={tag}
                 key={tag._id}
-                followed={followingTags.some((f) => f._id === tag._id)}
+                followed={followingTags?.some((f) => f._id === tag._id)}
                 onFollow={() => followTag(tag._id, token)}
                 onUnfollow={() => unfollowTag(tag._id, token)}
               />
@@ -96,14 +93,16 @@ const TagCardx = ({ count = 0, tag, followed, onFollow, onUnfollow }) => {
           <p className="text-gray-500 text-sm">{count + " posts published"}</p>
 
           <div className="flex justify-between mt-2.5 items-center">
-            <button
-              className={`my-button-transparent !px-4 !py-1.5 ${
-                !_followed && "bg-gray-300/80 hover:bg-gray-400/70 hover:border-transparent"
-              }`}
-              onClick={_followed ? handleUnfollow : handleFollow}
-            >
-              {_followed ? "Following" : "Follow"}
-            </button>
+            {authService.getCurrentUser() && (
+              <button
+                className={`my-button-transparent !px-4 !py-1.5 ${
+                  !_followed && "bg-gray-300/80 hover:bg-gray-400/70 hover:border-transparent"
+                }`}
+                onClick={_followed ? handleUnfollow : handleFollow}
+              >
+                {_followed ? "Following" : "Follow"}
+              </button>
+            )}
 
             {tag?.imageUrl && (
               <div className="h-14 w-14 relative rotate-6">
@@ -129,9 +128,9 @@ export async function getServerSideProps({ req }) {
 
   return {
     props: {
-      followingTags,
+      followingTags: followingTags || [],
       tags,
-      token: req.cookies.token,
+      token: req.cookies.token || "",
     },
   };
 }
