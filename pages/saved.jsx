@@ -7,202 +7,22 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { BookmarkIcon } from "@heroicons/react/outline";
+import authService from "../apis/authService";
+import { useRouter } from "next/router";
+import { savedPosts } from "../apis/user";
+import dayjs from "dayjs";
 
-export default function SavedPage() {
-  const posts = [
-    {
-      _id: "1",
-      title: "Deploy your Next.js app to Heroku in 5 minutes",
-      excerp: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, voluptatum corporis eligendi voluptatem cum voluptate atque beatae ab possimus expedita, perferendis, incidunt nam deserunt? Impedit explicabo cum fuga vel adipisci.      Quos iure numquam soluta enim repudiandae explicabo fugiat quam libero cumque alias temporibus, consequatur obcaecati impedit perferendis sequi et amet placeat deserunt. Ad tempore, dignissimos quasi mollitia rerum aperiam quis?      Inventore ipsam laudantium quod, praesentium earum cum voluptatibus molestias totam rerum reiciendis voluptatum nobis ipsum non veniam deleniti corporis, culpa adipisci. Eum quae tenetur ipsa iure dolore nesciunt pariatur animi.",
-      tags: [
-        {
-          _id: "5",
-          name: "politics",
-          url: "/t/politics",
-          bgColor: "bg-yellow-500",
-          textBlack: true,
-        },
-        {
-          _id: "6",
-          name: "football",
-          url: "/t/football",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "8",
-          name: "entertainment",
-          url: "/t/entertainment",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-      ],
-      arthur: {
-        name: "Marie Starck",
-        username: "kwadoskii",
-        img: "https://res.cloudinary.com/practicaldev/image/fetch/s--QU7IG6C2--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/80451/3034728c-5307-4467-a67e-b9c00d6d33ed.png",
-      },
-      slug: "lorem-ipsum",
-      banner: "http://imageurl.com",
-      timestamp: "12-2-22",
-    },
-    {
-      _id: "2",
-      title: "50 Best Inspiring Form Designs 🎨",
-      excerp: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, voluptatum corporis eligendi voluptatem cum voluptate atque beatae ab possimus expedita, perferendis, incidunt nam deserunt? Impedit explicabo cum fuga vel adipisci.      Quos iure numquam soluta enim repudiandae explicabo fugiat quam libero cumque alias temporibus, consequatur obcaecati impedit perferendis sequi et amet placeat deserunt. Ad tempore, dignissimos quasi mollitia rerum aperiam quis?      Inventore ipsam laudantium quod, praesentium earum cum voluptatibus molestias totam rerum reiciendis voluptatum nobis ipsum non veniam deleniti corporis, culpa adipisci. Eum quae tenetur ipsa iure dolore nesciunt pariatur animi.",
-      tags: [
-        {
-          _id: "1",
-          name: "news",
-          url: "/t/news",
-          bgColor: "bg-yellow-500",
-          textBlack: true,
-        },
-        {
-          _id: "2",
-          name: "local",
-          url: "/t/local",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "3",
-          name: "music",
-          url: "/t/music",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "4",
-          name: "latest",
-          url: "/t/latest",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-      ],
-      arthur: {
-        name: "Akunna Okoye",
-        username: "AkunnaOkoye",
-        img: "https://res.cloudinary.com/practicaldev/image/fetch/s--blbDiZBx--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/495782/9375dc8c-13d7-4da6-8fed-acae3d00a1f0.jpg",
-      },
-      slug: "lorem-ipsum2",
-      banner: "http://imageurl.com",
-      timestamp: "12-Feb-22",
-    },
-    {
-      _id: "3",
-      title: "Generate a PDF from HTML with puppeteer",
-      excerp: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, voluptatum corporis eligendi voluptatem cum voluptate atque beatae ab possimus expedita, perferendis, incidunt nam deserunt? Impedit explicabo cum fuga vel adipisci.      Quos iure numquam soluta enim repudiandae explicabo fugiat quam libero cumque alias temporibus, consequatur obcaecati impedit perferendis sequi et amet placeat deserunt. Ad tempore, dignissimos quasi mollitia rerum aperiam quis?      Inventore ipsam laudantium quod, praesentium earum cum voluptatibus molestias totam rerum reiciendis voluptatum nobis ipsum non veniam deleniti corporis, culpa adipisci. Eum quae tenetur ipsa iure dolore nesciunt pariatur animi.",
-      tags: [
-        {
-          _id: "1",
-          name: "news",
-          url: "/t/news",
-          bgColor: "bg-yellow-500",
-          textBlack: true,
-        },
-        {
-          _id: "2",
-          name: "local",
-          url: "/t/local",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "3",
-          name: "music",
-          url: "/t/music",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "4",
-          name: "latest",
-          url: "/t/latest",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-      ],
-      arthur: {
-        name: "Akunna Okoye",
-        username: "AkunnaOkoye",
-        img: "https://res.cloudinary.com/practicaldev/image/fetch/s--F7XF4LZS--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/15827/8dbfb1b9-ef41-4b17-b59c-487fbc1769ed.jpg",
-      },
-      slug: "lorem-ipsum2",
-      banner: "http://imageurl.com",
-      timestamp: "12-Feb-22",
-    },
-    {
-      _id: "4",
-      title: "6 Nullish coalescing operators every javascript programmer must know !",
-      excerp: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, voluptatum corporis eligendi voluptatem cum voluptate atque beatae ab possimus expedita, perferendis, incidunt nam deserunt? Impedit explicabo cum fuga vel adipisci.      Quos iure numquam soluta enim repudiandae explicabo fugiat quam libero cumque alias temporibus, consequatur obcaecati impedit perferendis sequi et amet placeat deserunt. Ad tempore, dignissimos quasi mollitia rerum aperiam quis?      Inventore ipsam laudantium quod, praesentium earum cum voluptatibus molestias totam rerum reiciendis voluptatum nobis ipsum non veniam deleniti corporis, culpa adipisci. Eum quae tenetur ipsa iure dolore nesciunt pariatur animi.",
-      tags: [
-        {
-          _id: "1",
-          name: "news",
-          url: "/t/news",
-          bgColor: "bg-yellow-500",
-          textBlack: true,
-        },
-        {
-          _id: "2",
-          name: "local",
-          url: "/t/local",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "3",
-          name: "music",
-          url: "/t/music",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-        {
-          _id: "4",
-          name: "latest",
-          url: "/t/latest",
-          bgColor: "bg-purple-400",
-          textBlack: false,
-        },
-      ],
-      arthur: {
-        name: "Akunna Okoye",
-        username: "AkunnaOkoye",
-        img: "https://res.cloudinary.com/practicaldev/image/fetch/s--R0nYGdi7--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/102689/254c0829-1ff0-4410-a4b2-c59c772b702e.jpeg",
-      },
-      slug: "lorem-ipsum2",
-      banner: "http://imageurl.com",
-      timestamp: "12-Feb-22",
-    },
-  ];
-
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const [postss, setPostss] = useState(posts);
+export default function SavedPage({ userSavedPosts }) {
+  const [postss, setPostss] = useState(userSavedPosts);
   const [tags, setTags] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   useEffect(() => {
-    setPostss(postss);
+    // setPostss(postss);
     filterTags(postss);
   }, []);
 
@@ -219,7 +39,8 @@ export default function SavedPage() {
         ? filtered.filter((p) =>
             p.title.toLowerCase().search(searchText) > -1 ||
             p.tags.filter((t) => t.name.toLowerCase().search(searchText) > -1).length > 0 ||
-            p.arthur.name.toLowerCase().search(searchText) > -1
+            p.author.firstname.toLowerCase().search(searchText) > -1 ||
+            p.author.lastname.toLowerCase().search(searchText) > -1
               ? p
               : null
           )
@@ -261,7 +82,14 @@ export default function SavedPage() {
 
   const { data: filteredPost, totalCount } = getPageData();
 
-  return (
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
+
+  return loading ? null : (
     <>
       <Title title="Saved Articles" />
       <Navbar />
@@ -303,15 +131,13 @@ export default function SavedPage() {
               <div className="border border-gray-200 rounded-md bg-white px-5 py-4">
                 {Array.isArray(filteredPost) && filteredPost.length > 0 ? (
                   filteredPost.map((p, i) => {
-                    const createdTime = new Date(p.timestamp);
-
                     return (
                       <div className="flex gap-4 mb-8" key={i}>
                         <Link passHref href="/kwadoskii">
                           <a>
                             <div className="w-8 h-8 relative border rounded-full cursor-pointer">
                               <Image
-                                src={p.arthur.img}
+                                src={p.author.profileImage}
                                 objectFit="cover"
                                 layout="fill"
                                 className="rounded-full"
@@ -321,26 +147,23 @@ export default function SavedPage() {
                         </Link>
 
                         <div className="flex-grow flex flex-col gap-1">
-                          <Link passHref href={`/${p.arthur.username}/${p.slug}`}>
+                          <Link passHref href={`/${p.author.username}/${p.slug}`}>
                             <a className="hover:text-blue-800">
                               <h3 className="font-bold text-lg">{p.title}</h3>
                             </a>
                           </Link>
 
                           <div className="flex flex-col md:flex-row gap-2 md:items-center text-gray-500 text-sm">
-                            <Link passHref href={`/${p.arthur.username}`}>
+                            <Link passHref href={`/${p.author.username}`}>
                               <a className="hover:text-blue-800 text-gray-800">
-                                <p className="text-sm font-semibold">{p.arthur.name}</p>
+                                <p className="text-sm font-semibold">
+                                  {`${p.author.firstname} ${p.author.lastname}`}
+                                </p>
                               </a>
                             </Link>
                             <p>
                               <span className="hidden md:inline text-gray-300">• </span>
-                              {months[createdTime.getMonth()] +
-                                " " +
-                                createdTime.getDate() +
-                                " '" +
-                                createdTime.getFullYear().toString().substring(2) +
-                                " "}
+                              {" " + dayjs(p.createdAt).format("MMM DD 'YY") + " "}
                               <span className="hidden md:inline text-gray-300">• </span>
                             </p>
                             <div className="flex gap-2">
@@ -382,4 +205,14 @@ export default function SavedPage() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const {
+    data: { data: userSavedPosts },
+  } = await savedPosts(req.cookies.token);
+
+  return {
+    props: { userSavedPosts },
+  };
 }

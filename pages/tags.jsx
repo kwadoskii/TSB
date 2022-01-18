@@ -90,7 +90,9 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
         <div className="px-2">
           <p className="my-2 mb-1 text-gray-800">{tag?.paragraph}</p>
 
-          <p className="text-gray-500 text-sm">{tag?.postCount + " posts published"}</p>
+          <p className="text-gray-500 text-sm">{`${tag?.postCount} post${
+            tag?.postCount > 1 ? "s" : ""
+          } published`}</p>
 
           <div className="flex justify-between mt-2.5 items-center">
             {authService.getCurrentUser() && (
