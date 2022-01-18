@@ -88,18 +88,13 @@ export default function EnterPage() {
     setDisableButton(true);
     e.preventDefault();
 
-    try {
-      const {
-        data: { data },
-        status,
-      } = await auth.login(loginUsername, loginPassword);
+    const { data, status } = await auth.login(loginUsername, loginPassword);
 
-      if (status === 200) {
-        auth.loginWithJwt(data.token);
-        router.replace(data.user.username);
-      }
-    } catch (error) {
-      toast.error(error.data);
+    if (status === 200) {
+      auth.loginWithJwt(data.data.token);
+      router.replace(data.data.user.username);
+    } else {
+      toast.error(data.message);
       setDisableButton(false);
     }
   };
