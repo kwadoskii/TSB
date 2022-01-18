@@ -36,4 +36,7 @@ const unfollowTag = (tagId, token) =>
 const reactions = (token) =>
   api.get(`${userEndpoint}/reactions`, { headers: { "x-auth-token": "JWT " + token } });
 
-export { register, profile, getUserFollowingTags, followTag, unfollowTag, reactions };
+const savedPosts = (token) =>
+  api.get(`${userEndpoint}/savedposts`, { headers: { "x-auth-token": "JWT " + token } });
+
+export { register, profile, getUserFollowingTags, followTag, unfollowTag, reactions, savedPosts };

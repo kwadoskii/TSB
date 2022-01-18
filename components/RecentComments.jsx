@@ -26,7 +26,7 @@ export default function RecentComments({ profileUrl, commentsOnly = false, comme
       ))}
 
       {!commentsOnly &&
-        comments?.length > 0 && ( // change to 7
+        comments?.length > 7 && ( // change to 7
           <Link passHref href={`${profileUrl}/comments`}>
             <a className="inline-block p-4 text-blue-500 hover:underline">
               <p>
