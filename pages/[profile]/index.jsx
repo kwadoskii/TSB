@@ -171,7 +171,6 @@ export async function getServerSideProps({ req, params }) {
   if (status === "error") return { notFound: true };
 
   return {
-    // props: { profileDetails: data, token: req.cookies.token },
     props: { profileDetails: data, token: req.cookies.token || "", userLikes: userLikes || [] },
   };
 }
