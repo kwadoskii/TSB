@@ -9,7 +9,7 @@ export default function ConfirmLogoutPage() {
 
   const handleSignout = () => {
     authService.logout();
-    router.push("/");
+    router.push("/enter");
   };
 
   return (

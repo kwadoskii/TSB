@@ -33,10 +33,34 @@ const unfollowTag = (tagId, token) =>
     { headers: { "x-auth-token": "JWT " + token } }
   );
 
+const savePost = (postId, token) =>
+  api.post(
+    `${userEndpoint}/posts/save/${postId}`,
+    {},
+    { headers: { "x-auth-token": "JWT " + token } }
+  );
+
+const unsavePost = (postId, token) =>
+  api.post(
+    `${userEndpoint}/posts/unsave/${postId}`,
+    {},
+    { headers: { "x-auth-token": "JWT " + token } }
+  );
+
 const reactions = (token) =>
   api.get(`${userEndpoint}/reactions`, { headers: { "x-auth-token": "JWT " + token } });
 
 const savedPosts = (token) =>
   api.get(`${userEndpoint}/savedposts`, { headers: { "x-auth-token": "JWT " + token } });
 
-export { register, profile, getUserFollowingTags, followTag, unfollowTag, reactions, savedPosts };
+export {
+  register,
+  profile,
+  getUserFollowingTags,
+  followTag,
+  unfollowTag,
+  reactions,
+  savedPosts,
+  savePost,
+  unsavePost,
+};

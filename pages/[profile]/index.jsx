@@ -7,12 +7,24 @@ import RecentComments from "../../components/RecentComments";
 import Title from "../../components/Title";
 import Footer from "../../components/Footer";
 import Image from "next/image";
-import { profile as profileApi, reactions } from "../../apis/user";
+import {
+  profile as profileApi,
+  reactions,
+  savedPosts,
+  savePost,
+  unsavePost,
+} from "../../apis/user";
 import authService from "../../apis/authService";
 import dayjs from "dayjs";
 import { likePost, unlikePost } from "../../apis/post";
 
-export default function ProfilePage({ commentsOnly = false, profileDetails, token, userLikes }) {
+export default function ProfilePage({
+  commentsOnly = false,
+  profileDetails,
+  token,
+  userLikes,
+  userPosts,
+}) {
   const router = useRouter();
   const {
     query: { profile },
@@ -146,6 +158,9 @@ export default function ProfilePage({ commentsOnly = false, profileDetails, toke
                     onLike={() => likePost(post._id, token)}
                     onUnlike={() => unlikePost(post._id, token)}
                     liked={userLikes?.reactions?.some((ul) => ul._id === post._id)}
+                    onSave={() => savePost(post._id, token)}
+                    onUnsave={() => unsavePost(post._id, token)}
+                    saved={userPosts?.some((up) => up._id === post._id)}
                   />
                 ))}
               </div>
@@ -168,9 +183,18 @@ export async function getServerSideProps({ req, params }) {
     data: { data: userLikes },
   } = await reactions(req.cookies.token);
 
+  const {
+    data: { data: userPosts },
+  } = await savedPosts(req.cookies.token);
+
   if (status === "error") return { notFound: true };
 
   return {
-    props: { profileDetails: data, token: req.cookies.token || "", userLikes: userLikes || [] },
+    props: {
+      profileDetails: data,
+      token: req.cookies.token || "",
+      userLikes: userLikes || [],
+      userPosts: userPosts || [],
+    },
   };
 }
