@@ -9,6 +9,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { getPostComments, getPostLikes } from "../apis/post";
 import authService from "../apis/authService";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function ArticleCard({
   hasImage = false,
@@ -18,6 +19,9 @@ export default function ArticleCard({
   liked,
   onLike,
   onUnlike,
+  saved,
+  onSave,
+  onUnsave,
 }) {
   dayjs.extend(relativeTime);
 
@@ -25,8 +29,10 @@ export default function ArticleCard({
 
   const [comments, setComments] = useState("");
   const [likesCount, setLikesCount] = useState("");
-  const [currentUser, setCurrentUser] = useState();
+  // const [currentUser, setCurrentUser] = useState();
   const [_liked, setLiked] = useState(liked);
+  const [_saved, setSaved] = useState(saved);
+  const router = useRouter();
 
   let formatedCreatedAt =
     dayjs().format("YYYY") === dayjs(articleDetails?.createdAt).format("YYYY")
@@ -43,7 +49,6 @@ export default function ArticleCard({
   };
 
   const commentHandler = () => console.log("handler clicked");
-  const saveHandler = () => console.log("handler clicked");
 
   const handleLike = async () => {
     const { data, status } = await onLike();
@@ -65,6 +70,26 @@ export default function ArticleCard({
     return toast.error("Could not unlike post.");
   };
 
+  const handleSave = async () => {
+    setSaved(true);
+
+    const { data, status } = await onSave();
+    if (status === 200 && data.status === "success") return;
+
+    setSaved(false);
+    return toast.error("Could not save post.");
+  };
+
+  const handleUnsave = async () => {
+    setSaved(false);
+
+    const { data, status } = await onUnsave();
+    if (status === 200 && data.status === "success") return;
+
+    setSaved(true);
+    return toast.error("Could not unsave post.");
+  };
+
   useEffect(async () => {
     const {
       data: { data: comments },
@@ -75,7 +100,7 @@ export default function ArticleCard({
 
     setComments(comments);
     setLikesCount(likes.length);
-    setCurrentUser(authService.getCurrentUser());
+    // setCurrentUser(authService.getCurrentUser());
   }, []);
 
   return (
@@ -84,13 +109,7 @@ export default function ArticleCard({
         <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>
             <div className="w-full h-[230px] relative">
-              <Image
-                alt="banner"
-                layout="fill"
-                objectFit="cover"
-                // src="https://res.cloudinary.com/practicaldev/image/fetch/s--rIMJB0Lh--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/881jdm7sdnril6hn3f3l.PNG"
-                src={articleDetails?.banner}
-              />
+              <Image alt="banner" layout="fill" objectFit="cover" src={articleDetails?.banner} />
             </div>
           </a>
         </Link>
@@ -174,7 +193,7 @@ export default function ArticleCard({
 
               <div
                 className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
-                onClick={commentHandler}
+                onClick={() => router.push(`/${user?.username}/${articleDetails?.slug}#comments`)}
               >
                 <ChatAltIcon className="h-5 text-gray-500" />
                 <p className="text-sm">
@@ -184,12 +203,12 @@ export default function ArticleCard({
               </div>
             </div>
 
-            {currentUser && (
+            {authService.getCurrentUser() && (
               <button
                 className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
-                onClick={saveHandler}
+                onClick={_saved ? () => handleUnsave() : () => handleSave()}
               >
-                Save
+                {_saved ? "Saved" : "Save"}
               </button>
             )}
           </div>
@@ -207,7 +226,7 @@ export default function ArticleCard({
       )}
 
       {userPost && isVisible && (
-        <div className="absolute right-3 top-9 z-[400]">
+        <div className="absolute right-3 top-9 z-[500]">
           <div className="bg-white border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
             <ul>
               {menuData.map((menu, i) => (
