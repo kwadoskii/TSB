@@ -51,16 +51,22 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
   const [_followed, setFollowed] = useState(followed);
 
   const handleFollow = async () => {
-    const { data, status } = await onFollow();
-    if (status === 200 && data.status === "success") return setFollowed(true);
+    setFollowed(true);
 
+    const { data, status } = await onFollow();
+    if (status === 200 && data.status === "success") return;
+
+    setFollowed(false);
     return toast.error("Could not follow this tag.");
   };
 
   const handleUnfollow = async () => {
-    const { data, status } = await onUnfollow();
-    if (status === 200 && data.status === "success") return setFollowed(false);
+    setFollowed(false);
 
+    const { data, status } = await onUnfollow();
+    if (status === 200 && data.status === "success") return;
+
+    setFollowed(true);
     return toast.error("Could not unfollow this tag.");
   };
 
