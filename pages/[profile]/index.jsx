@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { MapPin, Gift, Book, MessageSquare, Hash, User } from "react-feather";
+import { MapPin, Gift, Book, MessageSquare, Hash } from "react-feather";
 
 import ArticleCard from "../../components/ArticleCard";
 import Navbar from "../../components/Navbar";
@@ -8,15 +8,20 @@ import Title from "../../components/Title";
 import Footer from "../../components/Footer";
 import Image from "next/image";
 import {
+  followingUsers,
+  followUser,
   profile as profileApi,
   reactions,
   savedPosts,
   savePost,
+  unfollowUser,
   unsavePost,
 } from "../../apis/user";
 import authService from "../../apis/authService";
 import dayjs from "dayjs";
 import { likePost, unlikePost } from "../../apis/post";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ProfilePage({
   commentsOnly = false,
@@ -24,17 +29,46 @@ export default function ProfilePage({
   token,
   userLikes,
   userPosts,
+  userFollowingUsers,
 }) {
   const router = useRouter();
   const {
     query: { profile },
   } = router;
+  const [followed, setFollowed] = useState("");
 
   const gotoSettings = (e) => {
     e.preventDefault();
-
     router.push("/settings");
   };
+
+  console.log(userFollowingUsers);
+
+  const handleFollow = async (userId) => {
+    setFollowed(true);
+
+    const { data, status } = await followUser(userId, token);
+    if (status === 200 && data.status === "success") return;
+
+    setFollowed(false);
+    return toast.error(data.message);
+  };
+
+  const handleUnfollow = async (userId) => {
+    setFollowed(false);
+
+    const { data, status } = await unfollowUser(userId, token);
+    if (status === 200 && data.status === "success") return;
+
+    setFollowed(true);
+    return toast.error(data.message);
+  };
+
+  useEffect(() => {
+    setFollowed(
+      userFollowingUsers.some((followingUser) => followingUser._id === profileDetails._id)
+    );
+  }, []);
 
   return (
     <>
@@ -59,15 +93,34 @@ export default function ProfilePage({
                 />
               </div>
 
-              {authService.getCurrentUser(token)?._id === profileDetails._id && (
-                <div className="absolute top-3 right-3">
-                  <button
-                    className="border-none p-3 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end items-start"
-                    onClick={gotoSettings}
-                  >
-                    Edit profile
-                  </button>
-                </div>
+              {authService.getCurrentUser() ? (
+                authService.getCurrentUser(token)?._id === profileDetails._id ? (
+                  <div className="absolute top-3 right-3">
+                    <button
+                      className="border-none p-2.5 px-4 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end items-start outline-none"
+                      onClick={gotoSettings}
+                    >
+                      Edit profile
+                    </button>
+                  </div>
+                ) : (
+                  <div className="absolute top-3 right-3">
+                    <button
+                      className={`border-none p-3 bg-transparent text-blue-700 font-semibold text-sm cursor-pointer rounded-md hover:bg-blue-200/30 transition duration-100 ease-out self-end items-start ring-1 ring-blue-600 ${
+                        followed && "!bg-blue-600 !text-white hover:!bg-blue-600/80"
+                      }`}
+                      onClick={
+                        followed
+                          ? () => handleUnfollow(profileDetails._id)
+                          : () => handleFollow(profileDetails._id)
+                      }
+                    >
+                      {followed ? "Following" : "Follow"}
+                    </button>
+                  </div>
+                )
+              ) : (
+                ""
               )}
             </div>
 
@@ -175,26 +228,33 @@ export default function ProfilePage({
 }
 
 export async function getServerSideProps({ req, params }) {
+  const { token } = req.cookies;
+
   const {
-    data: { data, status },
+    data: { data: profileDetails, status },
   } = await profileApi(params.profile);
 
   const {
     data: { data: userLikes },
-  } = await reactions(req.cookies.token);
+  } = await reactions(token);
 
   const {
     data: { data: userPosts },
-  } = await savedPosts(req.cookies.token);
+  } = await savedPosts(token);
+
+  const {
+    data: { data: userFollowingUsers },
+  } = await followingUsers(token);
 
   if (status === "error") return { notFound: true };
 
   return {
     props: {
-      profileDetails: data,
-      token: req.cookies.token || "",
+      profileDetails,
+      token: token || "",
       userLikes: userLikes || [],
       userPosts: userPosts || [],
+      userFollowingUsers: userFollowingUsers || [],
     },
   };
 }
