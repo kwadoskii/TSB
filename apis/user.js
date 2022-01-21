@@ -53,6 +53,19 @@ const reactions = (token) =>
 const savedPosts = (token) =>
   api.get(`${userEndpoint}/savedposts`, { headers: { "x-auth-token": "JWT " + token } });
 
+const followUser = (userId, token) =>
+  api.post(`${userEndpoint}/follow/${userId}`, {}, { headers: { "x-auth-token": "JWT " + token } });
+
+const unfollowUser = (userId, token) =>
+  api.post(
+    `${userEndpoint}/unfollow/${userId}`,
+    {},
+    { headers: { "x-auth-token": "JWT " + token } }
+  );
+
+const followingUsers = (token) =>
+  api.get(`${userEndpoint}/following`, { headers: { "x-auth-token": "JWT " + token } });
+
 export {
   register,
   profile,
@@ -63,4 +76,7 @@ export {
   savedPosts,
   savePost,
   unsavePost,
+  followUser,
+  unfollowUser,
+  followingUsers,
 };

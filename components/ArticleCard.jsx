@@ -99,8 +99,7 @@ export default function ArticleCard({
     } = await getPostLikes(articleDetails?._id);
 
     setComments(comments);
-    setLikesCount(likes.length);
-    // setCurrentUser(authService.getCurrentUser());
+    setLikesCount(likes?.length);
   }, []);
 
   return (
@@ -125,7 +124,10 @@ export default function ArticleCard({
             <a>
               <div className="w-9 h-9 relative">
                 <Image
-                  src={user?.profileImage}
+                  src={
+                    user?.profileImage ||
+                    "https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                  }
                   alt="profile of user"
                   layout="fill"
                   className="rounded-full"
@@ -171,7 +173,9 @@ export default function ArticleCard({
           <div className="flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-2">
               <div
-                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
+                className={`py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50 ${
+                  _liked && "bg-red-100/50"
+                }`}
                 onClick={
                   authService.getCurrentUser()
                     ? _liked
@@ -205,7 +209,9 @@ export default function ArticleCard({
 
             {authService.getCurrentUser() && (
               <button
-                className="my-button-transparent text-sm font-normal py-1 bg-gray-300"
+                className={`my-button-transparent text-sm font-normal py-1 ${
+                  _saved && "bg-gray-300/80 hover:bg-gray-400/70 hover:border-transparent"
+                }`}
                 onClick={_saved ? () => handleUnsave() : () => handleSave()}
               >
                 {_saved ? "Saved" : "Save"}

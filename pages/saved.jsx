@@ -21,11 +21,6 @@ export default function SavedPage({ userSavedPosts }) {
 
   const router = useRouter();
 
-  useEffect(() => {
-    // setPostss(postss);
-    filterTags(postss);
-  }, []);
-
   const getPageData = () => {
     let searchText = searchValue.toLowerCase().trim().replace(/\\/g, "");
     let filtered = postss;
@@ -88,6 +83,10 @@ export default function SavedPage({ userSavedPosts }) {
     }
     setLoading(false);
   }, [loading]);
+
+  useEffect(() => {
+    filterTags(postss);
+  }, []);
 
   return loading ? null : (
     <>
