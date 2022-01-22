@@ -1,11 +1,26 @@
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import authService from "../../apis/authService";
 import { getUserFollowingTags } from "../../apis/user";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import TagCard from "../../components/TagCard";
 import Title from "../../components/Title";
 
-export default function following_tags({ tags }) {
-  return (
+export default function FollowingTagsPage({ tags }) {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  //route protection
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
+
+  //route protection of content
+  return loading ? null : (
     <>
       <Title title={"Dashboard"} />
       <Navbar />

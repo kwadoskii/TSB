@@ -1,40 +1,26 @@
 import Navbar from "../../components/Navbar";
 import Title from "../../components/Title";
 import Sidebar from "../../components/Sidebar";
-import Image from "next/image";
-import Link from "next/link";
 import FollowerCard from "../../components/FollowerCard";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import authService from "../../apis/authService";
+import { followers as followersApi } from "../../apis/user";
 
-export default function followers() {
-  const followers = [
-    {
-      username: "unohanandez",
-      name: "Uno Hanandez",
-      img: "https://res.cloudinary.com/practicaldev/image/fetch/s--dQPUaLyU--/c_fill,f_auto,fl_progressive,h_60,q_auto,w_60/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/632113/ce3053da-2661-4bd7-bf26-c0bc7600f4a4.jpeg",
-    },
-    {
-      username: "dosmiguel",
-      name: "Dos Miguel",
-      img: "https://res.cloudinary.com/practicaldev/image/fetch/s--lkWGw_C8--/c_fill,f_auto,fl_progressive,h_60,q_auto,w_60/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/649917/ea1d8682-3af5-40c2-a3d3-58a5c663cc4c.png",
-    },
-    {
-      username: "tressilva",
-      name: "Tres Silva",
-      img: "https://res.cloudinary.com/practicaldev/image/fetch/s--lkWGw_C8--/c_fill,f_auto,fl_progressive,h_60,q_auto,w_60/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/649917/ea1d8682-3af5-40c2-a3d3-58a5c663cc4c.png",
-    },
-    {
-      username: "tressilva",
-      name: "Tres Silva",
-      img: "https://res.cloudinary.com/practicaldev/image/fetch/s--lkWGw_C8--/c_fill,f_auto,fl_progressive,h_60,q_auto,w_60/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/649917/ea1d8682-3af5-40c2-a3d3-58a5c663cc4c.png",
-    },
-    {
-      username: "tressilva",
-      name: "Tres Silva",
-      img: "https://res.cloudinary.com/practicaldev/image/fetch/s--lkWGw_C8--/c_fill,f_auto,fl_progressive,h_60,q_auto,w_60/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/649917/ea1d8682-3af5-40c2-a3d3-58a5c663cc4c.png",
-    },
-  ];
+export default function FollowersPage({ followers }) {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  return (
+  //route protection
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
+
+  //route protection of content
+  return loading ? null : (
     <>
       <Title title="Dashboard" />
       <Navbar />
@@ -50,8 +36,13 @@ export default function followers() {
 
             <div className="flex flex-col col-span-full md:col-span-4">
               <div className="grid grid-cols-3 gap-1 lg:gap-3">
-                {followers.map(({ img, name, username }, i) => (
-                  <FollowerCard key={i} img={img} name={name} username={username} />
+                {followers?.map(({ _id, profileImage, firstname, lastname, username }) => (
+                  <FollowerCard
+                    key={_id}
+                    img={profileImage}
+                    name={firstname + " " + lastname}
+                    username={username}
+                  />
                 ))}
               </div>
             </div>
@@ -60,4 +51,16 @@ export default function followers() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const {
+    data: { data: _followers },
+  } = await followersApi(req.cookies.token);
+
+  return {
+    props: {
+      followers: _followers,
+    },
+  };
 }
