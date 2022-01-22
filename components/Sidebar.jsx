@@ -46,7 +46,7 @@ export default function Sidebar({
     clone[3].count = _followingTags.tags.length;
 
     setDaata([...clone]);
-  }, []);
+  }, [daata]);
 
   if (hasLinks === true)
     //sidebar nav with links
