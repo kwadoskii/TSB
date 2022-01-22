@@ -42,8 +42,6 @@ export default function ProfilePage({
     router.push("/settings");
   };
 
-  console.log(userFollowingUsers);
-
   const handleFollow = async (userId) => {
     setFollowed(true);
 

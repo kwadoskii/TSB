@@ -103,7 +103,7 @@ export default function ArticleCard({
   }, []);
 
   return (
-    <div className="w-full rounded-md border border-gray-300 overflow-hidden shadow-md mb-2 active:border-blue-700 relative">
+    <div className="w-full rounded-md border border-gray-300 shadow-md mb-3 active:border-blue-700 relative">
       {hasImage && articleDetails?.banner && (
         <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>

@@ -71,6 +71,12 @@ const followers = (token) =>
 
 const totalUsers = () => api.get(`${userEndpoint}/total`);
 
+const userPosts = (token) =>
+  api.get(`${userEndpoint}/posts`, { headers: { "x-auth-token": "JWT " + token } });
+
+const userComments = (token) =>
+  api.get(`${userEndpoint}/comments`, { headers: { "x-auth-token": "JWT " + token } });
+
 export {
   register,
   profile,
@@ -86,4 +92,6 @@ export {
   followingUsers,
   totalUsers,
   followers,
+  userPosts,
+  userComments,
 };
