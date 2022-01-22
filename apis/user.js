@@ -66,6 +66,11 @@ const unfollowUser = (userId, token) =>
 const followingUsers = (token) =>
   api.get(`${userEndpoint}/following`, { headers: { "x-auth-token": "JWT " + token } });
 
+const followers = (token) =>
+  api.get(`${userEndpoint}/followers`, { headers: { "x-auth-token": "JWT " + token } });
+
+const totalUsers = () => api.get(`${userEndpoint}/total`);
+
 export {
   register,
   profile,
@@ -79,4 +84,6 @@ export {
   followUser,
   unfollowUser,
   followingUsers,
+  totalUsers,
+  followers,
 };

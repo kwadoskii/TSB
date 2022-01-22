@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import authService from "../apis/authService";
+import { followers, followingUsers, getUserFollowingTags, profile, savedPosts } from "../apis/user";
 
 const initialData = [
   { name: "Posts", url: "/dashboard", count: 0 },
@@ -20,12 +22,37 @@ export default function Sidebar({
   textProperty = "name",
 }) {
   const { asPath } = useRouter();
+  const [daata, setDaata] = useState(data);
+
+  useEffect(async () => {
+    const token = authService.getJwt();
+    const {
+      data: { data: _profile },
+    } = await profile(authService.getCurrentUser().username, token);
+    const {
+      data: { data: _followingUsers },
+    } = await followingUsers(token);
+    const {
+      data: { data: _followers },
+    } = await followers(token);
+    const {
+      data: { data: _followingTags },
+    } = await getUserFollowingTags(token);
+
+    const clone = daata;
+    clone[0].count = _profile.posts.length;
+    clone[1].count = _followers.length;
+    clone[2].count = _followingUsers.length;
+    clone[3].count = _followingTags.tags.length;
+
+    setDaata([...clone]);
+  }, []);
 
   if (hasLinks === true)
     //sidebar nav with links
     return (
       <div className="flex flex-col">
-        {data.map((d, i) => (
+        {daata.map((d, i) => (
           <Link passHref href={d.url} key={i}>
             <a
               className={`flex cursor-pointer hover:bg-gray-200 rounded-md p-2 ${

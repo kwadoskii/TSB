@@ -11,6 +11,7 @@ export default function Input({
   onChange,
   clearButton = false,
   error, //use redux to implement this
+  needed = false,
   ...props
 }) {
   const nameFormatted = name?.toLowerCase().split(" ").join("_");
@@ -21,6 +22,7 @@ export default function Input({
       {hasLabel && (
         <label className="block mb-2 font-medium" htmlFor={nameFormatted}>
           {name}
+          {needed && <span className="text-red-500 ">*</span>}
         </label>
       )}
       {type !== "checkbox" ? (

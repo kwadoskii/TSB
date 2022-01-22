@@ -3,12 +3,13 @@ import Input from "../components/Input";
 import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { register as registerApi } from "../apis/user";
+import { register as registerApi, totalUsers } from "../apis/user";
 import Joi from "joi";
 import auth from "../apis/authService";
+import NumberFormat from "react-number-format";
 
 export default function EnterPage() {
   const [username, setUsername] = useState("");
@@ -17,6 +18,7 @@ export default function EnterPage() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
 
   const [errors, setErrors] = useState({});
 
@@ -40,12 +42,13 @@ export default function EnterPage() {
       .email({ tlds: { allow: false } })
       .label("Email"),
     password: Joi.string().required().min(6).max(1024).label("Password").trim(),
+    gender: Joi.string().required().valid("F", "M"),
   });
 
   const validateData = () => {
     const options = { abortEarly: false };
     const { error } = validateRegistration.validate(
-      { username, firstname, lastname, email, password },
+      { username, firstname, lastname, email, password, gender },
       options
     );
 
@@ -65,7 +68,7 @@ export default function EnterPage() {
 
     if (!errors)
       try {
-        const user = { username, password, email, firstname, lastname };
+        const user = { username, password, email, firstname, lastname, gender };
         const {
           data: { data },
           status,
@@ -121,6 +124,7 @@ export default function EnterPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     error={errors && errors["username"]}
+                    needed
                   />
                   <Input
                     hasLabel
@@ -130,6 +134,7 @@ export default function EnterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     error={errors && errors["password"]}
+                    needed
                   />
                   <Input
                     hasLabel
@@ -139,6 +144,7 @@ export default function EnterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     error={errors && errors["password"]}
+                    needed
                   />
                   <Input
                     hasLabel
@@ -147,6 +153,7 @@ export default function EnterPage() {
                     value={firstname}
                     onChange={(e) => setFirstname(e.target.value)}
                     error={errors && errors["firstname"]}
+                    needed
                   />
                   <Input
                     hasLabel
@@ -155,6 +162,7 @@ export default function EnterPage() {
                     value={lastname}
                     onChange={(e) => setLastname(e.target.value)}
                     error={errors && errors["lastname"]}
+                    needed
                   />
                   <Input
                     hasLabel
@@ -164,7 +172,30 @@ export default function EnterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     error={errors && errors["email"]}
+                    needed
                   />
+
+                  <div className="w-full my-6 mx-0">
+                    <label className="block mb-2 font-medium" htmlFor="gender">
+                      Gender<span className="text-red-500 ">*</span>
+                    </label>
+                    <select
+                      name="gender"
+                      id="gender"
+                      className="outline-none border border-gray-300 px-2 bg-white rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue h-10 placeholder-gray-500 pr-8"
+                      onChange={(e) => setGender(e.target.value)}
+                      value={gender}
+                    >
+                      <option value="">Choose gender</option>
+                      <option value="F">Female</option>
+                      <option value="M">Male</option>
+                    </select>
+                    {errors && errors["gender"] && (
+                      <p className="text-xs text-red-600 pl-1 mt-0.5">
+                        {errors["gender"].replace(/"/g, "")}
+                      </p>
+                    )}
+                  </div>
 
                   <button
                     className="bg-blue-700 px-4 py-2.5 rounded-md items-center font-semibold text-white hover:bg-blue-800 transition-all duration-200 ease-out w-full outline-none"
@@ -240,14 +271,25 @@ export default function EnterPage() {
   );
 }
 
-const Info = () => (
-  <div className="px-2 md:px-10">
-    <h2 className="font-bold text-[1.65rem] text-center">Welcome to TSB</h2>
-    <p className="text-gray-800 text-center">
-      <Link passHref href="/">
-        <a className="text-blue-600 hover:underline">TSB</a>
-      </Link>{" "}
-      Community has a total of 769,855 amazing members
-    </p>
-  </div>
-);
+const Info = () => {
+  const [_totalUsers, setTotalUsers] = useState(null);
+  useEffect(async () => {
+    const {
+      data: { data },
+    } = await totalUsers();
+    setTotalUsers(data);
+  }, []);
+
+  return (
+    <div className="px-2 md:px-10">
+      <h2 className="font-bold text-[1.65rem] text-center">Welcome to TSB</h2>
+      <p className="text-gray-800 text-center">
+        <Link passHref href="/">
+          <a className="text-blue-600 hover:underline">TSB</a>
+        </Link>{" "}
+        Community has a total of{" "}
+        {<NumberFormat value={_totalUsers} displayType="text" thousandSeparator />} amazing members
+      </p>
+    </div>
+  );
+};
