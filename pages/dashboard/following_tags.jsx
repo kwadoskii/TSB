@@ -21,7 +21,7 @@ export default function following_tags({ tags }) {
 
             <div className="col-span-full md:col-span-4">
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
-                {tags.map((tag) => (
+                {tags?.map((tag) => (
                   <TagCard
                     key={tag._id}
                     name={tag.name}
