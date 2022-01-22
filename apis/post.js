@@ -3,17 +3,11 @@ import api from "../apis/base";
 
 const apiEndpoint = server + "/posts";
 
-const getCommentById = (commentId) => {
-  return api.get(apiEndpoint + "/comment/" + commentId);
-};
+const getCommentById = (commentId) => api.get(apiEndpoint + "/comment/" + commentId);
 
-const getPostComments = (postId) => {
-  return api.get(`${apiEndpoint}/${postId}/comments`);
-};
+const getPostComments = (postId) => api.get(`${apiEndpoint}/${postId}/comments`);
 
-const getPostLikes = (postId) => {
-  return api.get(`${apiEndpoint}/${postId}/likes`);
-};
+const getPostLikes = (postId) => api.get(`${apiEndpoint}/${postId}/likes`);
 
 const likePost = (postId, token) =>
   api.post(`${apiEndpoint}/like/${postId}`, {}, { headers: { "x-auth-token": "JWT " + token } });

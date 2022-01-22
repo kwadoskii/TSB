@@ -9,26 +9,36 @@ import Title from "../../components/Title";
 import authService from "../../apis/authService";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { reactions, userComments, userPosts } from "../../apis/user";
 
-export default function DashboardIndexPage() {
-  const data = [
-    { name: "Total post reactions", count: "0" },
-    { name: "Total post views", count: "< 500" },
-    { name: "Total comments", count: "11" },
-  ];
+export default function DashboardIndexPage({ userPosts, userComments, userReaction }) {
+  const [data, setData] = useState([
+    { name: "Total post reaction", count: 0 },
+    { name: "Total post view", count: 0 },
+    { name: "Total comment", count: 0 },
+  ]);
 
   const [loading, setLoading] = useState(true);
-
-  const posts = [1, 3];
   const router = useRouter();
 
+  //route protection
   useEffect(() => {
     if (!authService.getCurrentUser()) {
       return router.push("/enter");
     }
+
+    const views = userPosts.reduce((prev, u) => prev + u.views, 0);
+    const clone = data;
+
+    clone[0].count = userReaction?.length;
+    clone[1].count = views;
+    clone[2].count = userComments?.length;
+
+    setData([...clone]);
     setLoading(false);
   }, [loading]);
 
+  //route protection of content
   return loading ? null : (
     <>
       <Navbar />
@@ -43,7 +53,7 @@ export default function DashboardIndexPage() {
           {/* smallcard */}
           <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
             {data.map((d, i) => (
-              <SmallCard key={i} title={d.count} subtitle={d.name} />
+              <SmallCard key={i} title={d.count} subtitle={d.count <= 1 ? d.name : d.name + "s"} />
             ))}
           </div>
 
@@ -53,7 +63,7 @@ export default function DashboardIndexPage() {
             {/* content */}
             <div className="flex flex-col col-span-full md:col-span-4">
               <h2 className="font-bold text-xl my-1">Posts</h2>
-              {posts.length <= 0 ? (
+              {userPosts?.length === 0 ? (
                 <div className="bg-gray-50 border rounded-md border-gray-300 mt-2">
                   <div className="flex items-center justify-center py-16 flex-col gap-10">
                     {/* image */}
@@ -61,7 +71,7 @@ export default function DashboardIndexPage() {
                       <Image
                         alt="no post"
                         layout="fill"
-                        src="https://res.cloudinary.com/practicaldev/image/fetch/s--XHE_XeFn--/c_imagga_scale,f_auto,fl_progressive,q_auto,w_300/https://dev-to-uploads.s3.amazonaws.com/i/y5767q6brm62skiyywvc.png"
+                        src="/images/nopostyet.png"
                         objectFit="contain"
                       />
                     </div>
@@ -73,15 +83,20 @@ export default function DashboardIndexPage() {
                       </p>
 
                       <Link passHref href="/write">
-                        <a className="mx-auto my-button">Write your first post now</a>
+                        <a className="mx-auto my-button !mr-auto">Write your first post now</a>
                       </Link>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="">
-                  {posts.map((p, i) => (
-                    <ArticleCard key={i} userPost />
+                  {userPosts?.map((post) => (
+                    <ArticleCard
+                      key={post._id}
+                      userPost
+                      articleDetails={post}
+                      user={authService.getCurrentUser()}
+                    />
                   ))}
                 </div>
               )}
@@ -92,4 +107,26 @@ export default function DashboardIndexPage() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const { token } = req.cookies;
+
+  const {
+    data: { data: _userPosts },
+  } = await userPosts(token);
+  const {
+    data: { data: _userComments },
+  } = await userComments(token);
+  const {
+    data: { data: _userReactions },
+  } = await reactions(token);
+
+  return {
+    props: {
+      userPosts: _userPosts,
+      userComments: _userComments,
+      userReaction: _userReactions?.reactions || [],
+    },
+  };
 }
