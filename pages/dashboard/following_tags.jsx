@@ -1,67 +1,10 @@
+import { getUserFollowingTags } from "../../apis/user";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import TagCard from "../../components/TagCard";
 import Title from "../../components/Title";
 
-export default function following_tags() {
-  const tags = [
-    {
-      id: "1",
-      name: "npm",
-      excerpt:
-        "lorem ipsum one two three dolum manga etc, i will be going to the venue pretty soon, just that i may not need your help. Anytime i check the mail, it always rain.",
-      barColor: "black",
-    },
-    {
-      id: "2",
-      name: "bash",
-      // excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "tomato",
-    },
-    {
-      id: "3",
-      name: "react",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "dodgerblue",
-    },
-    {
-      id: "4",
-      name: "football",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "gold",
-    },
-    {
-      id: "5",
-      name: "politics",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "#ba2738",
-    },
-    {
-      id: "6",
-      name: "trueStory",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "#9e1f89",
-    },
-    {
-      id: "7",
-      name: "programming",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "#12580b",
-    },
-    {
-      id: "8",
-      name: "EPL",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "#e48a16",
-    },
-    {
-      id: "9",
-      name: "laliga",
-      excerpt: "lorem ipsum one two three dolum manga etc",
-      barColor: "#10164e",
-    },
-  ];
-
+export default function following_tags({ tags }) {
   return (
     <>
       <Title title={"Dashboard"} />
@@ -80,10 +23,10 @@ export default function following_tags() {
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
                 {tags.map((tag) => (
                   <TagCard
-                    key={tag.id}
+                    key={tag._id}
                     name={tag.name}
-                    barColor={tag.barColor}
-                    subtitle={tag.excerpt}
+                    barColor={tag.backgroundColor}
+                    subtitle={tag.description}
                   />
                 ))}
               </div>
@@ -93,4 +36,16 @@ export default function following_tags() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const {
+    data: { data: tags },
+  } = await getUserFollowingTags(req.cookies.token);
+
+  return {
+    props: {
+      tags: tags.tags,
+    },
+  };
 }
