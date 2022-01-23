@@ -9,9 +9,22 @@ import Title from "../../components/Title";
 import authService from "../../apis/authService";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { reactions, userComments, userPosts } from "../../apis/user";
+import {
+  reactions,
+  savedPosts,
+  savePost,
+  unsavePost,
+  userComments,
+  userPosts,
+} from "../../apis/user";
+import { likePost, unlikePost } from "../../apis/post";
 
-export default function DashboardIndexPage({ userPosts, userComments, userReaction }) {
+export default function DashboardIndexPage({
+  userPosts,
+  userComments,
+  userReactions,
+  userSavedPosts,
+}) {
   const [data, setData] = useState([
     { name: "Total post reaction", count: 0 },
     { name: "Total post view", count: 0 },
@@ -19,6 +32,7 @@ export default function DashboardIndexPage({ userPosts, userComments, userReacti
   ]);
 
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState("");
   const router = useRouter();
 
   //route protection
@@ -30,12 +44,13 @@ export default function DashboardIndexPage({ userPosts, userComments, userReacti
     const views = userPosts.reduce((prev, u) => prev + u.views, 0);
     const clone = data;
 
-    clone[0].count = userReaction?.length;
+    clone[0].count = userReactions?.length;
     clone[1].count = views;
     clone[2].count = userComments?.length;
 
     setData([...clone]);
     setLoading(false);
+    setToken(authService.getJwt());
   }, [loading]);
 
   //route protection of content
@@ -96,6 +111,12 @@ export default function DashboardIndexPage({ userPosts, userComments, userReacti
                       userPost
                       articleDetails={post}
                       user={authService.getCurrentUser()}
+                      onLike={() => likePost(post._id, token)}
+                      onUnlike={() => unlikePost(post._id, token)}
+                      onSave={() => savePost(post._id, token)}
+                      onUnsave={() => unsavePost(post._id, token)}
+                      liked={() => userReactions.some((ur) => ur._id === post._id)}
+                      saved={() => userSavedPosts.some((usp) => usp._id === post._id)}
                     />
                   ))}
                 </div>
@@ -121,12 +142,16 @@ export async function getServerSideProps({ req }) {
   const {
     data: { data: _userReactions },
   } = await reactions(token);
+  const {
+    data: { data: _userSavedPosts },
+  } = await savedPosts(token);
 
   return {
     props: {
       userPosts: _userPosts,
       userComments: _userComments,
-      userReaction: _userReactions?.reactions || [],
+      userReactions: _userReactions?.reactions || [],
+      userSavedPosts: _userSavedPosts,
     },
   };
 }

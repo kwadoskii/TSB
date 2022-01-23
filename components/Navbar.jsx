@@ -100,7 +100,6 @@ export default function Navbar() {
               <div
                 className="relative w-9 h-9 cursor-pointer rounded-full none"
                 onClick={handleShowHideNavMenu}
-                ref={ref}
               >
                 <Image
                   alt="user avatar"
@@ -113,7 +112,10 @@ export default function Navbar() {
           )}
 
           {isVisible && (
-            <div className="absolute left-auto top-14 right-2 lg:right-6 bg-white my-shadow-drop text-black border border-black rounded-md z-[400] md:w-[250px] w-10/12">
+            <div
+              className="absolute left-auto top-14 right-2 lg:right-6 bg-white my-shadow-drop text-black border border-black rounded-md z-[400] md:w-[250px] w-10/12"
+              ref={ref}
+            >
               <NavbarDropdown
                 firstname={user.firstname}
                 lastname={user.lastname}

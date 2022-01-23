@@ -27,7 +27,7 @@ export default function Sidebar({
   useEffect(async () => {
     let mounted = true;
 
-    if (mounted) {
+    if (mounted && hasLinks) {
       const token = authService.getJwt();
       const {
         data: { data: _profile },
