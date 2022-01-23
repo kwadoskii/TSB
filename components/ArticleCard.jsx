@@ -29,7 +29,6 @@ export default function ArticleCard({
 
   const [comments, setComments] = useState("");
   const [likesCount, setLikesCount] = useState("");
-  // const [currentUser, setCurrentUser] = useState();
   const [_liked, setLiked] = useState(liked);
   const [_saved, setSaved] = useState(saved);
   const router = useRouter();
@@ -39,16 +38,9 @@ export default function ArticleCard({
       ? dayjs(articleDetails?.createdAt).format("MMM DD")
       : dayjs(articleDetails?.createdAt).format("YYYY MMM DD");
 
-  const menuData = [
-    { name: "Edit", url: "/edit" },
-    { name: "Delete", url: "/delete" },
-  ];
-
   const handleShowMenu = () => {
     setIsVisible(!isVisible);
   };
-
-  const commentHandler = () => console.log("handler clicked");
 
   const handleLike = async () => {
     const { data, status } = await onLike();
@@ -224,7 +216,6 @@ export default function ArticleCard({
       {userPost && (
         <div
           onClick={handleShowMenu}
-          ref={ref}
           className="cursor-pointer text-gray-400 hover:bg-gray-100 p-1 rounded-md self-center hover:text-gray-700 absolute top-1 right-3"
         >
           <DotsHorizontalIcon className="h-5" />
@@ -234,16 +225,19 @@ export default function ArticleCard({
       {userPost && isVisible && (
         <div className="absolute right-3 top-9 z-[500]">
           <div className="bg-white border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
-            <ul>
-              {menuData.map((menu, i) => (
-                <Link passHref href={menu.url} key={i}>
-                  <a>
-                    <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
-                      {menu.name}
-                    </li>
-                  </a>
-                </Link>
-              ))}
+            <ul ref={ref}>
+              <li
+                className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded"
+                onClick={() => console.log("/edit/" + articleDetails._id)}
+              >
+                Edit
+              </li>
+              <li
+                className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded"
+                onClick={() => console.log("/delele/" + articleDetails._id)}
+              >
+                Delete
+              </li>
             </ul>
           </div>
         </div>
