@@ -25,28 +25,36 @@ export default function Sidebar({
   const [daata, setDaata] = useState(data);
 
   useEffect(async () => {
-    const token = authService.getJwt();
-    const {
-      data: { data: _profile },
-    } = await profile(authService.getCurrentUser().username, token);
-    const {
-      data: { data: _followingUsers },
-    } = await followingUsers(token);
-    const {
-      data: { data: _followers },
-    } = await followers(token);
-    const {
-      data: { data: _followingTags },
-    } = await getUserFollowingTags(token);
+    let mounted = true;
 
-    const clone = daata;
-    clone[0].count = _profile.posts.length;
-    clone[1].count = _followers.length;
-    clone[2].count = _followingUsers.length;
-    clone[3].count = _followingTags.tags.length;
+    if (mounted) {
+      const token = authService.getJwt();
+      const {
+        data: { data: _profile },
+      } = await profile(authService.getCurrentUser().username, token);
+      const {
+        data: { data: _followingUsers },
+      } = await followingUsers(token);
+      const {
+        data: { data: _followers },
+      } = await followers(token);
+      const {
+        data: { data: _followingTags },
+      } = await getUserFollowingTags(token);
 
-    setDaata([...clone]);
-  }, [daata]);
+      const clone = daata;
+      clone[0].count = _profile.posts.length;
+      clone[1].count = _followers.length;
+      clone[2].count = _followingUsers.length;
+      clone[3].count = _followingTags.tags.length;
+
+      setDaata([...clone]);
+    }
+
+    return function cleanup() {
+      mounted = false;
+    };
+  }, []);
 
   if (hasLinks === true)
     //sidebar nav with links
