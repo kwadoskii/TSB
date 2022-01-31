@@ -23,8 +23,17 @@ export default function NavbarDropdown({
 
       <div className="p-2">
         {navs.map((n, i) =>
-          i !== navs.length - 1 ? (
+          i !== navs.length - 1 && n.title !== "Write" ? (
             <li className="cursor-pointer rounded-md hover:bg-gray-100 hover:text-blue-600" key={i}>
+              <Link href={n.href} passHref>
+                <a className="flex cursor-pointer flex-col p-2">{n.title}</a>
+              </Link>
+            </li>
+          ) : n.title === "Write" ? (
+            <li
+              className="cursor-pointer rounded-md hover:bg-gray-100 hover:text-blue-600 md:hidden"
+              key={i}
+            >
               <Link href={n.href} passHref>
                 <a className="flex cursor-pointer flex-col p-2">{n.title}</a>
               </Link>

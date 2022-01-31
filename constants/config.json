@@ -1,5 +1,6 @@
 {
   "navs": [
+    { "title": "Write", "href": "/write" },
     { "title": "Dashboard", "href": "/dashboard" },
     { "title": "Saved", "href": "/saved" },
     { "title": "Tags", "href": "/tags" },

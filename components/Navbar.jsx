@@ -65,11 +65,11 @@ export default function Navbar() {
               </a>
             </Link>
           )}
-          <Link href="/write" passHref>
+          {/* <Link href="/write" passHref>
             <a className="bg-blue-700 text-white rounded-lg p-1 md:hidden">
               <PlusIcon className="h-6" />
             </a>
-          </Link>
+          </Link> */}
 
           {!user && (
             <div className="flex items-center gap-2">
