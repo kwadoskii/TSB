@@ -5,6 +5,7 @@ module.exports = {
       "www.lindaikejisblog.com",
       "dev-to-uploads.s3.amazonaws.com",
       "www.shareicon.net",
+      "image.shutterstock.com",
     ],
   },
   env: {},
