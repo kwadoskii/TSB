@@ -105,7 +105,7 @@ export default function ProfilePage({
                   <div className="absolute top-3 right-3">
                     <button
                       className={`border-none p-3 bg-transparent text-blue-700 font-semibold text-sm cursor-pointer rounded-md hover:bg-blue-200/30 transition duration-100 ease-out self-end items-start ring-1 ring-blue-600 ${
-                        followed && "!bg-blue-600 !text-white hover:!bg-blue-600/80"
+                        !followed && "!bg-blue-600 !text-white hover:!bg-blue-600/80"
                       }`}
                       onClick={
                         followed
