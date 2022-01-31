@@ -71,7 +71,7 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
   };
 
   return (
-    <div className="rounded-md shadow-md border-gray-200 overflow-hidden">
+    <div className="rounded-md shadow-md border-gray-200 overflow-hidden bg-white">
       <div className="h-4" style={{ backgroundColor: tag?.backgroundColor + "e6" }}></div>
       <div className="p-6 bg-white flex flex-col">
         <Link passHref href={`/t/${tag?.name.toLowerCase()}`}>
@@ -112,9 +112,9 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
               </button>
             )}
 
-            {tag?.imageUrl && (
+            {tag?.image && (
               <div className="h-14 w-14 relative rotate-6">
-                <Image src={tag?.imageUrl} objectFit="contain" layout="fill" />
+                <Image src={tag?.image} objectFit="contain" layout="fill" />
               </div>
             )}
           </div>
@@ -123,6 +123,7 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
     </div>
   );
 };
+
 const TagCard = Radium(TagCardx);
 
 export async function getServerSideProps({ req }) {

@@ -5,4 +5,6 @@ const apiEndpoint = server + "/tags";
 
 const getTags = () => api.get(apiEndpoint);
 
-export { getTags };
+const getTagByName = (name) => api.get(`${apiEndpoint}/byname/${name}`);
+
+export { getTags, getTagByName };

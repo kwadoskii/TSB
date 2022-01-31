@@ -115,8 +115,8 @@ export default function DashboardIndexPage({
                       onUnlike={() => unlikePost(post._id, token)}
                       onSave={() => savePost(post._id, token)}
                       onUnsave={() => unsavePost(post._id, token)}
-                      liked={() => userReactions.some((ur) => ur._id === post._id)}
-                      saved={() => userSavedPosts.some((usp) => usp._id === post._id)}
+                      liked={() => userReactions?.some((ur) => ur._id === post._id)}
+                      saved={() => userSavedPosts?.some((usp) => usp._id === post._id)}
                     />
                   ))}
                 </div>
