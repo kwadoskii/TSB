@@ -25,11 +25,12 @@ export default function TagPage({ followingTags, top = false }) {
         status,
       } = await getTagByName(tagName);
 
+      setTag(_tag);
+
       if (status !== 200) return replace("/404");
     }
 
     setToken(authService.getJwt());
-    setTag(_tag);
     setLoading(false);
   }, []);
 
@@ -58,7 +59,7 @@ export default function TagPage({ followingTags, top = false }) {
             <div className="col-span-2 relative">{/* <Advert /> */}</div>
 
             <div className="col-span-full md:col-span-5">
-              <Feed tag={tag} data={[1, 1, 1, 11, 1, , 1, 1]} />
+              <Feed tag={tag} data={[1, 1, 1, 11, 1, 1, 1]} />
             </div>
 
             <div className="col-span-2"></div>
