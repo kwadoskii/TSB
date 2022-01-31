@@ -7,7 +7,7 @@ import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 const progress = new ProgressBar({
-  size: 4,
+  size: 2,
   color: "#110724",
   delay: 80,
   className: "z-50",

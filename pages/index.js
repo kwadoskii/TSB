@@ -2,8 +2,9 @@ import Feed from "../components/Feed";
 import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 import Advert from "../components/Advert";
+import { getUserFollowingTags } from "../apis/user";
 
-export default function HomePage() {
+export default function HomePage({ followingTags }) {
   return (
     <>
       <Title title="Home" />
@@ -22,7 +23,7 @@ export default function HomePage() {
               </div>
 
               <div className="col-span-full md:col-span-5">
-                <Feed />
+                <Feed  />
               </div>
 
               <div className="col-span-2 hidden md:flex"></div>
@@ -32,4 +33,24 @@ export default function HomePage() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const { token } = req.cookies;
+  let followingTags;
+
+  if (!token) {
+    followingTags = [];
+  } else {
+    const {
+      data: { data: _tag },
+    } = await getUserFollowingTags(req.cookies.token);
+    followingTags = _tag.tags;
+  }
+
+  return {
+    props: {
+      followingTags,
+    },
+  };
 }

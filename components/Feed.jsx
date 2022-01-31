@@ -2,10 +2,10 @@ import ArticleCard from "./ArticleCard";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function Feed({ tag = "", data = [..."hell"] }) {
+export default function Feed({ tag = "", data }) {
   const router = useRouter();
   const path = router.asPath;
-  const formattedTag = tag === "" ? "/" : "/t/" + tag + "/";
+  const formattedTag = tag === "" ? "/" : "/t/" + tag?.name + "/";
 
   const [navs, _] = useState([
     { name: "Feed", sortUrl: "" },
@@ -63,7 +63,7 @@ export default function Feed({ tag = "", data = [..."hell"] }) {
       </div>
 
       <div>
-        {data.map((h, i) => (
+        {data?.map((h, i) => (
           <ArticleCard key={i} />
         ))}
       </div>
