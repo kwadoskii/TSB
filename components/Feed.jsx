@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function Feed({ tag = "", data }) {
   const router = useRouter();
   const path = router.asPath;
-  const formattedTag = tag === "" ? "/" : "/t/" + tag?.name + "/";
+  const formattedTag = tag === "" ? "/" : "/t/" + tag + "/";
 
   const [navs, _] = useState([
     { name: "Feed", sortUrl: "" },
@@ -63,8 +63,8 @@ export default function Feed({ tag = "", data }) {
       </div>
 
       <div>
-        {data?.map((h, i) => (
-          <ArticleCard key={i} />
+        {data?.map((post, i) => (
+          <ArticleCard key={i} hasImage={post.banner} articleDetails={post} user={post.author} />
         ))}
       </div>
     </div>

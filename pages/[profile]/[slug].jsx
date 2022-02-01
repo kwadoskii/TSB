@@ -10,19 +10,13 @@ import Footer from "../../components/Footer";
 import ReadMore from "../../components/ReadMore";
 import ArthurInfoCard from "../../components/ArthurInfoCard";
 import MoreFromArthur from "../../components/MoreFromArthur";
+import { getMoreFromAuthor, getPostBySlug } from "../../apis/post";
+import dayjs from "dayjs";
 
-export default function PostPage() {
-  const tags = [
-    { name: "politics", url: "/t/politics", bgColor: "bg-yellow-500", textBlack: true },
-    { name: "football", url: "/t/football", bgColor: "bg-purple-400", textBlack: false },
-    { name: "music", url: "/t/music", bgColor: "bg-green-800", textBlack: false },
-    { name: "crime", url: "/t/crime", bgColor: "bg-blue-700", textBlack: false },
-  ];
-
+export default function PostPage({ post, previousPosts }) {
   return (
     <>
-      {/* update article title */}
-      <Title title="Client-Side and Server-Side Redirects in Next.js" />
+      <Title title={post.title} />
       <Navbar />
 
       <main className="bg-gray-100">
@@ -60,54 +54,61 @@ export default function PostPage() {
                 {/* article */}
                 <div className="lg:col-span-3 flex-grow  md:col-span-1">
                   <div className="border border-t-0 border-gray-300 rounded-md overflow-hidden shadow-md">
-                    <div className="relative h-[200px] sm:h-[280px] md:h-[350px] xl:h-[380px] 2xl:h-[400px]">
-                      {/* image yes or no -- make image to fill across all screen size */}
-                      {/* <div className="relative lg:h-80 md:h-72 h-36"> */}
-                      <Image
-                        src="https://res.cloudinary.com/practicaldev/image/fetch/s--OfyhQsDc--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5412klb67fxqqzoe8mjn.png"
-                        objectFit="cover"
-                        layout="fill"
-                        alt="article"
-                      />
-                    </div>
+                    {post.banner && (
+                      <div className="relative h-[200px] sm:h-[280px] md:h-[350px] xl:h-[380px] 2xl:h-[400px]">
+                        {/* image yes or no -- make image to fill across all screen size */}
+                        {/* <div className="relative lg:h-80 md:h-72 h-36"> */}
+                        <Image src={post.banner} objectFit="cover" layout="fill" alt="article" />
+                      </div>
+                    )}
 
-                    <article className="my-min-height border-b border-gray-100">
+                    <article className="border-b border-gray-100">
                       <div className="bg-white py-2 px-3 flex-grow md:pt-10 md:px-12 md:pb-5">
                         <h2 className="font-bold md:font-extrabold text-3xl md:text-5xl leading-snug">
-                          Client-Side and Server-Side Redirects in Next.js
+                          {post.title}
                         </h2>
 
                         <div className="flex gap-2 my-3 mt-2 lg:mt-6">
-                          {tags.map((tag, i) => (
-                            <Link passHref href={tag.url} key={i}>
-                              <a
-                                className={`${tag.bgColor} rounded-md p-1 text-sm ${
-                                  !tag.textBlack && "text-white"
-                                }`}
-                              >
-                                <span className="text-gray-300">#</span>
-                                {tag.name}
-                              </a>
-                            </Link>
-                          ))}
+                          {post?.tags.map((tag, i) => {
+                            const bgColor = "bg-[" + tag.backgroundColor + "]";
+
+                            return (
+                              <Link passHref href={`/t/${tag.name}`} key={i}>
+                                <a
+                                  className={`${bgColor} rounded-md p-1 text-sm ${
+                                    !tag.textBlack && "text-white"
+                                  }`}
+                                >
+                                  <span className="text-gray-300">#</span>
+                                  {tag.name}
+                                </a>
+                              </Link>
+                            );
+                          })}
                         </div>
 
                         {/* arthur details */}
                         <div className="mt-5 flex space-x-1 md:space-x-2 items-center">
                           <div className="relative w-8 h-8">
-                            <Image
-                              src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-                              layout="fill"
-                              objectFit="contain"
-                              className="rounded-full"
-                              alt="arthur"
-                            />
+                            {post.author?.profileImage && (
+                              <Image
+                                src={post.author.profileImage}
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-full"
+                                alt="arthur"
+                              />
+                            )}
                           </div>
                           <div className="font-semibold px-3 py-2 text-gray-800 cursor-pointer hover:bg-gray-100 rounded-md">
-                            <p>sudarshan</p>
+                            <Link passHref href={`/${post.author.username}`}>
+                              <a>
+                                <p>{`${post.author.firstname} ${post.author.lastname}`}</p>
+                              </a>
+                            </Link>
                           </div>
                           <div className="text-gray-600 text-sm">
-                            <p>May 3</p>
+                            <p>{dayjs(post.createdAt).format("MMM YY")}</p>
                           </div>
                           <div className="text-gray-600 text-sm">
                             <p>・ 3 min read</p>
@@ -115,49 +116,8 @@ export default function PostPage() {
                         </div>
 
                         {/* newsletter */}
-                        <div className="mx-auto mt-10 mb-3 border-gray-300 prose-lg lg:prose-xl prose-blue">
-                          <p>
-                            Most of the time out javascript code becomes clumsier if we inserted the
-                            multiple null checks for the several entities. Those checks are kind of
-                            mandatory and if those checks were removed then this happens.{" "}
-                          </p>
-                          <p>
-                            Thanks, the SS redirect helped me. Lorem ipsum dolor, sit amet
-                            consectetur adipisicing elit. Obcaecati natus et ipsum adipisci, fugit
-                            quis doloremque, esse perferendis rem, distinctio nisi minima! Dicta,
-                            maiores. Dolores illo commodi animi iure aperiam.
-                          </p>
-                          <p>
-                            This is most useful operator in day to day life. Whether you are dealing
-                            with async API calls or dealing with blocking tasks, we easily assume
-                            the key will be present in the response of an API or output JSON object
-                            of any operation But, what if key is absent of undefined. Here is the
-                            trick
-                          </p>
-                          <p>
-                            This my small try to explain you all the usage of some operators which
-                            could possibly make your code neater and smaller rather than your
-                            previous code 🤗Please let me know your thoughts in comments 🙏hanks For
-                            Reading ...
-                          </p>
-                          <p>
-                            Understanding the scoping of variables is pretty important while coding.
-                            Variables declared with let are specifically blocked scope. Whereas, if
-                            you used var then you can hoist it anywhere in your code, but using var
-                            should be avoided as much as possible (suggested by many !).
-                          </p>
-                          <p>
-                            I often find the behavior of the this is pretty confusing in javascript
-                            for me. Coming from the background of java and PHP, I assumed that I
-                            will definitely feel at home if I used it but, then I was pretty
-                            confused when getting started with the React or ES6. After several weird
-                            things, I left it and then approached the programming in javascript
-                            using functional approach.
-                          </p>
-                          <p>
-                            It is still pretty confusing for me to know how this works, but if you
-                            wanna use it then know it perfectly.
-                          </p>
+                        <div className="mt-10 mb-3 border-gray-300 prose lg:prose-lg prose-blue">
+                          {post.content}
                         </div>
                       </div>
                     </article>
@@ -165,7 +125,7 @@ export default function PostPage() {
                     {/* comment area */}
                     <div className="bg-white py-2 px-3 md:pt-8 md:px-12 md:pb-5" id="comments">
                       <div className="flex justify-between">
-                        <h2 className="font-bold text-2xl">Discussion (8)</h2>
+                        <h2 className="font-bold text-2xl">Discussion (3)</h2>
                         {/* <button className="my-button-transparent">Subscribe</button> */}
                       </div>
 
@@ -212,8 +172,11 @@ export default function PostPage() {
               {/* follow arthur */}
               <div className="col-span-full lg:col-span-5 lg:my-min-height">
                 <div className="sticky top-3">
-                  <ArthurInfoCard />
-                  <MoreFromArthur />
+                  <ArthurInfoCard profile={post.author} />
+                  <MoreFromArthur
+                    profile={post.author}
+                    previousPosts={previousPosts.filter((pp) => pp._id !== post._id)}
+                  />
                 </div>
               </div>
             </div>
@@ -224,4 +187,22 @@ export default function PostPage() {
       <Footer />
     </>
   );
+}
+
+export async function getServerSideProps({ params }) {
+  const {
+    data: { data: post },
+  } = await getPostBySlug(params.slug);
+  const {
+    data: { data: previousPosts },
+  } = await getMoreFromAuthor(post.author._id);
+
+  console.log(previousPosts);
+
+  return {
+    props: {
+      post,
+      previousPosts,
+    },
+  };
 }
