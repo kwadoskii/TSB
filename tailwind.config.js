@@ -43,14 +43,21 @@ module.exports = {
       height: {
         writeContent: "calc(100vh - 88px - 56px)",
       },
-
       boxShadow: {
         soft: "-2px -2px 4px 0px #c2c6c9;",
+      },
+      spacing: {
+        "1/3": "33.333333%",
+        "1/4": "25%",
       },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/line-clamp"), require("@tailwindcss/typography")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/aspect-ratio"),
+  ],
 };

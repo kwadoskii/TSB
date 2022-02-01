@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import authService from "../../../apis/authService";
+import { getAllPosts, getPostsByTagName } from "../../../apis/post";
 import { getTagByName } from "../../../apis/tag";
 import { reactions, getUserFollowingTags, followTag, unfollowTag } from "../../../apis/user";
 import Advert from "../../../components/Advert";
@@ -9,10 +10,11 @@ import Navbar from "../../../components/Navbar";
 import TagCard from "../../../components/TagCard";
 import Title from "../../../components/Title";
 
-export default function TagPage({ followingTags, top = false }) {
+export default function TagPage({ followingTags, top = false, posts }) {
   const [tag, setTag] = useState();
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(true);
+  const [_posts, setPosts] = useState(posts);
   const { query, replace } = useRouter();
   const tagName = query.tag;
 
@@ -25,14 +27,21 @@ export default function TagPage({ followingTags, top = false }) {
         status,
       } = await getTagByName(tagName);
 
+      const {
+        data: { data: _posts },
+      } = await getPostsByTagName(tagName);
+
+      console.log(tagName);
+
       setTag(_tag);
+      setPosts(_posts);
 
       if (status !== 200) return replace("/404");
     }
 
     setToken(authService.getJwt());
     setLoading(false);
-  }, []);
+  }, [tagName]);
 
   return loading ? null : (
     <>
@@ -59,7 +68,7 @@ export default function TagPage({ followingTags, top = false }) {
             <div className="col-span-2 relative">{/* <Advert /> */}</div>
 
             <div className="col-span-full md:col-span-5">
-              <Feed tag={tag} data={[1, 1, 1, 11, 1, 1, 1]} />
+              <Feed tag={tag?.name} data={_posts} />
             </div>
 
             <div className="col-span-2"></div>
@@ -74,6 +83,12 @@ export async function getServerSideProps({ req }) {
   // const tagName = req.url.split("/").reverse()[0];
   const { token } = req.cookies;
   let followingTags;
+  // let posts;
+
+  // const {
+  //   data: { data: _posts },
+  // } = await getPostsByTagName();
+  // posts = _posts;
 
   if (!token) {
     followingTags = [];
@@ -81,12 +96,14 @@ export async function getServerSideProps({ req }) {
     const {
       data: { data: _tag },
     } = await getUserFollowingTags(req.cookies.token);
+
     followingTags = _tag.tags;
   }
 
   return {
     props: {
       followingTags,
+      // posts: _posts || [],
     },
   };
 }

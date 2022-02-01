@@ -6,10 +6,11 @@ import { HeartIcon as SolidHeartIcon } from "@heroicons/react/solid";
 import useVisible from "../hooks/useVisible";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { getPostComments, getPostLikes } from "../apis/post";
+import { getPostComments, getPostLikes, likePost, unlikePost } from "../apis/post";
 import authService from "../apis/authService";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { savePost, unsavePost } from "../apis/user";
 
 export default function ArticleCard({
   hasImage = false,
@@ -31,6 +32,7 @@ export default function ArticleCard({
   const [likesCount, setLikesCount] = useState("");
   const [_liked, setLiked] = useState(liked);
   const [_saved, setSaved] = useState(saved);
+  const [token, setToken] = useState();
   const router = useRouter();
 
   let formatedCreatedAt =
@@ -42,8 +44,8 @@ export default function ArticleCard({
     setIsVisible(!isVisible);
   };
 
-  const handleLike = async () => {
-    const { data, status } = await onLike();
+  const handleLike = async (id) => {
+    const { data, status } = await likePost(id, token);
     if (status === 200 && data.status === "success") {
       setLikesCount(likesCount + 1);
       return setLiked(true);
@@ -52,8 +54,8 @@ export default function ArticleCard({
     return toast.error("Could not like post.");
   };
 
-  const handleUnlike = async () => {
-    const { data, status } = await onUnlike();
+  const handleUnlike = async (id) => {
+    const { data, status } = await unlikePost(id, token);
     if (status === 200 && data.status === "success") {
       setLikesCount(likesCount - 1);
       return setLiked(false);
@@ -62,20 +64,20 @@ export default function ArticleCard({
     return toast.error("Could not unlike post.");
   };
 
-  const handleSave = async () => {
+  const handleSave = async (id) => {
     setSaved(true);
 
-    const { data, status } = await onSave();
+    const { data, status } = await savePost(id, token);
     if (status === 200 && data.status === "success") return;
 
     setSaved(false);
     return toast.error("Could not save post.");
   };
 
-  const handleUnsave = async () => {
+  const handleUnsave = async (id) => {
     setSaved(false);
 
-    const { data, status } = await onUnsave();
+    const { data, status } = await unsavePost(id, token);
     if (status === 200 && data.status === "success") return;
 
     setSaved(true);
@@ -90,16 +92,17 @@ export default function ArticleCard({
       data: { data: likes },
     } = await getPostLikes(articleDetails?._id);
 
+    setToken(authService.getJwt());
     setComments(comments);
     setLikesCount(likes?.length);
   }, []);
 
   return (
-    <div className="w-full rounded-md border border-gray-300 shadow-md mb-3 active:border-blue-700 relative">
+    <div className="w-full rounded-md border border-gray-300 shadow-md mb-3 active:border-blue-700 relative overflow-hidden">
       {hasImage && articleDetails?.banner && (
         <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>
-            <div className="w-full h-[230px] relative">
+            <div className="w-full h-[230px] pb-1/3 relative">
               <Image alt="banner" layout="fill" objectFit="cover" src={articleDetails?.banner} />
             </div>
           </a>
@@ -112,7 +115,7 @@ export default function ArticleCard({
         }`}
       >
         <div className="flex items-center">
-          <Link href={user?.username || "/"} passHref>
+          <Link href={`/${user?.username}` || "/"} passHref>
             <a>
               <div className="w-9 h-9 relative">
                 <Image
@@ -129,7 +132,7 @@ export default function ArticleCard({
             </a>
           </Link>
           <div className="flex-grow-0 flex flex-col gap-0 ml-2">
-            <Link href={user?.username || "/"} passHref>
+            <Link href={`/${user?.username}` || "/"} passHref>
               <a>
                 <p className="text-gray-800 text-sm font-medium hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out">
                   {`${user?.firstname} ${user?.lastname}`}
@@ -152,8 +155,8 @@ export default function ArticleCard({
           </Link>
 
           <div className="flex text-gray-400 text-sm gap-1">
-            {articleDetails?.tags.map((tag) => (
-              <Link href={`/t/${tag.name.toLowerCase()}`} key={tag._id}>
+            {articleDetails?.tags.map((tag, i) => (
+              <Link href={`/t/${tag.name.toLowerCase()}`} key={i}>
                 <a className="p-1 hover:text-black">
                   <span className="opacity-40">#</span>
                   {tag.name.toLowerCase()}
@@ -171,8 +174,8 @@ export default function ArticleCard({
                 onClick={
                   authService.getCurrentUser()
                     ? _liked
-                      ? () => handleUnlike()
-                      : () => handleLike()
+                      ? () => handleUnlike(articleDetails._id)
+                      : () => handleLike(articleDetails._id)
                     : () => toast.info("Login or register to like a post.")
                 }
               >
@@ -204,7 +207,11 @@ export default function ArticleCard({
                 className={`my-button-transparent text-sm font-normal py-1 ${
                   _saved && "bg-gray-300/80 hover:bg-gray-400/70 hover:border-transparent"
                 }`}
-                onClick={_saved ? () => handleUnsave() : () => handleSave()}
+                onClick={
+                  _saved
+                    ? () => handleUnsave(articleDetails._id)
+                    : () => handleSave(articleDetails._id)
+                }
               >
                 {_saved ? "Saved" : "Save"}
               </button>
