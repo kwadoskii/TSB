@@ -9,4 +9,10 @@ module.exports = {
     ],
   },
   env: {},
+
+  // scroll restoration
+  reactStrictMode: true,
+  experimental: {
+    scrollRestoration: true,
+  },
 };

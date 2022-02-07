@@ -1,12 +1,12 @@
 export default function Footer() {
   return (
-    <div className="bg-gray-300 py-4 text-center md:px-3">
-      <p className="text-sm text-gray-700 my-3">A forum to write, learn and earn.</p>
-      <p className="text-sm text-gray-700 my-1">
+    <div className="py-4 text-center bg-gray-300 md:px-3">
+      <p className="my-3 text-gray-700 text-sm">A forum to write, learn and earn.</p>
+      <p className="my-1 text-gray-700 text-sm">
         Made with love and Next.js with a touch of tailwind.
       </p>
-      <p className="text-sm text-gray-700 my-3">Built by @kwadoskii</p>
-      <p className="text-xs text-gray-600 my-2">TSB © 2021 - {new Date().getFullYear()}</p>
+      <p className="my-3 text-gray-700 text-sm">Built by @kwadoskii</p>
+      <p className="my-2 text-gray-600 text-xs">TSB © 2021 - {new Date().getFullYear()}</p>
     </div>
   );
 }

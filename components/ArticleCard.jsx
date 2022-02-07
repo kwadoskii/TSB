@@ -45,23 +45,33 @@ export default function ArticleCard({
   };
 
   const handleLike = async (id) => {
-    const { data, status } = await likePost(id, token);
-    if (status === 200 && data.status === "success") {
-      setLikesCount(likesCount + 1);
-      return setLiked(true);
-    }
+    let prevLikeCount = likesCount;
 
-    return toast.error("Could not like post.");
+    setLiked(true);
+    setLikesCount(prevLikeCount + 1);
+
+    const { data, status } = await likePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(false);
+      setLikesCount(prevLikeCount);
+
+      return toast.error("Could not like post.");
+    }
   };
 
   const handleUnlike = async (id) => {
-    const { data, status } = await unlikePost(id, token);
-    if (status === 200 && data.status === "success") {
-      setLikesCount(likesCount - 1);
-      return setLiked(false);
-    }
+    let prevLikeCount = likesCount;
 
-    return toast.error("Could not unlike post.");
+    setLiked(false);
+    setLikesCount(prevLikeCount - 1);
+
+    const { data, status } = await unlikePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(true);
+      setLikesCount(prevLikeCount);
+
+      return toast.error("Could not unlike post.");
+    }
   };
 
   const handleSave = async (id) => {
@@ -98,11 +108,11 @@ export default function ArticleCard({
   }, []);
 
   return (
-    <div className="w-full rounded-md border border-gray-300 shadow-sm mb-1.5 active:border-blue-800 relative overflow-hidden">
+    <div className="relative mb-1.5 w-full border active:border-blue-800 border-gray-300 rounded-md shadow-sm overflow-hidden">
       {hasImage && articleDetails?.banner && (
         <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>
-            <div className="w-full h-[230px] pb-1/3 relative">
+            <div className="h-[230px] relative pb-1/3 w-full">
               <Image alt="banner" layout="fill" objectFit="cover" src={articleDetails?.banner} />
             </div>
           </a>
@@ -117,7 +127,7 @@ export default function ArticleCard({
         <div className="flex items-center">
           <Link href={`/${user?.username}` || "/"} passHref>
             <a>
-              <div className="w-9 h-9 relative">
+              <div className="relative w-9 h-9">
                 <Image
                   src={
                     user?.profileImage ||
@@ -131,30 +141,30 @@ export default function ArticleCard({
               </div>
             </a>
           </Link>
-          <div className="flex-grow-0 flex flex-col gap-0 ml-2">
+          <div className="flex flex-col flex-grow-0 gap-0 ml-2">
             <Link href={`/${user?.username}` || "/"} passHref>
               <a>
-                <p className="text-gray-800 text-sm font-medium hover:bg-gray-50 inline-block rounded-md transition duration-100 ease-out">
+                <p className="inline-block text-gray-800 text-sm font-medium hover:bg-gray-50 rounded-md transition duration-100 ease-out">
                   {`${user?.firstname} ${user?.lastname}`}
                 </p>
               </a>
             </Link>
-            <span className="text-xs text-gray-500 block">
+            <span className="block text-gray-500 text-xs">
               {formatedCreatedAt} ({dayjs(articleDetails?.createdAt).fromNow()})
             </span>
           </div>
         </div>
 
-        <div className="flex flex-col md:pl-9 w-full">
+        <div className="flex flex-col w-full md:pl-9">
           <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
             <a>
-              <h2 className="lg:text-2xl font-bold hover:text-blue-700 px-1 text-xl line-clamp-2">
+              <h2 className="line-clamp-2 px-1 hover:text-blue-700 text-xl font-bold lg:text-2xl">
                 {articleDetails?.title}
               </h2>
             </a>
           </Link>
 
-          <div className="flex text-gray-400 text-sm gap-1">
+          <div className="flex gap-1 text-gray-400 text-sm">
             {articleDetails?.tags.map((tag, i) => (
               <Link href={`/t/${tag.name.toLowerCase()}`} key={i}>
                 <a className="p-1 hover:text-black">
@@ -166,7 +176,7 @@ export default function ArticleCard({
           </div>
 
           <div className="flex flex-wrap items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2 items-center">
               <div
                 className={`py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50 ${
                   _liked && "bg-red-100/50"
@@ -191,7 +201,7 @@ export default function ArticleCard({
               </div>
 
               <div
-                className="py-1 px-1 rounded-md text-gray-800 flex items-center cursor-pointer text-sm gap-1 hover:bg-gray-50"
+                className="flex gap-1 items-center px-1 py-1 text-gray-800 text-sm hover:bg-gray-50 rounded-md cursor-pointer"
                 onClick={() => router.push(`/${user?.username}/${articleDetails?.slug}#comments`)}
               >
                 <ChatAltIcon className="h-5 text-gray-500" />
@@ -223,24 +233,24 @@ export default function ArticleCard({
       {userPost && (
         <div
           onClick={handleShowMenu}
-          className="cursor-pointer text-gray-400 hover:bg-gray-100 p-1 rounded-md self-center hover:text-gray-700 absolute top-1 right-3"
+          className="absolute right-3 top-1 self-center p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
         >
           <DotsHorizontalIcon className="h-5" />
         </div>
       )}
 
       {userPost && isVisible && (
-        <div className="absolute right-3 top-9 z-[500]">
-          <div className="bg-white border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
+        <div className="z-[500] absolute right-3 top-9">
+          <div className="my-shadow-drop w-56 bg-white border-2 border-black rounded-md overflow-hidden">
             <ul ref={ref}>
               <li
-                className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded"
+                className="p-2 hover:text-purple-500 hover:bg-gray-100 rounded cursor-pointer"
                 onClick={() => console.log("/edit/" + articleDetails._id)}
               >
                 Edit
               </li>
               <li
-                className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded"
+                className="p-2 hover:text-purple-500 hover:bg-gray-100 rounded cursor-pointer"
                 onClick={() => console.log("/delele/" + articleDetails._id)}
               >
                 Delete
