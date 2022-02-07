@@ -2,10 +2,10 @@ import Feed from "../components/Feed";
 import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 import Advert from "../components/Advert";
-import { getUserFollowingTags } from "../apis/user";
+import { getUserFollowingTags, reactions, savedPosts } from "../apis/user";
 import { getAllPosts } from "../apis/post";
 
-export default function HomePage({ followingTags, posts }) {
+export default function HomePage({ followingTags, posts, userLikes, userSavedPosts }) {
   return (
     <>
       <Title title="Home" />
@@ -24,7 +24,11 @@ export default function HomePage({ followingTags, posts }) {
               </div>
 
               <div className="col-span-full md:col-span-5">
-                <Feed data={posts} />
+                <Feed
+                  data={posts}
+                  userPostLikesIds={userLikes}
+                  userSavedPostsIds={userSavedPosts}
+                />
               </div>
 
               <div className="col-span-2 hidden md:flex"></div>
@@ -40,6 +44,7 @@ export async function getServerSideProps({ req }) {
   const { token } = req.cookies;
   let followingTags;
   let posts;
+  let userLikes, userSavedPosts;
 
   const {
     data: { data: _posts },
@@ -52,12 +57,24 @@ export async function getServerSideProps({ req }) {
     const {
       data: { data: _tag },
     } = await getUserFollowingTags(req.cookies.token);
+    const {
+      data: { data: _userLikes },
+    } = await reactions(token);
+
+    const {
+      data: { data: _userSavedPosts },
+    } = await savedPosts(token);
+
+    userLikes = _userLikes.reactions.map((r) => r._id);
+    userSavedPosts = _userSavedPosts.map((u) => u._id);
     followingTags = _tag.tags;
   }
 
   return {
     props: {
       followingTags,
+      userLikes,
+      userSavedPosts,
       posts: _posts || [],
     },
   };
