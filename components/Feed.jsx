@@ -26,9 +26,9 @@ export default function Feed({ tag = "", data, userPostLikesIds, userSavedPostsI
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-2 md:mb-6">
-        <h3 className="text-xl text-gray-800 font-bold">Posts</h3>
-        <div className="hidden sm:grid grid-flow-col gap-0">
+      <div className="flex items-center justify-between mb-2 md:mb-6">
+        <h3 className="text-gray-800 text-xl font-bold">Posts</h3>
+        <div className="hidden gap-0 grid-flow-col sm:grid">
           {navs.map(({ name, sortUrl }) => (
             <div className="relative" key={name}>
               <div
@@ -41,7 +41,7 @@ export default function Feed({ tag = "", data, userPostLikesIds, userSavedPostsI
                     : ""
                 }`}
               >
-                <p className="text-gray-700 hover:text-blue-700 hover:rounded-md hover:bg-gray-50 pb-2 pt-1 px-3">
+                <p className="pb-2 pt-1 px-3 hover:text-blue-700 text-gray-700 hover:bg-gray-50 hover:rounded-md">
                   {name}
                 </p>
               </div>
@@ -51,7 +51,7 @@ export default function Feed({ tag = "", data, userPostLikesIds, userSavedPostsI
 
         <select
           onChange={(e) => router.push(formattedTag + e.target.value)}
-          className="inline-block sm:hidden p-2 outline-none border border-gray-300 rounded-md active:border-blue-700"
+          className="inline-block p-2 border active:border-blue-700 border-gray-300 rounded-md outline-none sm:hidden"
           value={selected !== "" ? `top/${selected}` : ""}
         >
           {navs.map(({ name, sortUrl }, i) => (
