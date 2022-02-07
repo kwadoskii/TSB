@@ -8,10 +8,14 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            maxWidth: "100%",
             img: {
-              borderRadius: "0.375rem",
+              borderRadius: "0.75rem",
               marginLeft: "auto",
               marginRight: "auto",
+            },
+            pre: {
+              backgroundColor: "#090c10",
             },
           },
         },

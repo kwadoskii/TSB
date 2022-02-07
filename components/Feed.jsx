@@ -2,7 +2,7 @@ import ArticleCard from "./ArticleCard";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function Feed({ tag = "", data }) {
+export default function Feed({ tag = "", data, userPostLikesIds, userSavedPostsIds }) {
   const router = useRouter();
   const path = router.asPath;
   const formattedTag = tag === "" ? "/" : "/t/" + tag + "/";
@@ -64,7 +64,14 @@ export default function Feed({ tag = "", data }) {
 
       <div>
         {data?.map((post, i) => (
-          <ArticleCard key={i} hasImage={post.banner} articleDetails={post} user={post.author} />
+          <ArticleCard
+            key={i}
+            hasImage={post.banner}
+            articleDetails={post}
+            user={post.author}
+            liked={userPostLikesIds?.some((id) => id === post._id)}
+            saved={userSavedPostsIds?.some((id) => id === post._id)}
+          />
         ))}
       </div>
     </div>

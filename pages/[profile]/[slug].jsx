@@ -2,6 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { HeartIcon, DotsHorizontalIcon, BookmarkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { Remarkable } from "remarkable";
+import { linkify } from "remarkable/linkify";
+import hljs from "highlight.js";
 
 import Comment from "../../components/Comment";
 import Title from "../../components/Title";
@@ -12,15 +15,47 @@ import ArthurInfoCard from "../../components/ArthurInfoCard";
 import MoreFromArthur from "../../components/MoreFromArthur";
 import { getMoreFromAuthor, getPostBySlug } from "../../apis/post";
 import dayjs from "dayjs";
+import Radium from "radium";
 
 export default function PostPage({ post, previousPosts }) {
+  const md = new Remarkable({
+    typographer: true,
+    highlight: function (code, language) {
+      if (language && hljs.getLanguage(language)) {
+        try {
+          return hljs.highlight(code, { language }).value;
+        } catch (err) {}
+      }
+
+      try {
+        return hljs.highlightAuto(code).value;
+      } catch (err) {}
+
+      return ""; // use external default escaping
+    },
+  });
+
+  let formatedCreatedAt =
+    dayjs().format("YYYY") === dayjs(post.createdAt).format("YYYY")
+      ? dayjs(post.createdAt).format("MMM DD")
+      : dayjs(post.createdAt).format("MMM DD, YYYY");
+
+  md.use(linkify);
+
   return (
     <>
-      <Title title={post.title} />
+      <Title title={post.title}>
+        <link
+          rel="stylesheet"
+          // href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/arta.min.css"
+          // href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/rainbow.min.css"
+        />
+      </Title>
       <Navbar />
 
       <main className="bg-gray-100">
-        <div className="max-w-7xl relative px-1 py-1 lg:px-6 mx-auto">
+        <div className="max-w-7xl relative md:px-1 py-1 lg:px-6 mx-auto">
           <section className="grid mg:gap-3 md:grid-cols-post lg:pt-3 pt-0 md:pt-2 px-0">
             <aside className="md:block md:row-end-[initial] md:w-[4em]">
               <div className="fixed bottom-0 z-[100] left-0 right-0 bg-white rounded-t-md px-4 py-1 shadow-soft md:block md:shadow-none md:bg-transparent md:p-0 md:relative md:min-h-full">
@@ -64,32 +99,9 @@ export default function PostPage({ post, previousPosts }) {
 
                     <article className="border-b border-gray-100">
                       <div className="bg-white py-2 px-3 flex-grow md:pt-10 md:px-12 md:pb-5">
-                        <h2 className="font-bold md:font-extrabold text-3xl md:text-5xl leading-snug">
-                          {post.title}
-                        </h2>
-
-                        <div className="flex gap-2 my-3 mt-2 lg:mt-6">
-                          {post?.tags.map((tag, i) => {
-                            const bgColor = "bg-[" + tag.backgroundColor + "]";
-
-                            return (
-                              <Link passHref href={`/t/${tag.name}`} key={i}>
-                                <a
-                                  className={`${bgColor} rounded-md p-1 text-sm ${
-                                    !tag.textBlack && "text-white"
-                                  }`}
-                                >
-                                  <span className="text-gray-300">#</span>
-                                  {tag.name}
-                                </a>
-                              </Link>
-                            );
-                          })}
-                        </div>
-
                         {/* arthur details */}
-                        <div className="mt-5 flex space-x-1 md:space-x-2 items-center">
-                          <div className="relative w-8 h-8">
+                        <div className="mb-5 flex gap-x-1 md:gap-x-2 items-center">
+                          <div className="relative w-9 h-9">
                             {post.author?.profileImage && (
                               <Image
                                 src={post.author.profileImage}
@@ -100,24 +112,46 @@ export default function PostPage({ post, previousPosts }) {
                               />
                             )}
                           </div>
-                          <div className="font-semibold px-3 py-2 text-gray-800 cursor-pointer hover:bg-gray-100 rounded-md">
+
+                          <div className="px-1 py-2 text-gray-800 hover:text-blue-800 transition-all duration-200 ease-out">
                             <Link passHref href={`/${post.author.username}`}>
                               <a>
-                                <p>{`${post.author.firstname} ${post.author.lastname}`}</p>
+                                <p className="font-bold cursor-pointer">{`${post.author.firstname} ${post.author.lastname}`}</p>
                               </a>
                             </Link>
-                          </div>
-                          <div className="text-gray-600 text-sm">
-                            <p>{dayjs(post.createdAt).format("MMM YY")}</p>
-                          </div>
-                          <div className="text-gray-600 text-sm">
-                            <p>・ 3 min read</p>
+                            <div className="text-gray-600 text-xs">
+                              <p>Posted on {formatedCreatedAt}</p>
+                            </div>
                           </div>
                         </div>
 
+                        <h2 className="font-bold md:font-extrabold text-3xl md:text-5xl leading-snug">
+                          {post.title}
+                        </h2>
+
+                        <div className="flex gap-2 my-3 mt-2 lg:mt-3">
+                          {post?.tags.map((tag, i) => {
+                            {
+                              /* const bgColor = "bg-[" + tag.backgroundColor + "]"; */
+                            }
+
+                            return (
+                              <MiniTag
+                                key={i}
+                                name={tag.name}
+                                backgroundColor={tag.backgroundColor}
+                                textBlack={tag.textBlack}
+                              />
+                            );
+                          })}
+                        </div>
+
                         {/* newsletter */}
-                        <div className="mt-10 mb-3 border-gray-300 prose lg:prose-lg prose-blue">
-                          {post.content}
+                        <div
+                          className="mt-10 mb-3 border-gray-300 w-full prose lg:prose-lg prose-blue"
+                          dangerouslySetInnerHTML={{ __html: md.render(post.content) }}
+                        >
+                          {/* {post.content} */}
                         </div>
                       </div>
                     </article>
@@ -189,15 +223,40 @@ export default function PostPage({ post, previousPosts }) {
   );
 }
 
+const MiniTagWithoutRadium = ({ name, textBlack, backgroundColor }) => (
+  <Link passHref href={`/t/${name}`}>
+    <a
+      className={`${backgroundColor} rounded-md py-0.5 transition-all duration-100 ease-out px-2 ${
+        !textBlack && "text-white"
+      } border border-transparent`}
+      style={{
+        ":hover": {
+          background: backgroundColor + "20",
+          border: `1px solid ${backgroundColor + "cc"}`,
+        },
+      }}
+    >
+      <span style={{ color: `${backgroundColor + "cc"}` }}>#</span>
+      {name}
+    </a>
+  </Link>
+);
+
+const MiniTag = Radium(MiniTagWithoutRadium);
+
 export async function getServerSideProps({ params }) {
   const {
     data: { data: post },
   } = await getPostBySlug(params.slug);
+
+  if (!post)
+    return {
+      notFound: true,
+    };
+
   const {
     data: { data: previousPosts },
   } = await getMoreFromAuthor(post.author._id);
-
-  console.log(previousPosts);
 
   return {
     props: {

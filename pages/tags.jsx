@@ -47,7 +47,7 @@ const TagPage = ({ tags, followingTags: { tags: followingTags }, token }) => {
   );
 };
 
-const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
+const TagCardForRadium = ({ tag, followed, onFollow, onUnfollow }) => {
   const [_followed, setFollowed] = useState(followed);
 
   const handleFollow = async () => {
@@ -124,7 +124,7 @@ const TagCardx = ({ tag, followed, onFollow, onUnfollow }) => {
   );
 };
 
-const TagCard = Radium(TagCardx);
+const TagCard = Radium(TagCardForRadium);
 
 export async function getServerSideProps({ req }) {
   const {
