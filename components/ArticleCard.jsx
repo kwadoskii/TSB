@@ -28,7 +28,7 @@ export default function ArticleCard({
 
   const { isVisible, ref, setIsVisible } = useVisible();
 
-  const [comments, setComments] = useState("");
+  const [commentsCount, setCommentsCount] = useState("");
   const [likesCount, setLikesCount] = useState("");
   const [_liked, setLiked] = useState(liked);
   const [_saved, setSaved] = useState(saved);
@@ -93,12 +93,12 @@ export default function ArticleCard({
     } = await getPostLikes(articleDetails?._id);
 
     setToken(authService.getJwt());
-    setComments(comments);
+    setCommentsCount(comments?.length);
     setLikesCount(likes?.length);
   }, []);
 
   return (
-    <div className="w-full rounded-md border border-gray-300 shadow-md mb-3 active:border-blue-700 relative overflow-hidden">
+    <div className="w-full rounded-md border border-gray-300 shadow-sm mb-1.5 active:border-blue-800 relative overflow-hidden">
       {hasImage && articleDetails?.banner && (
         <Link href={`/${user?.username}/${articleDetails?.slug}` || "/"} passHref>
           <a>
@@ -196,8 +196,8 @@ export default function ArticleCard({
               >
                 <ChatAltIcon className="h-5 text-gray-500" />
                 <p className="text-sm">
-                  {comments?.length}{" "}
-                  <span className="hidden md:inline">comment{comments?.length > 1 && "s"}</span>
+                  {commentsCount}{" "}
+                  <span className="hidden md:inline">comment{commentsCount > 1 && "s"}</span>
                 </p>
               </div>
             </div>
