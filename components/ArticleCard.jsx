@@ -104,7 +104,7 @@ export default function ArticleCard({
 
     setToken(authService.getJwt());
     setCommentsCount(comments?.length);
-    setLikesCount(likes?.length);
+    setLikesCount(likes.userId?.length);
   }, []);
 
   return (
