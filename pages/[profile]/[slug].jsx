@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { HeartIcon, DotsHorizontalIcon, BookmarkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -13,11 +13,19 @@ import Footer from "../../components/Footer";
 import ReadMore from "../../components/ReadMore";
 import ArthurInfoCard from "../../components/ArthurInfoCard";
 import MoreFromArthur from "../../components/MoreFromArthur";
-import { getMoreFromAuthor, getPostBySlug } from "../../apis/post";
+import {
+  getMoreFromAuthor,
+  getPostBySlug,
+  getPostLikes,
+  likePost,
+  unlikePost,
+} from "../../apis/post";
 import dayjs from "dayjs";
 import Radium from "radium";
+import authService from "../../apis/authService";
+import { toast } from "react-toastify";
 
-export default function PostPage({ post, previousPosts }) {
+export default function PostPage({ post, previousPosts, postLikeCount, liked, token }) {
   const md = new Remarkable({
     typographer: true,
     highlight: function (code, language) {
@@ -42,6 +50,39 @@ export default function PostPage({ post, previousPosts }) {
 
   md.use(linkify);
 
+  const [_liked, setLiked] = useState(liked);
+  const [_postLikesCounts, setPostLikesCount] = useState(postLikeCount);
+
+  const handleLike = async (id) => {
+    let prevLikeCount = _postLikesCounts;
+
+    setLiked(true);
+    setPostLikesCount(prevLikeCount + 1);
+
+    const { data, status } = await likePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(false);
+      setPostLikesCount(prevLikeCount);
+
+      return toast.error("Could not like post.");
+    }
+  };
+
+  const handleUnlike = async (id) => {
+    let prevLikeCount = _postLikesCounts;
+
+    setLiked(false);
+    setPostLikesCount(prevLikeCount - 1);
+
+    const { data, status } = await unlikePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(true);
+      setPostLikesCount(prevLikeCount);
+
+      return toast.error("Could not unlike post.");
+    }
+  };
+
   return (
     <>
       <Title title={post.title}>
@@ -60,12 +101,23 @@ export default function PostPage({ post, previousPosts }) {
             <aside className="md:row-end-[initial] md:w-[4em] md:block">
               <div className="z-[100] fixed bottom-0 left-0 right-0 px-4 py-1 bg-white rounded-t-md shadow-soft md:relative md:block md:p-0 md:min-h-full md:bg-transparent md:shadow-none">
                 <div className="right-0 top-28 flex justify-between md:sticky md:flex-col md:gap-8 md:w-full">
-                  <div className="flex gap-1 items-center text-gray-400 md:flex-col md:gap-0">
-                    <div className="border-[3px] p-1 hover:bg-red-100 border-transparent rounded-full cursor-pointer md:flex-col">
+                  <div className="flex gap-1 items-center text-gray-800 md:flex-col md:gap-0">
+                    <div
+                      className={`border-[3px] p-1 border-transparent rounded-full cursor-pointer md:flex-col ${
+                        _liked && " bg-red-100"
+                      }`}
+                      onClick={
+                        authService.getCurrentUser()
+                          ? _liked
+                            ? () => handleUnlike(post._id)
+                            : () => handleLike(post._id)
+                          : () => toast.info("Login or register to like a post.")
+                      }
+                    >
                       {/* border should be on active state of the control border-red-600 */}
-                      <HeartIcon className="h-8 hover:text-red-600" />
+                      <HeartIcon className={`h-8 ${_liked ? "text-red-600" : "text-gray-400"}`} />
                     </div>
-                    <p className="text-sm">178</p>
+                    <p className="text-sm">{_postLikesCounts}</p>
                   </div>
 
                   <div className="flex gap-1 items-center text-gray-400 md:flex-col md:gap-0">
@@ -85,7 +137,7 @@ export default function PostPage({ post, previousPosts }) {
             </aside>
 
             <div className="grid gap-4 grid-cols-16">
-              <div className="relative grid col-span-full lg:col-span-11">
+              <div className="relative col-span-full lg:col-span-11">
                 {/* article */}
                 <div className="flex-grow md:col-span-1 lg:col-span-3">
                   <div className="border border-t-0 border-gray-300 rounded-md shadow-md overflow-hidden">
@@ -130,29 +182,21 @@ export default function PostPage({ post, previousPosts }) {
                         </h2>
 
                         <div className="flex gap-2 mt-2 my-3 lg:mt-3">
-                          {post?.tags.map((tag, i) => {
-                            {
-                              /* const bgColor = "bg-[" + tag.backgroundColor + "]"; */
-                            }
-
-                            return (
-                              <MiniTag
-                                key={i}
-                                name={tag.name}
-                                backgroundColor={tag.backgroundColor}
-                                textBlack={tag.textBlack}
-                              />
-                            );
-                          })}
+                          {post?.tags.map((tag, i) => (
+                            <MiniTag
+                              key={i}
+                              name={tag.name}
+                              backgroundColor={tag.backgroundColor}
+                              textBlack={tag.textBlack}
+                            />
+                          ))}
                         </div>
 
                         {/* newsletter */}
                         <div
                           className="prose prose-blue lg:prose-lg mb-3 mt-10 w-full border-gray-300"
                           dangerouslySetInnerHTML={{ __html: md.render(post.content) }}
-                        >
-                          {/* {post.content} */}
-                        </div>
+                        />
                       </div>
                     </article>
 
@@ -242,7 +286,11 @@ const MiniTagWithoutRadium = ({ name, textBlack, backgroundColor }) => (
 
 const MiniTag = Radium(MiniTagWithoutRadium);
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req }) {
+  let liked = false;
+  const token = req.cookies.token;
+  const userId = authService.getCurrentUser(token)._id;
+
   const {
     data: { data: post },
   } = await getPostBySlug(params.slug);
@@ -253,6 +301,12 @@ export async function getServerSideProps({ params }) {
     };
 
   const {
+    data: { data: postLikes },
+  } = await getPostLikes(post._id);
+
+  if (userId) liked = postLikes?.userId?.some((id) => id === userId);
+
+  const {
     data: { data: previousPosts },
   } = await getMoreFromAuthor(post.author._id);
 
@@ -260,6 +314,9 @@ export async function getServerSideProps({ params }) {
     props: {
       post,
       previousPosts,
+      postLikeCount: postLikes?.userId?.length,
+      liked,
+      token,
     },
   };
 }
