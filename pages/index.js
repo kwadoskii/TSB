@@ -12,11 +12,11 @@ export default function HomePage({ followingTags, posts, userLikes, userSavedPos
       <Navbar />
 
       <main>
-        <div className="bg-gray-100 my-min-height">
-          <div className="max-w-7xl relative px-2 py-1 lg:py-4 lg:px-6 mx-auto">
-            <div className="grid grid-cols-9 gap-5 my-0">
-              <div className="col-span-2 relative">
-                <div className="min-h-screen rounded-md sticky top-8 hidden md:flex flex-col gap-3">
+        <div className="my-min-height bg-gray-100">
+          <div className="relative mx-auto px-2 py-1 max-w-7xl lg:px-6 lg:py-4">
+            <div className="grid gap-5 grid-cols-9 my-0">
+              <div className="relative col-span-2">
+                <div className="sticky top-8 hidden flex-col gap-3 min-h-screen rounded-md md:flex">
                   {/* <Advert />
                   <Advert />
                   <Advert /> */}
@@ -31,7 +31,7 @@ export default function HomePage({ followingTags, posts, userLikes, userSavedPos
                 />
               </div>
 
-              <div className="col-span-2 hidden md:flex"></div>
+              <div className="hidden col-span-2 md:flex"></div>
             </div>
           </div>
         </div>
@@ -65,8 +65,8 @@ export async function getServerSideProps({ req }) {
       data: { data: _userSavedPosts },
     } = await savedPosts(token);
 
-    userLikes = _userLikes.reactions.map((r) => r._id);
-    userSavedPosts = _userSavedPosts.map((u) => u._id);
+    userLikes = _userLikes?.reactions?.map((r) => r.postId._id);
+    userSavedPosts = _userSavedPosts?.map((u) => u._id);
     followingTags = _tag.tags;
   }
 
