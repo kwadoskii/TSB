@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { DotsHorizontalIcon, HeartIcon, ChatIcon } from "@heroicons/react/outline";
+import { DotsHorizontalIcon, ChatIcon } from "@heroicons/react/outline";
 import { HeartIcon as SolidHeartIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
 import useVisible from "../hooks/useVisible";
+import dayjs from "dayjs";
+import authService from "../apis/authService";
+import { likeComment, unlikeComment } from "../apis/comment";
 
-export default function Comment() {
+export default function Comment({ comment }) {
   const [isOpen, setIsOpen] = useState(true);
   const { isVisible, ref, setIsVisible } = useVisible();
+  const [liked, setLiked] = useState("");
+  const [likesCount, setLikesCount] = useState("");
+  const [token, setToken] = useState("");
 
   const handleShowMenu = () => {
     setIsVisible(!isVisible);
@@ -22,8 +28,50 @@ export default function Comment() {
     { name: "Delete", url: "/delete" },
   ];
 
+  let formatedCreatedAt = "";
+  formatedCreatedAt =
+    dayjs().format("YYYY") === dayjs(comment.createdAt).format("YYYY")
+      ? dayjs(comment.createdAt).format("MMM DD")
+      : dayjs(comment.createdAt).format("MMM DD, YYYY");
+
+  const handleLike = async (id) => {
+    let prevLikeCount = likesCount;
+
+    setLiked(true);
+    setLikesCount(prevLikeCount + 1);
+
+    const { data, status } = await likeComment(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(false);
+      setLikesCount(prevLikeCount);
+
+      return toast.error("Could not like comment.");
+    }
+  };
+
+  const handleUnlike = async (id) => {
+    let prevLikeCount = likesCount;
+
+    setLiked(false);
+    setLikesCount(prevLikeCount - 1);
+
+    const { data, status } = await unlikeComment(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setLiked(true);
+      setLikesCount(prevLikeCount);
+
+      return toast.error("Could not unlike comment.");
+    }
+  };
+
+  useEffect(() => {
+    setLiked(comment.likes?.some((l) => l === authService.getCurrentUser()?._id));
+    setLikesCount(comment.likes?.length);
+    setToken(authService.getJwt());
+  }, []);
+
   return (
-    <div className="bg-white my-4 p-0">
+    <div className="my-3 p-0 bg-white">
       <details className="relative" open>
         <summary
           className={`cursor-pointer text-gray-500 italic text-sm bg-gray-50 p-2 rounded-md ${
@@ -33,15 +81,18 @@ export default function Comment() {
             setIsOpen((prevState) => !prevState);
           }}
         >
-          <span>{!isOpen && "Austin Ofor + 1 replies"}</span>
+          <span>
+            {/* {!isOpen && `${comment.userId.firstname + " " + comment.userId.lastname} + 1 replies"`}  make the plus replies work*/}
+            {!isOpen && `${comment.userId.firstname + " " + comment.userId.lastname}`}
+          </span>
         </summary>
         <div className="flex gap-1">
-          <Link passHref href="/test">
+          <Link passHref href={`/${comment.userId.username}`}>
             <a className="h-0">
-              <div className="relative w-8 h-8 top-0 left-0">
+              <div className="relative left-0 top-0 w-8 h-8">
                 <Image
                   alt="commenter"
-                  src="https://res.cloudinary.com/practicaldev/image/fetch/s--HMZIR_Gv--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/555812/2bf2e16e-98a9-450b-af3a-1fbd51fce623.png"
+                  src={comment.userId.profileImage}
                   layout="fill"
                   className="rounded-full"
                 />
@@ -49,34 +100,36 @@ export default function Comment() {
             </a>
           </Link>
 
-          <div className="flex flex-col gap-1">
-            <div className="rounded-md p-0 border border-gray-300 mb-0 ml-4">
-              <div className="flex p-2 flex-col">
-                <div className="flex justify-between mb-2">
-                  <div className="flex space-x-1 items-center">
-                    <p className="font-semibold cursor-pointer hover:bg-gray-100 p-2 rounded-lg">
-                      Austin Ofor
-                    </p>
+          <div className="flex flex-col flex-grow gap-1">
+            <div className="mb-0 ml-1.5 p-0 border border-gray-300 rounded-md">
+              <div className="flex flex-col p-2">
+                <div className="flex justify-between mb-0.5">
+                  <div className="flex gap-1.5 items-center">
+                    <Link passHref href={`/${comment.userId.username}`}>
+                      <p className="p-2 font-semibold hover:bg-gray-100 rounded-lg cursor-pointer">
+                        {comment.userId?.firstname + " " + comment.userId?.lastname}
+                      </p>
+                    </Link>
                     <p className="text-gray-400">•</p>
-                    <span className="text-gray-500 text-sm">Jul 21</span>
+                    <span className="text-gray-500 text-sm">{formatedCreatedAt}</span>
                   </div>
 
                   <div
                     onClick={handleShowMenu}
                     ref={ref}
-                    className="cursor-pointer text-gray-400 hover:bg-gray-100 p-1 rounded-md self-center hover:text-gray-700 relative"
+                    className="relative self-center p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
                   >
                     <DotsHorizontalIcon className="h-5" />
                   </div>
                 </div>
                 {isVisible && (
-                  <div className="absolute right-0 top-10 z-[400]">
-                    <div className="bg-white border-black border-2 rounded-md overflow-hidden w-56 my-shadow-drop">
+                  <div className="z-[400] absolute right-0 top-10">
+                    <div className="my-shadow-drop w-56 bg-white border-2 border-black rounded-md overflow-hidden">
                       <ul>
                         {commentMenuData.map((menu, i) => (
                           <Link passHref href={menu.url} key={i}>
                             <a>
-                              <li className="p-2 cursor-pointer hover:bg-gray-100 hover:text-purple-500 rounded">
+                              <li className="p-2 hover:text-purple-500 hover:bg-gray-100 rounded cursor-pointer">
                                 {menu.name}
                               </li>
                             </a>
@@ -87,24 +140,29 @@ export default function Comment() {
                   </div>
                 )}
 
-                <div className="p-2 pt-1">
-                  <p className="text-lg">
-                    Thanks, the SS redirect helped me. Lorem ipsum dolor, sit amet
-                    consectetur adipisicing elit. Obcaecati natus et ipsum adipisci, fugit
-                    quis doloremque, esse perferendis rem, distinctio nisi minima! Dicta,
-                    maiores. Dolores illo commodi animi iure aperiam.
-                  </p>
+                <div className="p-1.5 pt-0">
+                  <p className="text-gray-800">{comment.comment}</p>
                 </div>
               </div>
             </div>
 
-            <div className="px-4 mt-1 flex space-x-1 mb-5">
-              <div className="p-1 flex space-x-1 text-gray-600 text-sm items-center cursor-pointer px-3 hover:bg-gray-50 hover:text-gray-700 rounded-md bg-red-100">
-                {/* <HeartIcon className="h-5 text-gray-400" /> */}
-                <SolidHeartIcon className="h-5 text-red-600" />
-                <p>1 like</p>
+            <div className="flex mb-5 mt-1 px-1.5 space-x-1">
+              <div
+                className={`flex items-center p-1 px-1.5 text-gray-600 hover:text-gray-700 text-sm hover:bg-gray-50  rounded-md cursor-pointer space-x-1 md:px-2 ${
+                  liked && "bg-red-100"
+                }`}
+                onClick={
+                  authService.getCurrentUser()
+                    ? liked
+                      ? () => handleUnlike(comment._id)
+                      : () => handleLike(comment._id)
+                    : () => toast.info("Login or register to like a post.")
+                }
+              >
+                <SolidHeartIcon className={`h-5 ${liked && "text-red-600"}`} />
+                <p className="text-gray-900">{likesCount}</p>
               </div>
-              <div className="p-1 flex space-x-1 text-gray-600 text-sm items-center cursor-pointer px-3 hover:bg-gray-50 hover:text-gray-700 rounded-md">
+              <div className="flex items-center p-1 px-3 text-gray-600 hover:text-gray-700 text-sm hover:bg-gray-50 rounded-md cursor-pointer space-x-1">
                 <ChatIcon className="h-5" />
                 <p>Reply</p>
               </div>
