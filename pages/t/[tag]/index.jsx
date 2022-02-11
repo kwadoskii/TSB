@@ -61,8 +61,8 @@ export default function TagPage({
       <Title title={tag?.name} />
       <Navbar />
 
-      <div className="bg-gray-100 my-min-height">
-        <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto">
+      <div className="my-min-height bg-gray-100">
+        <div className="relative mx-auto px-1 py-1 max-w-7xl lg:px-6 lg:py-4">
           <div>
             <TagCard
               barColor={tag?.backgroundColor}
@@ -77,14 +77,14 @@ export default function TagPage({
             />
           </div>
 
-          <div className="grid grid-cols-9 gap-5 my-2 md:my-8">
-            <div className="col-span-2 relative">{/* <Advert /> */}</div>
+          <div className="grid gap-5 grid-cols-9 my-2 md:my-8">
+            <div className="relative col-span-2">{/* <Advert /> */}</div>
 
             <div className="col-span-full md:col-span-5">
               <Feed
                 tag={tag?.name}
                 data={_posts}
-                userPostLikesIds={userLikes?.reactions?.map((r) => r._id)}
+                userPostLikesIds={userLikes}
                 userSavedPostsIds={userSavedPosts?.map((sp) => sp._id)}
               />
             </div>
@@ -134,7 +134,7 @@ export async function getServerSideProps({ req, params }) {
     } = await savedPosts(token);
 
     userSavedPosts = _userSavedPosts;
-    userLikes = _userLikes;
+    userLikes = _userLikes.reactions?.map((r) => r.postId._id);
     followingTags = _tag.tags;
   }
 
