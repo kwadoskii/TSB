@@ -15,14 +15,14 @@ export default function ConfirmLogoutPage() {
   return (
     <>
       <Title title="Confirm Logout" />
-      <Navbar />
+      <Navbar hideSearch />
 
       <div className="h-screen bg-gray-200">
-        <div className="flex flex-col justify-center items-center h-full">
-          <div className="flex flex-col items-center justify-center gap-3">
-            <p className="font-bold text-2xl">Are you sure you want to sign out?</p>
+        <div className="flex flex-col items-center justify-center h-full">
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <p className="text-2xl font-bold">Are you sure you want to sign out?</p>
             <button
-              className="bg-blue-700 px-4 py-2.5 rounded-md items-center font-semibold text-white hover:bg-blue-800 transition-all duration-200 ease-out outline-none"
+              className="items-center px-4 py-2.5 text-white font-semibold bg-blue-700 hover:bg-blue-800 rounded-md outline-none transition-all duration-200 ease-out"
               onClick={handleSignout}
             >
               Yes, sign out

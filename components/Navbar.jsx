@@ -9,7 +9,7 @@ import Image from "next/image";
 import { BellIcon, PlusIcon } from "@heroicons/react/outline";
 import auth from "../apis/authService";
 
-export default function Navbar() {
+export default function Navbar({ hideSearch = false }) {
   const { isVisible, ref, setIsVisible } = useVisible();
   const [searchValue, setSearchValue] = useState("");
   const [user, setUser] = useState("");
@@ -33,34 +33,36 @@ export default function Navbar() {
   const handleInputChange = (e) => setSearchValue(e.target.value);
 
   return (
-    <nav className="border-b border-gray-300 z-10 select-none">
-      <div className="bg-white h-[56px] m-0 w-full flex justify-between px-1 gap-2 py-1 lg:py-5 lg:px-6 mx-auto max-w-7xl relative">
-        <div className="flex justify-start items-center flex-1 gap-2">
+    <nav className="z-10 border-b border-gray-300 select-none">
+      <div className="h-[56px] relative flex gap-2 justify-between m-0 mx-auto px-1 py-1 w-full max-w-7xl bg-white lg:px-6 lg:py-5">
+        <div className="flex flex-1 gap-2 items-center justify-start">
           <Link href="/">
             <a className="outline-none">
-              <p className="cursor-pointer select-none bg-black p-[5px] rounded font-semibold text-white text-lg outline-none">
+              <p className="p-[5px] text-white text-lg font-semibold bg-black rounded outline-none cursor-pointer select-none">
                 TSB
               </p>
             </a>
           </Link>
 
-          <div className="flex-grow-0 w-full lg:w-1/2">
-            <form>
-              <Input
-                onChange={handleInputChange}
-                placeholder="Search..."
-                value={searchValue}
-                clearButton
-              />
-              <button type="submit" onClick={handleSearch} className="hidden"></button>
-            </form>
-          </div>
+          {!hideSearch && (
+            <div className="flex-grow-0 w-full lg:w-1/2">
+              <form>
+                <Input
+                  onChange={handleInputChange}
+                  placeholder="Search..."
+                  value={searchValue}
+                  clearButton
+                />
+                <button type="submit" onClick={handleSearch} className="hidden"></button>
+              </form>
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
+        <div className="flex gap-2 items-center md:gap-4">
           {user && (
             <Link href="/write" passHref>
-              <a className="outline-none border-none py-3 px-4 bg-blue-700 text-white font-medium text md:text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out h-10 items-center md:flex hidden">
+              <a className="text hidden items-center px-4 py-3 h-10 text-white font-medium bg-blue-700 hover:bg-blue-800 border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
                 Create Post
               </a>
             </Link>
@@ -72,14 +74,14 @@ export default function Navbar() {
           </Link> */}
 
           {!user && (
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2 items-center">
               <Link href="/enter" passHref>
-                <a className="outline-none border-none py-3 px-4 text-gray-600 font-medium text md:text-sm cursor-pointer rounded-md hover:bg-blue-100/90 hover:text-blue-500 transition duration-100 ease-out h-10 items-center md:flex hidden">
+                <a className="text hover:bg-blue-100/90 hidden items-center px-4 py-3 h-10 hover:text-blue-500 text-gray-600 font-medium border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
                   Log in
                 </a>
               </Link>
               <Link href="/enter?state=new" passHref>
-                <a className="outline-none border-none py-3 px-4 bg-white text-blue-600 ring-1 ring-blue-600 font-bold text-xl text md:text-sm cursor-pointer rounded-md hover:bg-blue-600 hover:text-white transition duration-100 ease-out h-10 items-center md:flex hidden">
+                <a className="text hidden items-center px-4 py-3 h-10 text-blue-600 hover:text-white text-xl font-bold hover:bg-blue-600 bg-white border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out ring-1 ring-blue-600 md:flex md:text-sm">
                   Create account
                 </a>
               </Link>
@@ -89,16 +91,16 @@ export default function Navbar() {
           {user && (
             <>
               <div
-                className="text-gray-700 relative cursor-pointer rounded-full hover:bg-gray-100 p-1 hover:text-gray-900"
+                className="relative p-1 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full cursor-pointer"
                 onClick={() => router.push("/notifications")}
               >
                 <BellIcon className="h-7" />
-                <span className="bg-red-600 text-white absolute rounded-md p-1 text-xs -top-2 -right-2">
+                <span className="absolute -right-2 -top-2 p-1 text-white text-xs bg-red-600 rounded-md">
                   110
                 </span>
               </div>
               <div
-                className="relative w-9 h-9 cursor-pointer rounded-full none"
+                className="none relative w-9 h-9 rounded-full cursor-pointer"
                 onClick={handleShowHideNavMenu}
               >
                 <Image
@@ -113,7 +115,7 @@ export default function Navbar() {
 
           {isVisible && (
             <div
-              className="absolute left-auto top-14 right-2 lg:right-6 bg-white my-shadow-drop text-black border border-black rounded-md z-[400] md:w-[250px] w-10/12"
+              className="my-shadow-drop z-[400] md:w-[250px] absolute left-auto right-2 top-14 w-10/12 text-black bg-white border border-black rounded-md lg:right-6"
               ref={ref}
             >
               <NavbarDropdown

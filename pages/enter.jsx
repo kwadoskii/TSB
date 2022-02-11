@@ -107,14 +107,14 @@ export default function EnterPage() {
     return (
       <>
         <Title title="Welcome" />
-        <Navbar />
+        <Navbar hideSearch />
 
         <div className="bg-gray-200">
-          <div className="flex flex-col justify-center items-center py-10 px-2">
-            <div className="flex flex-col bg-white py-4 pb-6 border rounded-md border-gray-300 w-full md:w-5/12">
+          <div className="flex flex-col items-center justify-center px-2 py-10">
+            <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
               <Info />
 
-              <div className="px-2 md:px-10 mt-5">
+              <div className="mt-5 px-2 md:px-10">
                 <form action="">
                   <Input
                     hasLabel
@@ -175,14 +175,14 @@ export default function EnterPage() {
                     needed
                   />
 
-                  <div className="w-full my-6 mx-0">
+                  <div className="mx-0 my-6 w-full">
                     <label className="block mb-2 font-medium" htmlFor="gender">
-                      Gender<span className="text-red-500 ">*</span>
+                      Gender<span className="text-red-500">*</span>
                     </label>
                     <select
                       name="gender"
                       id="gender"
-                      className="outline-none border border-gray-300 px-2 bg-white rounded-md transition-all duration-75 w-full focus:bg-white focus:my-shadow-blue h-10 placeholder-gray-500 pr-8"
+                      className="focus:my-shadow-blue placeholder-gray-500 pr-8 px-2 w-full h-10 bg-white focus:bg-white border border-gray-300 rounded-md outline-none transition-all duration-75"
                       onChange={(e) => setGender(e.target.value)}
                       value={gender}
                     >
@@ -191,14 +191,14 @@ export default function EnterPage() {
                       <option value="M">Male</option>
                     </select>
                     {errors && errors["gender"] && (
-                      <p className="text-xs text-red-600 pl-1 mt-0.5">
+                      <p className="mt-0.5 pl-1 text-red-600 text-xs">
                         {errors["gender"].replace(/"/g, "")}
                       </p>
                     )}
                   </div>
 
                   <button
-                    className="bg-blue-700 px-4 py-2.5 rounded-md items-center font-semibold text-white hover:bg-blue-800 transition-all duration-200 ease-out w-full outline-none"
+                    className="items-center px-4 py-2.5 w-full text-white font-semibold bg-blue-700 hover:bg-blue-800 rounded-md outline-none transition-all duration-200 ease-out"
                     type="submit"
                     onClick={handleRegister}
                   >
@@ -218,14 +218,14 @@ export default function EnterPage() {
   return (
     <>
       <Title title="Log in" />
-      <Navbar />
+      <Navbar hideSearch />
 
       <div className="h-writeContent bg-gray-200">
-        <div className="flex flex-col justify-center items-center py-10 px-2">
-          <div className="flex flex-col bg-white py-4 pb-6 border rounded-md border-gray-300 w-full md:w-5/12">
+        <div className="flex flex-col items-center justify-center px-2 py-10">
+          <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
             <Info />
 
-            <div className="px-2 md:px-10 mt-5">
+            <div className="mt-5 px-2 md:px-10">
               <form action="">
                 <Input
                   hasLabel
@@ -255,7 +255,7 @@ export default function EnterPage() {
 
                 <div className="flex justify-center mt-5">
                   <Link passHref href={"/forgot_password"}>
-                    <a className="text-sm text-blue-600 text-center hover:underline">
+                    <a className="text-center text-blue-600 hover:underline text-sm">
                       I forgot my password
                     </a>
                   </Link>
@@ -282,8 +282,8 @@ const Info = () => {
 
   return (
     <div className="px-2 md:px-10">
-      <h2 className="font-bold text-[1.65rem] text-center">Welcome to TSB</h2>
-      <p className="text-gray-800 text-center">
+      <h2 className="text-[1.65rem] text-center font-bold">Welcome to TSB</h2>
+      <p className="text-center text-gray-800">
         <Link passHref href="/">
           <a className="text-blue-600 hover:underline">TSB</a>
         </Link>{" "}
