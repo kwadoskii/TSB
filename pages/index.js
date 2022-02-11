@@ -44,7 +44,8 @@ export async function getServerSideProps({ req }) {
   const { token } = req.cookies;
   let followingTags;
   let posts;
-  let userLikes, userSavedPosts;
+  let userLikes = [],
+    userSavedPosts = [];
 
   const {
     data: { data: _posts },

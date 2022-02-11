@@ -288,8 +288,8 @@ const MiniTag = Radium(MiniTagWithoutRadium);
 
 export async function getServerSideProps({ params, req }) {
   let liked = false;
-  const token = req.cookies.token;
-  const userId = authService.getCurrentUser(token)._id;
+  const token = req.cookies.token || "";
+  const userId = authService.getCurrentUser(token)?._id;
 
   const {
     data: { data: post },
