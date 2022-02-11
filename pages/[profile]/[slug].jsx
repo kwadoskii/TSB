@@ -16,6 +16,7 @@ import MoreFromArthur from "../../components/MoreFromArthur";
 import {
   getMoreFromAuthor,
   getPostBySlug,
+  getPostComments,
   getPostLikes,
   likePost,
   unlikePost,
@@ -25,7 +26,15 @@ import Radium from "radium";
 import authService from "../../apis/authService";
 import { toast } from "react-toastify";
 
-export default function PostPage({ post, previousPosts, postLikeCount, liked, token }) {
+export default function PostPage({
+  post,
+  previousPosts,
+  postLikeCount,
+  liked,
+  token,
+  postComments,
+  postLikes,
+}) {
   const md = new Remarkable({
     typographer: true,
     highlight: function (code, language) {
@@ -50,8 +59,11 @@ export default function PostPage({ post, previousPosts, postLikeCount, liked, to
 
   md.use(linkify);
 
+  console.log(postLikes.userId, postComments);
+
   const [_liked, setLiked] = useState(liked);
-  const [_postLikesCounts, setPostLikesCount] = useState(postLikeCount);
+  const [_postLikesCounts, setPostLikesCount] = useState(postLikes?.userId.length);
+  const [_postComments, setPostComments] = useState(postComments);
 
   const handleLike = async (id) => {
     let prevLikeCount = _postLikesCounts;
@@ -203,11 +215,10 @@ export default function PostPage({ post, previousPosts, postLikeCount, liked, to
                     {/* comment area */}
                     <div className="px-3 py-2 bg-white md:pb-5 md:pt-8 md:px-12" id="comments">
                       <div className="flex justify-between">
-                        <h2 className="text-2xl font-bold">Discussion (3)</h2>
-                        {/* <button className="my-button-transparent">Subscribe</button> */}
+                        <h2 className="text-2xl font-bold">Discussion ({_postComments.length})</h2>
                       </div>
 
-                      <div className="flex gap-5 items-center mt-5">
+                      <div className="flex gap-3 items-center mt-5">
                         <div className="relative self-start w-8 h-8">
                           <Image
                             src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
@@ -236,9 +247,9 @@ export default function PostPage({ post, previousPosts, postLikeCount, liked, to
                       </div>
 
                       <div>
-                        <Comment />
-                        <Comment />
-                        <Comment />
+                        {_postComments.map((postComment) => (
+                          <Comment key={postComment._id} comment={postComment} />
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -267,7 +278,7 @@ export default function PostPage({ post, previousPosts, postLikeCount, liked, to
   );
 }
 
-const MiniTagWithoutRadium = ({ name, textBlack, backgroundColor }) => (
+const MiniTagWithoutRadium = ({ name, backgroundColor }) => (
   <Link passHref href={`/t/${name}`}>
     <a
       className={`${backgroundColor} rounded-md py-0.5 transition-all duration-100 ease-out px-2 border border-transparent`}
@@ -310,13 +321,24 @@ export async function getServerSideProps({ params, req }) {
     data: { data: previousPosts },
   } = await getMoreFromAuthor(post.author._id);
 
+  const {
+    data: { data: postComments },
+  } = await getPostComments(post._id);
+  // const {
+  //   data: { data: postComments },
+  // } = await getComment(post._id);
+
   return {
     props: {
       post,
       previousPosts,
-      postLikeCount: postLikes?.userId?.length,
+      // postLikeCount: postLikes?.userId?.length,
+      postLikes,
       liked,
+      postComments: postComments || [],
       token,
     },
   };
 }
+
+// const getComment = async (postId) => await getPostComments(postId);
