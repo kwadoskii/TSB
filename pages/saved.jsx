@@ -93,11 +93,11 @@ export default function SavedPage({ userSavedPosts }) {
       <Title title="Saved Articles" />
       <Navbar />
 
-      <div className="bg-gray-100 my-min-height">
-        <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto ">
-          <div className="grid grid-cols-2 gap-3">
+      <div className="my-min-height bg-gray-100">
+        <div className="relative mx-auto px-1 py-1 max-w-7xl lg:px-6 lg:py-4">
+          <div className="grid gap-3 grid-cols-2">
             <div className="col-span-full lg:col-span-1">
-              <h2 className="font-bold text-xl md:text-3xl">Saved posts ({totalCount})</h2>
+              <h2 className="text-xl font-bold md:text-3xl">Saved posts ({totalCount})</h2>
             </div>
 
             <div className="col-span-full lg:col-span-1">
@@ -115,8 +115,8 @@ export default function SavedPage({ userSavedPosts }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-16 md:gap-2 lg:gap-4 md:mt-5">
-            <div className="col-span-full md:col-span-4 lg:col-span-3 my-2 md:m-0">
+          <div className="grid grid-cols-16 md:gap-2 md:mt-5 lg:gap-4">
+            <div className="col-span-full my-2 md:col-span-4 md:m-0 lg:col-span-3">
               <Sidebar
                 hasLinks={false}
                 data={tags}
@@ -127,14 +127,14 @@ export default function SavedPage({ userSavedPosts }) {
             </div>
 
             <div className="col-span-full md:col-span-12 lg:col-span-13">
-              <div className="border border-gray-200 rounded-md bg-white px-5 py-4">
+              <div className="px-5 py-4 bg-white border border-gray-200 rounded-md">
                 {Array.isArray(filteredPost) && filteredPost.length > 0 ? (
                   filteredPost.map((p, i) => {
                     return (
                       <div className="flex gap-4 mb-8" key={i}>
                         <Link passHref href="/kwadoskii">
                           <a>
-                            <div className="w-8 h-8 relative border rounded-full cursor-pointer">
+                            <div className="relative w-8 h-8 border rounded-full cursor-pointer">
                               <Image
                                 src={p.author.profileImage}
                                 objectFit="cover"
@@ -145,28 +145,28 @@ export default function SavedPage({ userSavedPosts }) {
                           </a>
                         </Link>
 
-                        <div className="flex-grow flex flex-col gap-1">
+                        <div className="flex flex-col flex-grow gap-1">
                           <Link passHref href={`/${p.author.username}/${p.slug}`}>
                             <a className="hover:text-blue-800">
-                              <h3 className="font-bold text-lg">{p.title}</h3>
+                              <h3 className="text-lg font-bold">{p.title}</h3>
                             </a>
                           </Link>
 
-                          <div className="flex flex-col md:flex-row gap-2 md:items-center text-gray-500 text-sm">
+                          <div className="flex flex-col gap-2 text-gray-500 text-sm md:flex-row md:items-center">
                             <Link passHref href={`/${p.author.username}`}>
                               <a className="hover:text-blue-800 text-gray-800">
                                 <p className="text-sm font-semibold">
-                                  {`${p.author.firstname} ${p.author.lastname}`}
+                                  {`${p.author?.firstname} ${p.author.lastname}`}
                                 </p>
                               </a>
                             </Link>
                             <p>
-                              <span className="hidden md:inline text-gray-300">• </span>
+                              <span className="hidden text-gray-300 md:inline">• </span>
                               {" " + dayjs(p.createdAt).format("MMM DD 'YY") + " "}
-                              <span className="hidden md:inline text-gray-300">• </span>
+                              <span className="hidden text-gray-300 md:inline">• </span>
                             </p>
                             <div className="flex gap-2">
-                              {p.tags.map((tag, i) => (
+                              {p.tags?.map((tag, i) => (
                                 <Link passHref href={`/t/${tag.name}`} key={i}>
                                   <a className="hover:text-gray-900">
                                     <p key={tag._id}>{`#${tag.name}`}</p>
@@ -180,15 +180,15 @@ export default function SavedPage({ userSavedPosts }) {
                     );
                   })
                 ) : (
-                  <div className="flex flex-col justify-center items-center my-24">
-                    <p className="text-gray-700 font-bold text-lg">
+                  <div className="flex flex-col items-center justify-center my-24">
+                    <p className="text-gray-700 text-lg font-bold">
                       No saved posts from search filter 🤔
                     </p>
                     <div className="w-full">
                       <div className="mt-2">
-                        <p className="w-5/6 text-center mx-auto text-gray-500">
+                        <p className="mx-auto w-5/6 text-center text-gray-500">
                           Click the <span className="font-bold">bookmark reaction</span>{" "}
-                          <BookmarkIcon className="h-6 text-gray-500 inline" /> when viewing a post
+                          <BookmarkIcon className="inline h-6 text-gray-500" /> when viewing a post
                           to add it to your saved post.
                         </p>
                       </div>
@@ -212,6 +212,6 @@ export async function getServerSideProps({ req }) {
   } = await savedPosts(req.cookies.token);
 
   return {
-    props: { userSavedPosts },
+    props: { userSavedPosts: userSavedPosts.map((usp) => usp.postId) },
   };
 }

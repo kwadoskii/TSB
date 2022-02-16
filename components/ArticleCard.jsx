@@ -18,11 +18,7 @@ export default function ArticleCard({
   articleDetails,
   user,
   liked,
-  onLike,
-  onUnlike,
   saved,
-  onSave,
-  onUnsave,
 }) {
   dayjs.extend(relativeTime);
 

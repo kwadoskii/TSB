@@ -8,6 +8,7 @@ import useVisible from "../hooks/useVisible";
 import dayjs from "dayjs";
 import authService from "../apis/authService";
 import { likeComment, unlikeComment } from "../apis/comment";
+import { toast } from "react-toastify";
 
 export default function Comment({ comment }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -156,7 +157,7 @@ export default function Comment({ comment }) {
                     ? liked
                       ? () => handleUnlike(comment._id)
                       : () => handleLike(comment._id)
-                    : () => toast.info("Login or register to like a post.")
+                    : () => toast.info("Login or register to like a comment.")
                 }
               >
                 <SolidHeartIcon className={`h-5 ${liked && "text-red-600"}`} />
