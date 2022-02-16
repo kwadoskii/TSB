@@ -9,6 +9,8 @@ const getPostComments = (postId) => api.get(`${apiEndpoint}/${postId}/comments`)
 
 const getPostLikes = (postId) => api.get(`${apiEndpoint}/${postId}/likes`);
 
+const getPostSaves = (postId) => api.get(`${apiEndpoint}/${postId}/saves`);
+
 const likePost = (postId, token) =>
   api.post(`${apiEndpoint}/like/${postId}`, {}, { headers: { "x-auth-token": "JWT " + token } });
 
@@ -33,4 +35,5 @@ export {
   getPostsByTagName,
   getPostBySlug,
   getMoreFromAuthor,
+  getPostSaves,
 };

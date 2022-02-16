@@ -18,6 +18,7 @@ import {
   getPostBySlug,
   getPostComments,
   getPostLikes,
+  getPostSaves,
   likePost,
   unlikePost,
 } from "../../apis/post";
@@ -25,6 +26,7 @@ import dayjs from "dayjs";
 import Radium from "radium";
 import authService from "../../apis/authService";
 import { toast } from "react-toastify";
+import { savedPosts, savePost, unsavePost } from "../../apis/user";
 
 export default function PostPage({
   liked,
@@ -35,8 +37,6 @@ export default function PostPage({
   saved,
   postSaveCount,
   token,
-  postComments,
-  postLikes,
 }) {
   const md = new Remarkable({
     typographer: true,
@@ -69,7 +69,7 @@ export default function PostPage({
   const [_postComments, setPostComments] = useState([]);
 
   const handleLike = async (id) => {
-    let prevLikeCount = _postLikesCounts;
+    let prevLikeCount = _postLikesCount;
 
     setLiked(true);
     setPostLikesCount(prevLikeCount + 1);
@@ -84,7 +84,7 @@ export default function PostPage({
   };
 
   const handleUnlike = async (id) => {
-    let prevLikeCount = _postLikesCounts;
+    let prevLikeCount = _postLikesCount;
 
     setLiked(false);
     setPostLikesCount(prevLikeCount - 1);
@@ -98,11 +98,44 @@ export default function PostPage({
     }
   };
 
+  const handleSave = async (id) => {
+    let prevSaveCount = _postSaveCount;
+
+    setSaved(true);
+    setPostSaveCount(prevSaveCount + 1);
+
+    const { data, status } = await savePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setSaved(false);
+      setPostSaveCount(prevSaveCount);
+
+      return toast.error("Could not save post.");
+    }
+  };
+
+  const handleUnsave = async (id) => {
+    let prevSaveCount = _postSaveCount;
+
+    setSaved(false);
+    setPostSaveCount(prevSaveCount - 1);
+
+    const { data, status } = await unsavePost(id, token);
+    if (status !== 200 && data.status !== "success") {
+      setSaved(true);
+      setPostSaveCount(prevSaveCount);
+
+      return toast.error("Could not unsave post.");
+    }
+  };
+
   useEffect(() => {
     setLiked(liked);
     setPostComments(postComments);
     setPostLikesCount(postLikeCount);
+    setPostSaveCount(postSaveCount);
+    setSaved(saved);
   }, [post._id]);
+
   return (
     <>
       <Title title={post.title}>
@@ -120,7 +153,7 @@ export default function PostPage({
           <section className="grid mg:gap-3 pt-0 px-0 md:grid-cols-post md:pt-2 lg:pt-3">
             <aside className="md:row-end-[initial] md:w-[4em] md:block">
               <div className="z-[100] fixed bottom-0 left-0 right-0 px-4 py-1 bg-white rounded-t-md shadow-soft md:relative md:block md:p-0 md:min-h-full md:bg-transparent md:shadow-none">
-                <div className="right-0 top-28 flex justify-between md:sticky md:flex-col md:gap-8 md:w-full">
+                <div className="right-0 top-28 flex justify-between md:sticky md:flex-col md:gap-5 md:w-full">
                   <div className="flex gap-1 items-center text-gray-800 md:flex-col md:gap-0">
                     <div
                       className={`border-[3px] p-1 border-transparent rounded-full cursor-pointer md:flex-col ${
@@ -134,17 +167,29 @@ export default function PostPage({
                           : () => toast.info("Login or register to like a post.")
                       }
                     >
-                      {/* border should be on active state of the control border-red-600 */}
                       <HeartIcon className={`h-8 ${_liked ? "text-red-600" : "text-gray-400"}`} />
                     </div>
-                    <p className="text-sm">{_postLikesCounts}</p>
+                    <p className="text-sm">{_postLikesCount}</p>
                   </div>
 
                   <div className="flex gap-1 items-center text-gray-400 md:flex-col md:gap-0">
-                    <div className="border-[3px] p-1 hover:bg-blue-100 border-transparent rounded-full cursor-pointer">
-                      <BookmarkIcon className="h-8 hover:text-blue-600" />
+                    <div
+                      className={`border-[3px] p-1 border-transparent rounded-full cursor-pointer ${
+                        _saved && "bg-blue-100"
+                      }`}
+                      onClick={
+                        authService.getCurrentUser()
+                          ? _saved
+                            ? () => handleUnsave(post._id)
+                            : () => handleSave(post._id)
+                          : () => toast.info("Login or register to save a post.")
+                      }
+                    >
+                      <BookmarkIcon
+                        className={`h-8 ${_saved ? "text-blue-600" : "text-gray-400"}`}
+                      />
                     </div>
-                    <p className="text-sm">17</p>
+                    <p className="text-sm">{_postSaveCount}</p>
                   </div>
 
                   <div className="flex gap-1 items-center text-gray-400 md:flex-col md:gap-0">
@@ -307,6 +352,7 @@ const MiniTag = Radium(MiniTagWithoutRadium);
 
 export async function getServerSideProps({ params, req }) {
   let liked = false;
+  let saved = false;
   const token = req.cookies.token || "";
   const userId = authService.getCurrentUser(token)?._id;
 
@@ -323,7 +369,18 @@ export async function getServerSideProps({ params, req }) {
     data: { data: postLikes },
   } = await getPostLikes(post._id);
 
-  if (userId) liked = postLikes?.userId?.some((id) => id === userId);
+  const {
+    data: { data: postSaves },
+  } = await getPostSaves(post._id);
+
+  if (userId) {
+    const {
+      data: { data: userSavedPosts },
+    } = await savedPosts(token);
+
+    liked = postLikes?.userId?.some((id) => id === userId);
+    saved = postSaves?.userId?.some((usp) => usp._id === userId);
+  }
 
   const {
     data: { data: previousPosts },
@@ -332,21 +389,17 @@ export async function getServerSideProps({ params, req }) {
   const {
     data: { data: postComments },
   } = await getPostComments(post._id);
-  // const {
-  //   data: { data: postComments },
-  // } = await getComment(post._id);
 
   return {
     props: {
       post,
       previousPosts,
-      // postLikeCount: postLikes?.userId?.length,
-      postLikes,
+      postLikeCount: postLikes?.userId?.length || 0,
       liked,
       postComments: postComments || [],
       token,
+      saved,
+      postSaveCount: postSaves?.userId?.length || 0,
     },
   };
 }
-
-// const getComment = async (postId) => await getPostComments(postId);
