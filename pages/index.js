@@ -67,7 +67,7 @@ export async function getServerSideProps({ req }) {
     } = await savedPosts(token);
 
     userLikes = _userLikes?.reactions?.map((r) => r.postId._id);
-    userSavedPosts = _userSavedPosts?.map((u) => u._id);
+    userSavedPosts = _userSavedPosts?.map((usp) => usp.postId._id);
     followingTags = _tag.tags;
   }
 

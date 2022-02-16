@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { HeartIcon, DotsHorizontalIcon, BookmarkIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -27,10 +27,13 @@ import authService from "../../apis/authService";
 import { toast } from "react-toastify";
 
 export default function PostPage({
-  post,
-  previousPosts,
-  postLikeCount,
   liked,
+  post,
+  postComments,
+  postLikeCount,
+  previousPosts,
+  saved,
+  postSaveCount,
   token,
   postComments,
   postLikes,
@@ -59,11 +62,11 @@ export default function PostPage({
 
   md.use(linkify);
 
-  console.log(postLikes.userId, postComments);
-
-  const [_liked, setLiked] = useState(liked);
-  const [_postLikesCounts, setPostLikesCount] = useState(postLikes?.userId.length);
-  const [_postComments, setPostComments] = useState(postComments);
+  const [_liked, setLiked] = useState("");
+  const [_postLikesCount, setPostLikesCount] = useState("");
+  const [_postSaveCount, setPostSaveCount] = useState("");
+  const [_saved, setSaved] = useState("");
+  const [_postComments, setPostComments] = useState([]);
 
   const handleLike = async (id) => {
     let prevLikeCount = _postLikesCounts;
@@ -95,6 +98,11 @@ export default function PostPage({
     }
   };
 
+  useEffect(() => {
+    setLiked(liked);
+    setPostComments(postComments);
+    setPostLikesCount(postLikeCount);
+  }, [post._id]);
   return (
     <>
       <Title title={post.title}>
