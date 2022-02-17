@@ -13,4 +13,7 @@ const unlikeComment = (commentId, token) =>
     { headers: { "x-auth-token": "JWT " + token } }
   );
 
-export { likeComment, unlikeComment };
+const addComment = (postId, comment, token) =>
+  api.post(`${apiEndpoint}`, { comment, postId }, { headers: { "x-auth-token": "JWT " + token } });
+
+export { likeComment, unlikeComment, addComment };

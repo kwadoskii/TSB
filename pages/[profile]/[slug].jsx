@@ -27,6 +27,7 @@ import Radium from "radium";
 import authService from "../../apis/authService";
 import { toast } from "react-toastify";
 import { savedPosts, savePost, unsavePost } from "../../apis/user";
+import { addComment } from "../../apis/comment";
 
 export default function PostPage({
   liked,
@@ -43,7 +44,9 @@ export default function PostPage({
     highlight: function (code, language) {
       if (language && hljs.getLanguage(language)) {
         try {
-          return hljs.highlight(code, { language }).value;
+          return hljs.highlight(code, {
+            language,
+          }).value;
         } catch (err) {}
       }
 
@@ -67,6 +70,7 @@ export default function PostPage({
   const [_postSaveCount, setPostSaveCount] = useState("");
   const [_saved, setSaved] = useState("");
   const [_postComments, setPostComments] = useState([]);
+  const [comment, setComment] = useState("");
 
   const handleLike = async (id) => {
     let prevLikeCount = _postLikesCount;
@@ -128,6 +132,29 @@ export default function PostPage({
     }
   };
 
+  const handleComment = async () => {
+    const {
+      data: { data },
+      status,
+    } = await addComment(post._id, comment, token);
+
+    if (status !== 201) return toast.error("Could not add comment.");
+
+    let newPostComments = _postComments;
+    newPostComments.unshift({
+      comment,
+      createdAt: new Date(),
+      likes: [],
+      _id: data._id,
+      userId: {
+        ...authService.getCurrentUser(),
+      },
+    });
+
+    setPostComments(newPostComments);
+    return setComment("");
+  };
+
   useEffect(() => {
     setLiked(liked);
     setPostComments(postComments);
@@ -141,8 +168,6 @@ export default function PostPage({
       <Title title={post.title}>
         <link
           rel="stylesheet"
-          // href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/arta.min.css"
-          // href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css"
           href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/rainbow.min.css"
         />
       </Title>
@@ -204,18 +229,24 @@ export default function PostPage({
             <div className="grid gap-4 grid-cols-16">
               <div className="relative col-span-full lg:col-span-11">
                 {/* article */}
-                <div className="flex-grow md:col-span-1 lg:col-span-3">
-                  <div className="border border-t-0 border-gray-300 rounded-md shadow-md overflow-hidden">
+                <div className="flex-grow rounded-t-md md:col-span-1 lg:col-span-3">
+                  <div className="border border-t-0 border-gray-300 rounded-md shadow-md">
                     {post.banner && (
                       <div className="h-[200px] 2xl:h-[400px] sm:h-[280px] md:h-[350px] xl:h-[380px] relative">
                         {/* image yes or no -- make image to fill across all screen size */}
                         {/* <div className="relative lg:h-80 md:h-72 h-36"> */}
-                        <Image src={post.banner} objectFit="cover" layout="fill" alt="article" />
+                        <Image
+                          src={post.banner}
+                          objectFit="cover"
+                          className="rounded-t-md"
+                          layout="fill"
+                          alt="article"
+                        />
                       </div>
                     )}
 
                     <article className="border-b border-gray-100">
-                      <div className="flex-grow px-3 py-2 bg-white md:pb-5 md:pt-10 md:px-12">
+                      <div className="flex-grow px-3 py-2 bg-white rounded-t-md md:pb-5 md:pt-10 md:px-12">
                         {/* arthur details */}
                         <div className="flex gap-x-1 items-center mb-5 md:gap-x-2">
                           <div className="relative w-9 h-9">
@@ -260,44 +291,68 @@ export default function PostPage({
                         {/* newsletter */}
                         <div
                           className="prose prose-blue lg:prose-lg mb-3 mt-10 w-full border-gray-300"
-                          dangerouslySetInnerHTML={{ __html: md.render(post.content) }}
+                          dangerouslySetInnerHTML={{
+                            __html: md.render(post.content),
+                          }}
                         />
                       </div>
                     </article>
 
                     {/* comment area */}
-                    <div className="px-3 py-2 bg-white md:pb-5 md:pt-8 md:px-12" id="comments">
-                      <div className="flex justify-between">
-                        <h2 className="text-2xl font-bold">Discussion ({_postComments.length})</h2>
-                      </div>
-
-                      <div className="flex gap-3 items-center mt-5">
-                        <div className="relative self-start w-8 h-8">
-                          <Image
-                            src="https://res.cloudinary.com/practicaldev/image/fetch/s--qZUyVAzn--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/473848/c9176bd4-7e29-4848-84ca-534bb8533111.png"
-                            alt="commenter"
-                            layout="fill"
-                            objectFit="cover"
-                            className="rounded-full"
-                          />
-                        </div>
-                        <div className="flex-grow">
-                          <div className="">
-                            <textarea
-                              placeholder="Add to the discussion"
-                              name="comment"
-                              className="placeholder-gray-400 focus:my-shadow-blue p-3 w-full text-base placeholder-shown:bg-gray-50 border border-gray-300 rounded-md outline-none resize-none transition duration-100"
-                              rows={3}
-                            />
+                    <div
+                      className="px-3 py-2 bg-white rounded-b-md md:pb-5 md:pt-8 md:px-12"
+                      id="comments"
+                    >
+                      {authService.getCurrentUser()?._id ? (
+                        <>
+                          <div className="flex justify-between">
+                            <h2 className="text-2xl font-bold">
+                              Discussion ({_postComments.length})
+                            </h2>
                           </div>
-                          <button
-                            className="mb-4 mt-1 px-3 py-2 text-white font-semibold bg-blue-600 hover:bg-blue-800 rounded-md cursor-pointer"
-                            type="submit"
-                          >
-                            Submit
-                          </button>
-                        </div>
-                      </div>
+                          <div className="flex gap-3 items-center mt-5">
+                            <div className="relative self-start w-8 h-8">
+                              <Image
+                                src={authService.getCurrentUser().profileImage}
+                                alt="commenter"
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-full"
+                              />
+                            </div>
+                            <div className="flex-grow">
+                              <div className="">
+                                <textarea
+                                  placeholder="Add to the discussion"
+                                  name="comment"
+                                  className="placeholder-gray-400 focus:my-shadow-blue p-3 w-full text-base placeholder-shown:bg-gray-50 border border-gray-300 rounded-md outline-none resize-none transition duration-100"
+                                  rows={3}
+                                  value={comment}
+                                  onChange={(e) => setComment(e.target.value)}
+                                />
+                              </div>
+                              <button
+                                className={`mb-4 mt-1 px-3 py-2 text-white font-semibold bg-blue-600 hover:bg-blue-800 rounded-md ${
+                                  comment.length < 1
+                                    ? "cursor-not-allowed bg-blue-800"
+                                    : "cursor-pointer"
+                                }`}
+                                type="submit"
+                                onClick={() => handleComment()}
+                                disabled={comment.length < 1}
+                              >
+                                Submit
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <Link passHref href="/enter">
+                          <a className="text-blue-500 underline text-base cursor-pointer">
+                            Login or Register to comment
+                          </a>
+                        </Link>
+                      )}
 
                       <div>
                         {_postComments.map((postComment) => (
@@ -342,7 +397,13 @@ const MiniTagWithoutRadium = ({ name, backgroundColor }) => (
         },
       }}
     >
-      <span style={{ color: `${backgroundColor + "cc"}` }}>#</span>
+      <span
+        style={{
+          color: `${backgroundColor + "cc"}`,
+        }}
+      >
+        #
+      </span>
       {name}
     </a>
   </Link>
@@ -374,10 +435,6 @@ export async function getServerSideProps({ params, req }) {
   } = await getPostSaves(post._id);
 
   if (userId) {
-    const {
-      data: { data: userSavedPosts },
-    } = await savedPosts(token);
-
     liked = postLikes?.userId?.some((id) => id === userId);
     saved = postSaves?.userId?.some((usp) => usp._id === userId);
   }
@@ -395,10 +452,10 @@ export async function getServerSideProps({ params, req }) {
       post,
       previousPosts,
       postLikeCount: postLikes?.userId?.length || 0,
-      liked,
+      liked: liked || false,
       postComments: postComments || [],
       token,
-      saved,
+      saved: saved || false,
       postSaveCount: postSaves?.userId?.length || 0,
     },
   };
