@@ -11,6 +11,7 @@ const register = (user) =>
     firstname: user.firstname,
     lastname: user.lastname,
     email: user.email,
+    gender: user.gender,
   });
 
 const profile = (username, token) =>
