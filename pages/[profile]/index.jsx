@@ -73,12 +73,12 @@ export default function ProfilePage({
       <Title title={profileDetails.username} />
       <Navbar />
 
-      <main className="my-min-height p-0 bg-gray-200 pb-8 relative">
-        <div className="absolute top-0 w-full h-[230px] bg-my-purple"></div>
-        <div className="pt-6 max-w-5xl mx-auto flex-col items-center md:px-6 px-3 relative">
+      <main className="my-min-height relative p-0 pb-8 bg-gray-200">
+        <div className="h-[230px] absolute top-0 w-full bg-my-purple"></div>
+        <div className="relative flex-col items-center mx-auto pt-6 px-3 max-w-5xl md:px-6">
           <div className="pt-12 lg:pt-20">
-            <div className="w-full rounded-t-md border border-gray-300 flex bg-white pb-9 relative items-start flex-col gap-0">
-              <div className="relative w-24 h-24 md:w-32 md:h-32 lg:h-40 lg:w-40 mx-auto rounded-full border-my-purple -mt-12 md:-mt-14 lg:-mt-20 shadow-2xl">
+            <div className="relative flex flex-col gap-0 items-start pb-9 w-full bg-white border border-gray-300 rounded-t-md">
+              <div className="relative -mt-12 mx-auto w-24 h-24 border-my-purple rounded-full shadow-2xl md:-mt-14 md:w-32 md:h-32 lg:-mt-20 lg:w-40 lg:h-40">
                 <Image
                   src={
                     profileDetails?.profileImage ||
@@ -93,16 +93,16 @@ export default function ProfilePage({
 
               {authService.getCurrentUser() ? (
                 authService.getCurrentUser(token)?._id === profileDetails._id ? (
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute right-3 top-3">
                     <button
-                      className="border-none p-2.5 px-4 bg-blue-700 text-white font-medium text-sm cursor-pointer rounded-md hover:bg-blue-800 transition duration-100 ease-out self-end items-start outline-none"
+                      className="items-start self-end p-2.5 px-4 text-white text-sm font-medium bg-blue-700 hover:bg-blue-800 border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out"
                       onClick={gotoSettings}
                     >
                       Edit profile
                     </button>
                   </div>
                 ) : (
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute right-3 top-3">
                     <button
                       className={`border-none p-3 bg-transparent text-blue-700 font-semibold text-sm cursor-pointer rounded-md hover:bg-blue-200/30 transition duration-100 ease-out self-end items-start ring-1 ring-blue-600 ${
                         !followed && "!bg-blue-600 !text-white hover:!bg-blue-600/80"
@@ -122,22 +122,22 @@ export default function ProfilePage({
               )}
             </div>
 
-            <div className="w-full bg-white border-r border-l border-gray-300 text-center py-6 px-1">
+            <div className="px-1 py-6 w-full text-center bg-white border-l border-r border-gray-300">
               <h2 className="text-4xl font-black">
                 {profileDetails.firstname + " " + profileDetails.lastname} ({profile})
               </h2>
 
-              <p className="w-3/4 mx-auto text-lg py-1">{profileDetails.bio}</p>
+              <p className="mx-auto py-1 w-3/4 text-lg">{profileDetails.bio}</p>
 
-              <div className="flex row flex-wrap text-gray-500 justify-center items-center my-4">
+              <div className="row flex flex-wrap items-center justify-center my-4 text-gray-500">
                 {profileDetails.location && (
-                  <div className="my-0 mx-4 flex min-w-min items-center">
+                  <div className="flex items-center mx-4 my-0 min-w-min">
                     <MapPin size={20} />
                     <span className="ml-1 text-sm">{profileDetails.location}</span>
                   </div>
                 )}
 
-                <div className="my-0 mx-4 flex min-w-min items-center">
+                <div className="flex items-center mx-4 my-0 min-w-min">
                   <Gift size={20} />
                   <span className="ml-1 text-sm">
                     Joined on {dayjs(profileDetails.joined).format("MMM DD, YYYY")}
@@ -147,11 +147,11 @@ export default function ProfilePage({
             </div>
           </div>
 
-          <div className="bg-white text-center w-full border rounded-b-md border-gray-300 shadow-md">
+          <div className="w-full text-center bg-white border border-gray-300 rounded-b-md shadow-md">
             <div className="my-8 text-gray-500">
               {profileDetails.occupation?.position && (
                 <>
-                  <h5 className="font-medium text-sm">Work</h5>
+                  <h5 className="text-sm font-medium">Work</h5>
                   <p className="text-gray-800">{profileDetails.occupation?.position}</p>
                 </>
               )}
@@ -159,23 +159,23 @@ export default function ProfilePage({
           </div>
         </div>
 
-        <div className="grid grid-cols-6 gap-3 mt-2 max-w-5xl mx-auto md:px-6 px-3 relative items-start">
-          <div className="flex p-4 flex-col col-span-full md:col-span-2 bg-gray-50 rounded-md border border-gray-300 text-gray-800 gap-4 shadow-md">
-            <div className="flex flex-wrap items-center gap-2">
+        <div className="relative grid gap-3 grid-cols-6 items-start mt-2 mx-auto px-3 max-w-5xl md:px-6">
+          <div className="flex flex-col gap-4 col-span-full p-4 text-gray-800 bg-gray-50 border border-gray-300 rounded-md shadow-md md:col-span-2">
+            <div className="flex flex-wrap gap-2 items-center">
               <Book size={21} className="text-gray-500" />
               <span>
                 {profileDetails.posts?.length || 0} post{profileDetails.posts?.length > 1 && "s"}{" "}
                 published
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
               <MessageSquare size={21} className="text-gray-500" />
               <span>
                 {profileDetails.comments?.length || 0} comment
                 {profileDetails.comments?.length > 1 && "s"} written
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
               <Hash size={21} className="text-gray-500" />
               <span>
                 {profileDetails.followingTags?.tagId?.length || 0} tag
@@ -184,7 +184,7 @@ export default function ProfilePage({
             </div>
           </div>
 
-          <div className="flex flex-col flex-wrap col-span-full md:col-span-4 gap-2">
+          <div className="flex flex-col flex-wrap gap-2 col-span-full md:col-span-4">
             {profileDetails.comments.length > 0 && (
               <RecentComments
                 profileUrl={profile}
@@ -206,12 +206,8 @@ export default function ProfilePage({
                       profileImage: profileDetails.profileImage,
                       username: profileDetails.username,
                     }}
-                    onLike={() => likePost(post._id, token)}
-                    onUnlike={() => unlikePost(post._id, token)}
-                    liked={userLikes?.reactions?.some((ul) => ul._id === post._id)}
-                    onSave={() => savePost(post._id, token)}
-                    onUnsave={() => unsavePost(post._id, token)}
-                    saved={userPosts?.some((up) => up._id === post._id)}
+                    liked={userLikes?.reactions?.some((ul) => ul.postId._id === post._id)}
+                    saved={userPosts?.some((up) => up.postId._id === post._id)}
                   />
                 ))}
               </div>
