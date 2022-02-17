@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import authService from "../apis/authService";
 import { likeComment, unlikeComment } from "../apis/comment";
 import { toast } from "react-toastify";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 export default function Comment({ comment }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -34,6 +35,8 @@ export default function Comment({ comment }) {
     dayjs().format("YYYY") === dayjs(comment.createdAt).format("YYYY")
       ? dayjs(comment.createdAt).format("MMM DD")
       : dayjs(comment.createdAt).format("MMM DD, YYYY");
+
+  dayjs.extend(relativeTime);
 
   const handleLike = async (id) => {
     let prevLikeCount = likesCount;
@@ -107,21 +110,25 @@ export default function Comment({ comment }) {
                 <div className="flex justify-between mb-0.5">
                   <div className="flex gap-1.5 items-center">
                     <Link passHref href={`/${comment.userId.username}`}>
-                      <p className="p-2 font-semibold hover:bg-gray-100 rounded-lg cursor-pointer">
+                      <p className="p-2 py-1 font-semibold hover:bg-gray-100 rounded-lg cursor-pointer">
                         {comment.userId?.firstname + " " + comment.userId?.lastname}
                       </p>
                     </Link>
                     <p className="text-gray-400">•</p>
-                    <span className="text-gray-500 text-sm">{formatedCreatedAt}</span>
+                    <span className="text-gray-500 text-xs">
+                      {dayjs(comment?.createdAt).fromNow()}
+                    </span>
                   </div>
 
-                  <div
-                    onClick={handleShowMenu}
-                    ref={ref}
-                    className="relative self-center p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
-                  >
-                    <DotsHorizontalIcon className="h-5" />
-                  </div>
+                  {authService.getCurrentUser()?._id === comment.userId?._id && (
+                    <div
+                      onClick={handleShowMenu}
+                      ref={ref}
+                      className="relative self-center p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
+                    >
+                      <DotsHorizontalIcon className="h-5" />
+                    </div>
+                  )}
                 </div>
                 {isVisible && (
                   <div className="z-[400] absolute right-0 top-10">
