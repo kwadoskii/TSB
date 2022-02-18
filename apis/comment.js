@@ -16,4 +16,6 @@ const unlikeComment = (commentId, token) =>
 const addComment = (postId, comment, token) =>
   api.post(`${apiEndpoint}`, { comment, postId }, { headers: { "x-auth-token": "JWT " + token } });
 
-export { likeComment, unlikeComment, addComment };
+const getCommentById = (commentId) => api.get(`${apiEndpoint}/${commentId}`);
+
+export { likeComment, unlikeComment, addComment, getCommentById };

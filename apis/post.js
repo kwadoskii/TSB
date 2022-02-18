@@ -3,8 +3,6 @@ import api from "../apis/base";
 
 const apiEndpoint = server + "/posts";
 
-const getCommentById = (commentId) => api.get(apiEndpoint + "/comment/" + commentId);
-
 const getPostComments = (postId) => api.get(`${apiEndpoint}/${postId}/comments`);
 
 const getPostLikes = (postId) => api.get(`${apiEndpoint}/${postId}/likes`);
@@ -26,7 +24,6 @@ const getPostBySlug = (slug) => api.get(`${apiEndpoint}/slug/${slug}`);
 const getMoreFromAuthor = (authorId) => api.get(`${apiEndpoint}/morefromauthor/${authorId}`);
 
 export {
-  getCommentById,
   getPostComments,
   getPostLikes,
   likePost,
