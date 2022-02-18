@@ -64,7 +64,7 @@ export default function ProfilePage({
 
   useEffect(() => {
     setFollowed(
-      userFollowingUsers.some((followingUser) => followingUser._id === profileDetails._id)
+      userFollowingUsers?.some((followingUser) => followingUser._id === profileDetails._id)
     );
   }, []);
 
