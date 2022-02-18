@@ -1,48 +1,66 @@
-import { useRouter } from "next/router";
+import { search } from "../apis/post";
 
 import ArticleCard from "../components/ArticleCard";
 import Nav from "../components/Nav";
 import Navbar from "../components/Navbar";
 import Title from "../components/Title";
 
-export default function Search() {
-  const {
-    query: { q },
-  } = useRouter();
-
-  const searchResults = [1, 2, 3, 4, 9, 9];
-
+export default function Search({ searchResults, query }) {
   return (
     <>
       <Title title="Search" />
       <Navbar />
 
-      <div className="bg-gray-100 my-min-height">
-        <div className="max-w-7xl relative px-1 py-1 lg:py-4 lg:px-6 mx-auto">
-          <div className="flex flex-wrap justify-between items-center my-2">
-            <h2 className="font-bold text-xl md:text-3xl">Search results ({q})</h2>
+      <div className="my-min-height bg-gray-100">
+        <div className="relative mx-auto px-1 py-1 max-w-7xl lg:px-6 lg:py-4">
+          <div className="flex flex-wrap items-center justify-between my-2">
+            <h2 className="text-xl font-bold md:text-3xl">Search results ({query})</h2>
             <Nav />
           </div>
 
-          <div className="grid grid-cols-9 gap-5 my-0">
-            <div className="col-span-2 relative">
-              <div className="min-h-screen rounded-md sticky top-8 hidden md:flex flex-col gap-3">
+          <div className="grid gap-5 grid-cols-9 my-0">
+            <div className="relative col-span-2">
+              <div className="sticky top-8 hidden flex-col gap-3 min-h-screen rounded-md md:flex">
                 {/* <Advert />
                   <Advert />
                   <Advert /> */}
               </div>
             </div>
 
-            <div className="col-span-full md:col-span-5">
-              {searchResults.map((sr, i) => (
-                <ArticleCard key={i} />
-              ))}
+            <div className="col-span-full md:col-span-6">
+              {searchResults.length > 0 ? (
+                searchResults.map((sr) => (
+                  <ArticleCard articleDetails={sr} user={sr.author} key={sr._id} />
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center my-10">
+                  <p className="text-gray-700 text-lg font-bold">No posts from search query 🤔</p>
+                  <div className="mt-2">
+                    <p className="text-center text-gray-500">
+                      Try modifying your search query and retry.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="col-span-2 hidden md:flex"></div>
+            <div className="hidden col-span-2 md:flex"></div>
           </div>
         </div>
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ query: { q: query } }) {
+  const {
+    data: { data: searchResults },
+  } = await search(query);
+
+  return {
+    props: {
+      searchResults,
+      query,
+    },
+  };
 }

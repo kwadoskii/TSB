@@ -23,6 +23,8 @@ const getPostBySlug = (slug) => api.get(`${apiEndpoint}/slug/${slug}`);
 
 const getMoreFromAuthor = (authorId) => api.get(`${apiEndpoint}/morefromauthor/${authorId}`);
 
+const search = (query) => api.get(`${apiEndpoint}/search?q=${query}`);
+
 export {
   getPostComments,
   getPostLikes,
@@ -33,4 +35,5 @@ export {
   getPostBySlug,
   getMoreFromAuthor,
   getPostSaves,
+  search,
 };
