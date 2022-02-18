@@ -11,7 +11,7 @@ import Joi from "joi";
 import auth from "../apis/authService";
 import NumberFormat from "react-number-format";
 
-export default function EnterPage() {
+export default function EnterPage({ totalUsers }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -112,7 +112,7 @@ export default function EnterPage() {
         <div className="bg-gray-200">
           <div className="flex flex-col items-center justify-center px-2 py-10">
             <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
-              <Info />
+              <Info totalUsers={totalUsers} />
 
               <div className="mt-5 px-2 md:px-10">
                 <form action="">
@@ -223,7 +223,7 @@ export default function EnterPage() {
       <div className="h-writeContent bg-gray-200">
         <div className="flex flex-col items-center justify-center px-2 py-10">
           <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
-            <Info />
+            <Info totalUsers={totalUsers} />
 
             <div className="mt-5 px-2 md:px-10">
               <form action="">
@@ -271,15 +271,7 @@ export default function EnterPage() {
   );
 }
 
-const Info = () => {
-  const [_totalUsers, setTotalUsers] = useState(null);
-  useEffect(async () => {
-    const {
-      data: { data },
-    } = await totalUsers();
-    setTotalUsers(data);
-  }, []);
-
+const Info = ({ totalUsers }) => {
   return (
     <div className="px-2 md:px-10">
       <h2 className="text-[1.65rem] text-center font-bold">Welcome to TSB</h2>
@@ -288,8 +280,20 @@ const Info = () => {
           <a className="text-blue-600 hover:underline">TSB</a>
         </Link>{" "}
         Community has a total of{" "}
-        {<NumberFormat value={_totalUsers} displayType="text" thousandSeparator />} amazing members
+        {<NumberFormat value={totalUsers} displayType="text" thousandSeparator />} amazing members
       </p>
     </div>
   );
 };
+
+export async function getServerSideProps() {
+  const {
+    data: { data: _totalUsers },
+  } = await totalUsers();
+
+  return {
+    props: {
+      totalUsers: _totalUsers,
+    },
+  };
+}
