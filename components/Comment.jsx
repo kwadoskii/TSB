@@ -170,10 +170,13 @@ export default function Comment({ comment }) {
                 <SolidHeartIcon className={`h-5 ${liked && "text-red-600"}`} />
                 <p className="text-gray-900">{likesCount}</p>
               </div>
-              <div className="flex items-center p-1 px-3 text-gray-600 hover:text-gray-700 text-sm hover:bg-gray-50 rounded-md cursor-pointer space-x-1">
+
+              {/* Reply functionality */}
+
+              {/* <div className="flex items-center p-1 px-3 text-gray-600 hover:text-gray-700 text-sm hover:bg-gray-50 rounded-md cursor-pointer space-x-1">
                 <ChatIcon className="h-5" />
                 <p>Reply</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

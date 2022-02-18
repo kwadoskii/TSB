@@ -59,10 +59,10 @@ export default function DashboardIndexPage({
       <Navbar />
       <Title title="Dashboard" />
 
-      <div className="bg-gray-100 my-min-height">
-        <div className="max-w-7xl relative px-1 gap-2 py-1 lg:py-4 lg:px-6 mx-auto">
-          <div className="py-3 pb-5">
-            <h2 className="font-bold text-2xl">Dashboard </h2>
+      <div className="my-min-height bg-gray-100">
+        <div className="relative gap-2 mx-auto px-1 py-1 max-w-7xl lg:px-6 lg:py-4">
+          <div className="pb-5 py-3">
+            <h2 className="text-2xl font-bold">Dashboard </h2>
           </div>
 
           {/* smallcard */}
@@ -72,17 +72,17 @@ export default function DashboardIndexPage({
             ))}
           </div>
 
-          <div className="grid md:grid-cols-5 my-4 gap-3">
+          <div className="grid gap-3 my-4 md:grid-cols-5">
             <Sidebar hasLinks />
 
             {/* content */}
             <div className="flex flex-col col-span-full md:col-span-4">
-              <h2 className="font-bold text-xl my-1">Posts</h2>
+              <h2 className="my-1 text-xl font-bold">Posts</h2>
               {userPosts?.length === 0 ? (
-                <div className="bg-gray-50 border rounded-md border-gray-300 mt-2">
-                  <div className="flex items-center justify-center py-16 flex-col gap-10">
+                <div className="mt-2 bg-gray-50 border border-gray-300 rounded-md">
+                  <div className="flex flex-col gap-10 items-center justify-center py-16">
                     {/* image */}
-                    <div className="h-64 relative w-1/3">
+                    <div className="relative w-1/3 h-64">
                       <Image
                         alt="no post"
                         layout="fill"
@@ -98,7 +98,7 @@ export default function DashboardIndexPage({
                       </p>
 
                       <Link passHref href="/write">
-                        <a className="mx-auto my-button !mr-auto">Write your first post now</a>
+                        <a className="my-button !mr-auto mx-auto">Write your first post now</a>
                       </Link>
                     </div>
                   </div>
@@ -150,8 +150,8 @@ export async function getServerSideProps({ req }) {
     props: {
       userPosts: _userPosts,
       userComments: _userComments,
-      userReactions: _userReactions?.reactions || [],
-      userSavedPosts: _userSavedPosts,
+      userReactions: _userReactions?.reactions?.map((ur) => ur.postId) || [],
+      userSavedPosts: _userSavedPosts.map((usp) => usp.postId) || [],
     },
   };
 }

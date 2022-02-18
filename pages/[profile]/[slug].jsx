@@ -26,7 +26,7 @@ import dayjs from "dayjs";
 import Radium from "radium";
 import authService from "../../apis/authService";
 import { toast } from "react-toastify";
-import { savedPosts, savePost, unsavePost } from "../../apis/user";
+import { followingUsers, followUser, savePost, unfollowUser, unsavePost } from "../../apis/user";
 import { addComment } from "../../apis/comment";
 
 export default function PostPage({
@@ -38,6 +38,7 @@ export default function PostPage({
   saved,
   postSaveCount,
   token,
+  followingUser,
 }) {
   const md = new Remarkable({
     typographer: true,
@@ -57,13 +58,12 @@ export default function PostPage({
       return ""; // use external default escaping
     },
   });
+  md.use(linkify);
 
   let formatedCreatedAt =
     dayjs().format("YYYY") === dayjs(post.createdAt).format("YYYY")
       ? dayjs(post.createdAt).format("MMM DD")
       : dayjs(post.createdAt).format("MMM DD, YYYY");
-
-  md.use(linkify);
 
   const [_liked, setLiked] = useState("");
   const [_postLikesCount, setPostLikesCount] = useState("");
@@ -71,6 +71,7 @@ export default function PostPage({
   const [_saved, setSaved] = useState("");
   const [_postComments, setPostComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [_followingUser, setFollowingUser] = useState("");
 
   const handleLike = async (id) => {
     let prevLikeCount = _postLikesCount;
@@ -155,12 +156,23 @@ export default function PostPage({
     return setComment("");
   };
 
+  const handleFollow = async () => {
+    const { status } = await followUser(post.author._id, token);
+    if (status === 200) return setFollowingUser(true);
+  };
+
+  const handleUnfollow = async () => {
+    const { status } = await unfollowUser(post.author._id, token);
+    if (status === 200) return setFollowingUser(false);
+  };
+
   useEffect(() => {
     setLiked(liked);
     setPostComments(postComments);
     setPostLikesCount(postLikeCount);
     setPostSaveCount(postSaveCount);
     setSaved(saved);
+    setFollowingUser(followingUser);
   }, [post._id]);
 
   return (
@@ -174,7 +186,7 @@ export default function PostPage({
       <Navbar />
 
       <main className="bg-gray-100">
-        <div className="relative mx-auto py-1 max-w-7xl md:px-1 lg:px-6">
+        <div className="relative mx-auto pb-2 py-1 max-w-7xl md:pb-3 md:px-1 lg:px-6">
           <section className="grid mg:gap-3 pt-0 px-0 md:grid-cols-post md:pt-2 lg:pt-3">
             <aside className="md:row-end-[initial] md:w-[4em] md:block">
               <div className="z-[100] fixed bottom-0 left-0 right-0 px-4 py-1 bg-white rounded-t-md shadow-soft md:relative md:block md:p-0 md:min-h-full md:bg-transparent md:shadow-none">
@@ -369,7 +381,12 @@ export default function PostPage({
               {/* follow arthur */}
               <div className="lg:my-min-height col-span-full lg:col-span-5">
                 <div className="sticky top-3">
-                  <ArthurInfoCard profile={post.author} />
+                  <ArthurInfoCard
+                    following={_followingUser}
+                    onFollow={handleFollow}
+                    onUnfollow={handleUnfollow}
+                    profile={post.author}
+                  />
                   <MoreFromArthur
                     profile={post.author}
                     previousPosts={previousPosts.filter((pp) => pp._id !== post._id)}
@@ -414,6 +431,7 @@ const MiniTag = Radium(MiniTagWithoutRadium);
 export async function getServerSideProps({ params, req }) {
   let liked = false;
   let saved = false;
+  let followingUser = false;
   const token = req.cookies.token || "";
   const userId = authService.getCurrentUser(token)?._id;
 
@@ -435,6 +453,11 @@ export async function getServerSideProps({ params, req }) {
   } = await getPostSaves(post._id);
 
   if (userId) {
+    const {
+      data: { data: _followingUsers },
+    } = await followingUsers(token);
+
+    followingUser = _followingUsers.some((following) => following._id === post.author._id);
     liked = postLikes?.userId?.some((id) => id === userId);
     saved = postSaves?.userId?.some((usp) => usp._id === userId);
   }
@@ -457,6 +480,7 @@ export async function getServerSideProps({ params, req }) {
       token,
       saved: saved || false,
       postSaveCount: postSaves?.userId?.length || 0,
+      followingUser,
     },
   };
 }
