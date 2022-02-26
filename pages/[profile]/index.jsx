@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 import { likePost, unlikePost } from "../../apis/post";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { LinkIcon, MailIcon } from "@heroicons/react/outline";
 
 export default function ProfilePage({
   commentsOnly = false,
@@ -129,20 +130,38 @@ export default function ProfilePage({
 
               <p className="mx-auto py-1 w-3/4 text-lg">{profileDetails.bio}</p>
 
-              <div className="row flex flex-wrap items-center justify-center my-4 text-gray-500">
+              <div className="row flex flex-wrap gap-4 gap-y-1 items-center justify-center mx-auto my-4 text-gray-500 md:w-8/12">
                 {profileDetails.location && (
-                  <div className="flex items-center mx-4 my-0 min-w-min">
-                    <MapPin size={20} />
+                  <div className="flex gap-0.5 items-center my-0">
+                    <MapPin size={19} />
                     <span className="ml-1 text-sm">{profileDetails.location}</span>
                   </div>
                 )}
 
-                <div className="flex items-center mx-4 my-0 min-w-min">
-                  <Gift size={20} />
+                <div className="flex gap-0.5 items-center my-0">
+                  <Gift size={19} />
                   <span className="ml-1 text-sm">
                     Joined on {dayjs(profileDetails.joined).format("MMM DD, YYYY")}
                   </span>
                 </div>
+
+                {profileDetails.displayEmail && (
+                  <div className="flex gap-0.5 items-center">
+                    <MailIcon className="h-6" />
+                    <a href={`mailto:${profileDetails.email}`} className="text-sm">
+                      {profileDetails.email}
+                    </a>
+                  </div>
+                )}
+
+                {profileDetails.displayWebsite && profileDetails.website && (
+                  <div className="flex gap-0.5 items-center">
+                    <LinkIcon className="h-5" />
+                    <a href={profileDetails.website} className="text-sm">
+                      {profileDetails.website}
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

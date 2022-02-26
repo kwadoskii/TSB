@@ -149,7 +149,9 @@ export default function Comment({ comment }) {
                 )}
 
                 <div className="p-1.5 pt-0">
-                  <p className="text-gray-800">{comment.comment}</p>
+                  <p className="text-gray-800 whitespace-pre-wrap leading-snug">
+                    {comment.comment}
+                  </p>
                 </div>
               </div>
             </div>

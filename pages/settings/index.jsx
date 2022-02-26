@@ -65,6 +65,7 @@ export default function SettingsPage({ userDetails, token }) {
     setEmail(userDetails?.email);
     setUsername(userDetails?.username);
     setDisplayEmail(userDetails?.displayEmail);
+    setDisplayWebsite(userDetails?.displayWebsite);
     setWebsite(userDetails?.website || "");
     setLocation(userDetails?.location || "");
     setBio(userDetails?.bio || "");
