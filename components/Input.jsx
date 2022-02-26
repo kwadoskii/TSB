@@ -58,6 +58,7 @@ export default function Input({
             name={nameFormatted}
             id={nameFormatted}
             type={type}
+            onChange={onChange}
           />
           <span className="ml-2 font-medium">
             <label className="flex-grow cursor-pointer" htmlFor={nameFormatted}>
