@@ -78,6 +78,12 @@ const userPosts = (token) =>
 const userComments = (token) =>
   api.get(`${userEndpoint}/comments`, { headers: { "x-auth-token": "JWT " + token } });
 
+const me = (token) =>
+  api.get(`${userEndpoint}/me`, { headers: { "x-auth-token": "JWT " + token } });
+
+const updateProfile = (details, token) =>
+  api.patch(`${userEndpoint}/me`, { ...details }, { headers: { "x-auth-token": "JWT " + token } });
+
 export {
   register,
   profile,
@@ -95,4 +101,6 @@ export {
   followers,
   userPosts,
   userComments,
+  me,
+  updateProfile,
 };
