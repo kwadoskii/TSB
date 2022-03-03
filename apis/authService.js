@@ -3,12 +3,20 @@ import jwtDecode from "jwt-decode";
 import { server } from "../config/server";
 import Cookies from "js-cookie";
 
-const apiEndpoint = server + "/login";
+const apiEndpoint = server + "/auth";
 const tokenKey = "token";
 
 // api.setJwt(getJwt());
 
-const login = async (username, password) => api.post(apiEndpoint, { username, password });
+const login = async (username, password) =>
+  api.post(apiEndpoint + "/login", { username, password });
+
+export const changePassword = async (currentPassword, newPassword, token) =>
+  api.post(
+    apiEndpoint + "/changepassword",
+    { currentPassword, newPassword },
+    { headers: { "x-auth-token": "JWT " + token } }
+  );
 
 const loginWithJwt = (jwt) => {
   localStorage.setItem(tokenKey, jwt);
