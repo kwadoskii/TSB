@@ -25,7 +25,7 @@ export default function DashboardIndexPage({
   userReactions,
   userSavedPosts,
 }) {
-  const [data, setData] = useState([
+  const [dashboardCounters, setDashboardCounters] = useState([
     { name: "Total post reaction", count: 0 },
     { name: "Total post view", count: 0 },
     { name: "Total comment", count: 0 },
@@ -35,6 +35,8 @@ export default function DashboardIndexPage({
   const [token, setToken] = useState("");
   const router = useRouter();
 
+  console.log(userPosts);
+
   //route protection
   useEffect(() => {
     if (!authService.getCurrentUser()) {
@@ -42,13 +44,16 @@ export default function DashboardIndexPage({
     }
 
     const views = userPosts.reduce((prev, u) => prev + u.views, 0);
-    const clone = data;
+    const commentsCount = userPosts.reduce((prev, u) => prev + u.commentsCount, 0);
+    const likesCount = userPosts.reduce((prev, u) => prev + u.likesCount, 0);
 
-    clone[0].count = userReactions?.length;
-    clone[1].count = views;
-    clone[2].count = userComments?.length;
+    const prevDashboardCounters = dashboardCounters;
 
-    setData([...clone]);
+    prevDashboardCounters[0].count = likesCount;
+    prevDashboardCounters[1].count = views;
+    prevDashboardCounters[2].count = commentsCount;
+
+    setDashboardCounters([...prevDashboardCounters]);
     setLoading(false);
     setToken(authService.getJwt());
   }, [loading]);
@@ -67,7 +72,7 @@ export default function DashboardIndexPage({
 
           {/* smallcard */}
           <div className="grid gap-3 grid-cols-1 md:grid-cols-3">
-            {data.map((d, i) => (
+            {dashboardCounters.map((d, i) => (
               <SmallCard key={i} title={d.count} subtitle={d.count <= 1 ? d.name : d.name + "s"} />
             ))}
           </div>
