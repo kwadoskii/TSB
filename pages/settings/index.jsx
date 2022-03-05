@@ -8,6 +8,8 @@ import SettingsSidebar from "../../components/SettingsSidebar";
 import { me, updateProfile } from "../../apis/user";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import authService from "../../apis/authService";
+import { useRouter } from "next/router";
 
 export default function SettingsPage({ userDetails, token }) {
   const [_userDetails, setUserDetails] = useState("");
@@ -25,6 +27,9 @@ export default function SettingsPage({ userDetails, token }) {
   const [company, setCompany] = useState("");
   const [companyWebsite, setCompanyWebsite] = useState("");
   const [education, setEducation] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   const handleSave = async () => {
     let userDetailsToSave = {
@@ -74,6 +79,13 @@ export default function SettingsPage({ userDetails, token }) {
     setCompanyWebsite(userDetails?.occupation?.website || "");
     setEducation(userDetails?.education || "");
   }, []);
+
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
 
   return (
     <>
@@ -234,6 +246,6 @@ export async function getServerSideProps({ req }) {
   } = await me(token);
 
   return {
-    props: { userDetails, token },
+    props: { userDetails: userDetails || null, token: token || null },
   };
 }

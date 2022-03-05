@@ -8,39 +8,47 @@ import SettingsSidebar from "../../components/SettingsSidebar";
 import { me } from "../../apis/user";
 import authService, { changePassword } from "../../apis/authService";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 export default function AccountPage({ userDetails, token }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [pwChangeLoading, setpwChangeLoading] = useState(false);
   const [newPWMismatch, setNewPWMismatch] = useState();
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
   const handlePasswordChange = async (e) => {
-    setLoading(true);
+    setpwChangeLoading(true);
     setNewPWMismatch(false);
     e.preventDefault();
 
     if (newPassword && newPassword === confirmNewPassword) {
       const { data, status } = await changePassword(currentPassword, newPassword, token);
 
-      setLoading(false);
+      setpwChangeLoading(false);
       if (status !== 200) return toast.error(data.message);
 
-      router.push("/enter");
+      router.replace("/enter");
       authService.logout();
       return toast.success(data.message);
     } else {
       setNewPWMismatch(true);
-      setLoading(false);
+      setpwChangeLoading(false);
     }
   };
 
-  return (
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
+
+  return loading ? null : (
     <>
       <Title title="Settings" />
       <Navbar />
@@ -71,8 +79,8 @@ export default function AccountPage({ userDetails, token }) {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       name="Current password"
-                      disabled={loading}
-                      className={loading && "bg-gray-300/30"}
+                      disabled={pwChangeLoading}
+                      className={pwChangeLoading && "bg-gray-300/30"}
                     />
                     <Input
                       hasLabel
@@ -80,18 +88,18 @@ export default function AccountPage({ userDetails, token }) {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       name="New password"
-                      disabled={loading}
-                      className={loading && "bg-gray-300/30"}
+                      disabled={pwChangeLoading}
+                      className={pwChangeLoading && "bg-gray-300/30"}
                     />
                     <Input
                       hasLabel
-                      disabled={loading}
+                      disabled={pwChangeLoading}
                       type="password"
                       name="Confirm new password"
                       error={newPWMismatch && "Confirm new password"}
                       value={confirmNewPassword}
                       onChange={(e) => setConfirmNewPassword(e.target.value)}
-                      className={loading && "bg-gray-300/30"}
+                      className={pwChangeLoading && "bg-gray-300/30"}
                     />
 
                     <button
@@ -153,6 +161,6 @@ export async function getServerSideProps({ req }) {
   } = await me(token);
 
   return {
-    props: { userDetails, token },
+    props: { userDetails: userDetails || null, token: token || null },
   };
 }
