@@ -28,7 +28,7 @@ export default function DashboardIndexPage({
   const [dashboardCounters, setDashboardCounters] = useState([
     { name: "Total post reaction", count: 0 },
     { name: "Total post view", count: 0 },
-    { name: "Total comment", count: 0 },
+    { name: "Total post comment", count: 0 },
   ]);
 
   const [loading, setLoading] = useState(true);
