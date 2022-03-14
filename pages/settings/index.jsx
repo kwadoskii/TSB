@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import authService from "../../apis/authService";
 import { useRouter } from "next/router";
+import Compressor from "compressorjs";
+import axios from "axios";
 
 export default function SettingsPage({ userDetails, token }) {
   const [_userDetails, setUserDetails] = useState("");
@@ -28,6 +30,8 @@ export default function SettingsPage({ userDetails, token }) {
   const [companyWebsite, setCompanyWebsite] = useState("");
   const [education, setEducation] = useState("");
   const [loading, setLoading] = useState(true);
+  const [imageToUpload, setImageToUpload] = useState("");
+  const [_formData, setFormData] = useState("");
 
   const router = useRouter();
 
@@ -51,6 +55,23 @@ export default function SettingsPage({ userDetails, token }) {
       },
     };
 
+    if (imageToUpload.value) {
+      const { data, status } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`,
+        _formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (status === 200) {
+        setImageToUpload("");
+        userDetailsToSave.profileImage = data.secure_url;
+      }
+    }
+
     const {
       data: { status, message },
     } = await updateProfile(userDetailsToSave, token);
@@ -60,6 +81,27 @@ export default function SettingsPage({ userDetails, token }) {
     if (status !== "success") return toast.error("Could not save details.");
 
     return toast.success("Changes saved.");
+  };
+
+  const handleImageChange = (e) => {
+    // let image = e.target.files[0];
+    setImageToUpload(e.target);
+
+    new Compressor(e.target.files[0], {
+      quality: 0.7, // 0.6 can also be used, but its not recommended to go below.
+      success: (result) => {
+        const formData = new FormData();
+
+        formData.append("upload_preset", "vivlkh4a");
+        formData.append("file", result, result.name);
+        formData.append("folder", "tsb");
+
+        setFormData(formData);
+      },
+      error(err) {
+        console.log(err);
+      },
+    });
   };
 
   useEffect(() => {
@@ -155,7 +197,15 @@ export default function SettingsPage({ userDetails, token }) {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                     />
-                    <Input type="file" name="Profile image" hasLabel />
+
+                    <Input
+                      type="file"
+                      name="Profile image"
+                      max-size="2000"
+                      hasLabel
+                      // value={imageToUpload.value}
+                      onChange={handleImageChange}
+                    />
                   </form>
                 </div>
               </Card>
