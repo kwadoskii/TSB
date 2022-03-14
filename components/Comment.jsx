@@ -98,6 +98,7 @@ export default function Comment({ comment }) {
                   alt="commenter"
                   src={comment.userId.profileImage}
                   layout="fill"
+                  objectFit="cover"
                   className="rounded-full"
                 />
               </div>

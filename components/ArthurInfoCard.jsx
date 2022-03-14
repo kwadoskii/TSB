@@ -14,7 +14,7 @@ export default function ArthurInfoCard({ profile, following, onFollow, onUnfollo
                 <Image
                   src={profile.profileImage}
                   layout="fill"
-                  objectFit="contain"
+                  objectFit="cover"
                   className="rounded-full"
                 />
               </div>

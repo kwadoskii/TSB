@@ -266,7 +266,7 @@ export default function PostPage({
                               <Image
                                 src={post.author.profileImage}
                                 layout="fill"
-                                objectFit="contain"
+                                objectFit="cover"
                                 className="rounded-full"
                                 alt="arthur"
                               />

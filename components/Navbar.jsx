@@ -107,6 +107,7 @@ export default function Navbar({ hideSearch = false }) {
                   alt="user avatar"
                   className="rounded-full"
                   layout="fill"
+                  objectFit="cover"
                   src={user.profileImage}
                 />
               </div>
