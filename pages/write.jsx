@@ -8,22 +8,34 @@ import sanitizeHtml, { defaults } from "sanitize-html";
 import hljs from "highlight.js";
 
 import Title from "../components/Title";
+import authService from "../apis/authService";
 
 export default function Write() {
   const titleRef = useRef(null);
+  const router = useRouter();
   const contentDivRef = useRef(null);
   const contentRef = useRef(null);
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [postTags, setPostTags] = useState("");
   const [editMode, setEditMode] = useState(true);
   const [bannerLink, setBannerLink] = useState("");
   const [minHeight, setMinHeight] = useState("");
-  const route = useRouter();
+  const [bannerBase64, setBannerBase64] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     titleRef.current?.focus();
   }, []);
+
+  //route protection
+  useEffect(() => {
+    if (!authService.getCurrentUser()) {
+      return router.push("/enter");
+    }
+    setLoading(false);
+  }, [loading]);
 
   marked.setOptions({
     highlight: function (code, lang) {
@@ -32,7 +44,7 @@ export default function Write() {
     gfm: true,
   });
 
-  return (
+  return loading ? null : (
     <>
       <Title title="Write post">
         <link
@@ -45,13 +57,13 @@ export default function Write() {
       </Title>
 
       <div className="bg-gray-100">
-        <div className="block md:grid grid-cols-write grid-rows-write h-screen p-3 relative gap-x-4 max-w-7xl mx-auto">
+        <div className="relative block gap-x-4 grid-cols-write grid-rows-write mx-auto p-3 max-w-7xl h-screen md:grid">
           {/* nav */}
-          <div className="col-start-1 col-span-2 flex justify-between h-[56px]">
-            <div className="flex justify-start items-center flex-1 gap-4">
+          <div className="h-[56px] flex col-span-2 col-start-1 justify-between">
+            <div className="flex flex-1 gap-4 items-center justify-start">
               <Link href="/">
                 <a className="outline-none">
-                  <p className="cursor-pointer select-none bg-black p-[5px] rounded font-semibold text-white text-lg">
+                  <p className="p-[5px] text-white text-lg font-semibold bg-black rounded cursor-pointer select-none">
                     TSB
                   </p>
                 </a>
@@ -59,7 +71,7 @@ export default function Write() {
               <h3 className="font-semibold">Create Post</h3>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex gap-2 items-center">
               <div
                 className={`relative w-full inline-flex flex-col overflow-hidden transition duration-100 ease-out after:right-3 after:left-3 after:absolute after:bottom-0 hover:text-blue-700 text-gray-800 cursor-pointer rounded-md hover:bg-gray-200 items-center py-2 px-3.5 select-none ${
                   editMode
@@ -83,8 +95,8 @@ export default function Write() {
               </div>
 
               <div
-                className="absolute -top-1 md:top-2 right-3 p-[10px] cursor-pointer hover:bg-gray-200 rounded-lg"
-                onClick={() => route.back()}
+                className="p-[10px] absolute -top-1 right-3 hover:bg-gray-200 rounded-lg cursor-pointer md:top-2"
+                onClick={() => router.back()}
               >
                 <XIcon className="h-5 text-gray-700" />
               </div>
@@ -92,55 +104,61 @@ export default function Write() {
           </div>
 
           {/* editor area */}
-          <div className="col-start-2 gap-4 flex flex-col mt-2 h-writeContent overflow-auto bg-white rounded-md border border-gray-300">
+          <div className="flex flex-col gap-4 col-start-2 mt-2 h-writeContent bg-white border border-gray-300 rounded-md overflow-auto">
             {editMode ? (
               <>
-                <div className="flex flex-col flex-grow gap-4 w-10/12 mx-auto py-8">
+                <div className="flex flex-col flex-grow gap-4 mx-auto py-8 w-10/12">
                   <div className="mb-4">
-                    {bannerLink === "" ? (
+                    {bannerBase64 === "" ? (
                       <label className="my-button-transparent" htmlFor="banner">
                         Add a cover image
                         <input
                           type="file"
                           id="banner"
                           className="hidden"
-                          onChange={() => {
-                            console.log("Image uploaded");
-                            setBannerLink(
-                              "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ydpav198t18pvae5x144.jpg"
-                            );
+                          onChange={(e) => {
+                            // setBannerLink(
+                            //   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ydpav198t18pvae5x144.jpg"
+                            // );
+
+                            let reader = new FileReader();
+                            reader.onload = function () {
+                              setBannerBase64(reader.result);
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
                           }}
                         />
                       </label>
                     ) : (
-                      <div className="grid grid-cols-7 gap-4">
-                        <div className="relative h-28 col-span-3">
+                      <div className="grid gap-4 grid-cols-7">
+                        <div className="relative col-span-3 h-28">
                           <Image
+                            src={bannerBase64}
                             objectFit="cover"
-                            src={bannerLink}
                             layout="fill"
                             className="rounded-md"
                           />
                         </div>
-                        <div className="flex items-center">
+                        <div className="flex gap-1.5 items-center">
                           <label className="my-button-transparent" htmlFor="changeBanner">
                             Change
                             <input
                               type="file"
                               id="changeBanner"
                               className="hidden"
-                              onChange={() => {
-                                console.log("Image changed");
-                                setBannerLink(
-                                  "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/j65tbwm3c6t379ed64by.png"
-                                );
+                              onChange={(e) => {
+                                let reader = new FileReader();
+                                reader.onload = function () {
+                                  setBannerBase64(reader.result);
+                                };
+                                reader.readAsDataURL(e.target.files[0]);
                               }}
                             />
                           </label>
 
                           <button
-                            className="text-red-600 font-semibold rounded-md px-3 py-2 border border-transparent hover:bg-gray-50"
-                            onClick={() => setBannerLink("")}
+                            className="px-3 py-2 text-red-600 font-semibold hover:bg-gray-50 border border-transparent rounded-md"
+                            onClick={() => setBannerBase64("")}
                           >
                             Remove
                           </button>
@@ -149,12 +167,12 @@ export default function Write() {
                     )}
                   </div>
 
-                  <div className="flex flex-grow flex-col gap-1 md:gap-3">
+                  <div className="flex flex-col flex-grow gap-1 md:gap-3">
                     <textarea
                       ref={titleRef}
                       type="text"
                       placeholder="New post title here..."
-                      className="outline-none font-extrabold text-2xl md:text-5xl rounded-md placeholder-gray-400 overflow-y-hidden resize-none leading-snug h-[40px] md:h-[66px]"
+                      className="placeholder-gray-400 h-[40px] md:h-[66px] text-2xl font-extrabold leading-snug rounded-md outline-none overflow-y-hidden resize-none md:text-5xl"
                       data-gramm_editor="false"
                       value={title}
                       onChange={(e) => {
@@ -169,7 +187,7 @@ export default function Write() {
 
                     <input
                       type="text"
-                      className="outline-none placeholder-gray-400 font-mono rounded-md"
+                      className="placeholder-gray-400 font-mono rounded-md outline-none"
                       placeholder="Add up to 4 tags..."
                       value={postTags}
                       onChange={(e) => {
@@ -185,12 +203,12 @@ export default function Write() {
                     />
 
                     <div
-                      className="h-full flex-grow"
+                      className="flex-grow h-full"
                       ref={contentDivRef}
                       style={{ height: minHeight }}
                     >
                       <textarea
-                        className="flex-grow outline-none placeholder-shown:font-mono rounded-md placeholder-gray-400 resize-none text-lg mt-3 w-full h-full"
+                        className="placeholder-gray-400 flex-grow mt-3 w-full h-full placeholder-shown:font-mono text-lg rounded-md outline-none resize-none"
                         data-gramm_editor="false"
                         onChange={(e) => {
                           setContent(e.target.value);
@@ -207,25 +225,26 @@ export default function Write() {
               </>
             ) : (
               <div className="mb-7">
-                {bannerLink && (
+                {bannerBase64 && (
                   <div className="relative h-80">
                     <Image
-                      src={bannerLink}
+                      src={bannerBase64}
                       layout="fill"
                       objectFit="cover"
+                      alt="banner"
                       className="rounded-t-md"
                     />
                   </div>
                 )}
 
-                <div className="w-10/12 mx-auto mt-8 flex flex-col">
+                <div className="flex flex-col mt-8 mx-auto w-10/12">
                   <h2 className="text-black text-5xl font-extrabold">{title}</h2>
-                  <div className="mb-8 mt-4 text-sm text-gray-500 flex gap-2">
+                  <div className="flex gap-2 mb-8 mt-4 text-gray-500 text-sm">
                     {postTags.split(",").map((tag) => {
                       tag = tag.trim().toLowerCase();
                       return tag !== "" ? (
                         <span className="text-gray-600">
-                          <span className="text-gray-400 opacity-85">#</span>
+                          <span className="opacity-85 text-gray-400">#</span>
                           {tag}
                         </span>
                       ) : null;
@@ -245,13 +264,13 @@ export default function Write() {
             )}
           </div>
 
-          <div className="flex items-center col-start-2 gap-2 h-[68px]">
-            <button className="bg-blue-700 text-white rounded-md font-semibold p-2 px-3.5 hover:bg-blue-800 transition duration-100 ease-out outline-none">
+          <div className="h-[68px] flex gap-2 col-start-2 items-center">
+            <button className="p-2 px-3.5 text-white font-semibold bg-blue-700 hover:bg-blue-800 rounded-md outline-none transition duration-100 ease-out">
               Publish
             </button>
             <button
-              className="rounded-md font-semibold p-2 px-3.5 text-gray-600 bg-gray-200 hover:text-gray-800 hover:bg-gray-300 transition duration-100 ease-out outline-none"
-              onClick={() => route.back()}
+              className="p-2 px-3.5 text-gray-600 hover:text-gray-800 font-semibold bg-gray-200 hover:bg-gray-300 rounded-md outline-none transition duration-100 ease-out"
+              onClick={() => router.back()}
             >
               Discard
             </button>
