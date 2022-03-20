@@ -88,13 +88,14 @@ export default function SettingsPage({ userDetails, token }) {
     setImageToUpload(e.target);
 
     new Compressor(e.target.files[0], {
-      quality: 0.7, // 0.6 can also be used, but its not recommended to go below.
+      quality: 0.6, // 0.6 can also be used, but its not recommended to go below.
       success: (result) => {
         const formData = new FormData();
 
-        formData.append("upload_preset", "vivlkh4a");
+        formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UNPLOAD_PRESET);
         formData.append("file", result, result.name);
-        formData.append("folder", "tsb");
+        formData.append("folder", process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER);
+        formData.append("public_id", `${authService.getCurrentUser().username}_dp`);
 
         setFormData(formData);
       },
