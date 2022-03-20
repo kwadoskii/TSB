@@ -9,8 +9,9 @@ import hljs from "highlight.js";
 
 import Title from "../components/Title";
 import authService from "../apis/authService";
+import { create } from "../apis/post";
 
-export default function Write() {
+export default function Write({ token }) {
   const titleRef = useRef(null);
   const router = useRouter();
   const contentDivRef = useRef(null);
@@ -43,6 +44,22 @@ export default function Write() {
     },
     gfm: true,
   });
+
+  const handleSavePost = async () => {
+    const contents = {
+      title,
+      tags: ["61b292f38561f0c5550ca78c", "61e19280ea75da2f52656706"],
+      content,
+      banner: bannerLink,
+      // author: authService.getCurrentUser()._id,
+    };
+
+    const { data, status } = await create(contents, token);
+
+    if (status === 201 && data.status === "success")
+      return router.push(authService.getCurrentUser().username + "/" + data.data.slug);
+    console.log(data);
+  };
 
   return loading ? null : (
     <>
@@ -110,16 +127,16 @@ export default function Write() {
                 <div className="flex flex-col flex-grow gap-4 mx-auto py-8 w-10/12">
                   <div className="mb-4">
                     {bannerBase64 === "" ? (
-                      <label className="my-button-transparent" htmlFor="banner">
+                      <label className="my-button-transparent cursor-pointer" htmlFor="banner">
                         Add a cover image
                         <input
                           type="file"
                           id="banner"
                           className="hidden"
                           onChange={(e) => {
-                            // setBannerLink(
-                            //   "https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ydpav198t18pvae5x144.jpg"
-                            // );
+                            setBannerLink(
+                              "https://res.cloudinary.com/kwadoskii/image/upload/v1647791319/tsb-test/test_banner.jpg"
+                            );
 
                             let reader = new FileReader();
                             reader.onload = function () {
@@ -140,13 +157,19 @@ export default function Write() {
                           />
                         </div>
                         <div className="flex gap-1.5 items-center">
-                          <label className="my-button-transparent" htmlFor="changeBanner">
+                          <label
+                            className="my-button-transparent cursor-pointer"
+                            htmlFor="changeBanner"
+                          >
                             Change
                             <input
                               type="file"
                               id="changeBanner"
                               className="hidden"
                               onChange={(e) => {
+                                setBannerLink(
+                                  "https://res.cloudinary.com/kwadoskii/image/upload/v1647791319/tsb-test/test_banner.jpg"
+                                );
                                 let reader = new FileReader();
                                 reader.onload = function () {
                                   setBannerBase64(reader.result);
@@ -175,6 +198,7 @@ export default function Write() {
                       className="placeholder-gray-400 h-[40px] md:h-[66px] text-2xl font-extrabold leading-snug rounded-md outline-none overflow-y-hidden resize-none md:text-5xl"
                       data-gramm_editor="false"
                       value={title}
+                      maxLength={80}
                       onChange={(e) => {
                         setTitle(e.target.value);
 
@@ -198,7 +222,7 @@ export default function Write() {
                           e.preventDefault();
                           setPostTags(postTags + ", ");
                         }
-                        if (e.key === " ") e.preventDefault();
+                        if (e.key === " " || e.key === "#") e.preventDefault();
                       }}
                     />
 
@@ -251,7 +275,7 @@ export default function Write() {
                     })}
                   </div>
                   <div
-                    className="prose prose-blue"
+                    className="prose prose-blue whitespace-pre-line"
                     dangerouslySetInnerHTML={{
                       __html: sanitizeHtml(marked(content), {
                         allowedTags: [...defaults.allowedTags, "img", "a", "hr"],
@@ -265,7 +289,10 @@ export default function Write() {
           </div>
 
           <div className="h-[68px] flex gap-2 col-start-2 items-center">
-            <button className="p-2 px-3.5 text-white font-semibold bg-blue-700 hover:bg-blue-800 rounded-md outline-none transition duration-100 ease-out">
+            <button
+              className="p-2 px-3.5 text-white font-semibold bg-blue-700 hover:bg-blue-800 rounded-md outline-none transition duration-100 ease-out"
+              onClick={handleSavePost}
+            >
               Publish
             </button>
             <button
@@ -279,4 +306,12 @@ export default function Write() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ req: { cookies } }) {
+  const token = cookies.token;
+
+  return {
+    props: { token },
+  };
 }

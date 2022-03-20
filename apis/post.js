@@ -25,6 +25,9 @@ const getMoreFromAuthor = (authorId) => api.get(`${apiEndpoint}/morefromauthor/$
 
 const search = (query) => api.get(`${apiEndpoint}/search?q=${query}`);
 
+const create = (content, token) =>
+  api.post(`${apiEndpoint}`, { ...content }, { headers: { "x-auth-token": "JWT " + token } });
+
 export {
   getPostComments,
   getPostLikes,
@@ -36,4 +39,5 @@ export {
   getMoreFromAuthor,
   getPostSaves,
   search,
+  create,
 };
