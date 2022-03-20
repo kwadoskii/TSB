@@ -17,6 +17,9 @@ module.exports = {
             pre: {
               backgroundColor: "#090c10",
             },
+            p: {
+              margin: 0,
+            },
           },
         },
       },
