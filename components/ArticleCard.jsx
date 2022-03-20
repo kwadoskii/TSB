@@ -100,7 +100,7 @@ export default function ArticleCard({
 
     setToken(authService.getJwt());
     setCommentsCount(comments?.length);
-    setLikesCount(likes.userId?.length);
+    setLikesCount(likes?.userId?.length || 0);
   }, []);
 
   return (

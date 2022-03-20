@@ -19,12 +19,7 @@ import {
 } from "../../apis/user";
 import { likePost, unlikePost } from "../../apis/post";
 
-export default function DashboardIndexPage({
-  userPosts,
-  userComments,
-  userReactions,
-  userSavedPosts,
-}) {
+export default function DashboardIndexPage({ userPosts, userReactions, userSavedPosts }) {
   const [dashboardCounters, setDashboardCounters] = useState([
     { name: "Total post reaction", count: 0 },
     { name: "Total post view", count: 0 },
@@ -34,8 +29,6 @@ export default function DashboardIndexPage({
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
   const router = useRouter();
-
-  console.log(userPosts);
 
   //route protection
   useEffect(() => {
@@ -154,7 +147,6 @@ export async function getServerSideProps({ req }) {
   return {
     props: {
       userPosts: _userPosts,
-      userComments: _userComments,
       userReactions: _userReactions?.reactions?.map((ur) => ur.postId) || [],
       userSavedPosts: _userSavedPosts.map((usp) => usp.postId) || [],
     },
