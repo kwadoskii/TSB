@@ -79,12 +79,12 @@ export default function Navbar({ hideSearch = false }) {
           {!user && (
             <div className="flex gap-2 items-center">
               <Link href="/enter" passHref>
-                <a className="text hover:bg-blue-100/90 items-center px-4 py-2 hover:text-blue-500 text-gray-600 font-medium border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
+                <a className="hover:bg-blue-100/90 items-center px-4 py-2 hover:text-blue-500 text-gray-600 font-medium border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
                   Log in
                 </a>
               </Link>
               <Link href="/enter?state=new" passHref>
-                <a className="text items-center px-4 py-2 text-blue-600 hover:text-white text-xl font-bold hover:bg-blue-600 bg-white border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out ring-1 ring-blue-600 md:flex md:text-sm">
+                <a className="items-center px-4 py-2 text-blue-600 hover:text-white font-bold hover:bg-blue-600 bg-white border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out ring-1 ring-blue-600 md:flex md:text-sm">
                   Create account
                 </a>
               </Link>
