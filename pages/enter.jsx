@@ -231,14 +231,12 @@ export default function EnterPage({ totalUsers }) {
                   hasLabel
                   name="Username or Email"
                   noVerticalMargin
-                  value={loginUsername}
                   onChange={(e) => setLoginUsername(e.target.value)}
                 />
                 <Input
                   hasLabel
                   type="password"
                   name="Password"
-                  value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
                 />
 
