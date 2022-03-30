@@ -277,10 +277,10 @@ const Info = ({ totalUsers }) => {
       <h2 className="text-[1.65rem] text-center font-bold">Welcome to TSB</h2>
       <p className="text-center text-gray-800">
         <Link passHref href="/">
-          <a className="text-blue-600 hover:underline">TSB</a>
+          <a className="text-blue-600 hover:underline">TSB Community</a>
         </Link>{" "}
-        Community has a total of{" "}
-        {<NumberFormat value={totalUsers} displayType="text" thousandSeparator />} amazing members
+        has a total of {<NumberFormat value={totalUsers} displayType="text" thousandSeparator />}{" "}
+        amazing members
       </p>
     </div>
   );

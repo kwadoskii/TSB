@@ -302,7 +302,7 @@ export default function PostPage({
 
                         {/* newsletter */}
                         <div
-                          className="prose prose-blue lg:prose-lg mb-3 mt-10 w-full border-gray-300"
+                          className="prose prose-blue lg:prose-lg mb-3 mt-5 w-full border-gray-300"
                           dangerouslySetInnerHTML={{
                             __html: md.render(post.content),
                           }}
