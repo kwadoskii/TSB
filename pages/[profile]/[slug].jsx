@@ -459,7 +459,7 @@ export async function getServerSideProps({ params, req }) {
 
     followingUser = _followingUsers.some((following) => following._id === post.author._id);
     liked = postLikes?.userId?.some((id) => id === userId);
-    saved = postSaves?.userId?.some((usp) => usp._id === userId);
+    saved = postSaves?.userId?.some((usp) => usp.user === userId);
   }
 
   const {
