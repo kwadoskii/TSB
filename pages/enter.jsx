@@ -110,8 +110,8 @@ export default function EnterPage({ totalUsers }) {
         <Navbar hideSearch />
 
         <div className="bg-gray-200">
-          <div className="flex flex-col items-center justify-center px-2 py-10">
-            <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
+          <div className="flex flex-col items-center justify-center mx-auto px-2 py-10 max-w-7xl">
+            <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-6/12">
               <Info totalUsers={totalUsers} />
 
               <div className="mt-5 px-2 md:px-10">
@@ -222,7 +222,7 @@ export default function EnterPage({ totalUsers }) {
 
       <div className="h-writeContent bg-gray-200">
         <div className="flex flex-col items-center justify-center px-2 py-10">
-          <div className="flex flex-col pb-6 py-4 w-full bg-white border border-gray-300 rounded-md md:w-5/12">
+          <div className="flex flex-col mx-auto pb-6 px-2 py-4 w-full max-w-7xl bg-white border border-gray-300 rounded-md md:w-4/12">
             <Info totalUsers={totalUsers} />
 
             <div className="mt-5 px-2 md:px-10">
@@ -271,7 +271,7 @@ export default function EnterPage({ totalUsers }) {
 
 const Info = ({ totalUsers }) => {
   return (
-    <div className="px-2 md:px-10">
+    <div className="mx-auto px-2 md:px-10 xl:w-2/3">
       <h2 className="text-[1.65rem] text-center font-bold">Welcome to TSB</h2>
       <p className="text-center text-gray-800">
         <Link passHref href="/">
