@@ -76,7 +76,11 @@ export default function SettingsPage({ userDetails, token }) {
       data: { status, message },
     } = await updateProfile(userDetailsToSave, token);
 
-    if (message) return toast.info(message.pop());
+    console.log(typeof message);
+    if (message) {
+      if (typeof message === "string") return toast.info(message);
+      return toast.info(message?.pop());
+    }
 
     if (status !== "success") return toast.error("Could not save details.");
 
