@@ -42,6 +42,8 @@ export default function SavedPage({ userSavedPosts }) {
         : filtered;
     }
 
+    filtered = filtered.sort((a, b) => new Date(b.savedDate) - new Date(a.savedDate));
+
     return { totalCount: filtered.length, data: filtered };
   };
 
@@ -60,9 +62,7 @@ export default function SavedPage({ userSavedPosts }) {
 
     setTags(
       [...tagLists]
-        .map((tag, i) => {
-          return { id: i + 1, name: tag };
-        })
+        .map((tag, i) => ({ id: i + 1, name: tag }))
         .sort((a, b) => {
           let fa = a.name.toLowerCase(),
             fb = b.name.toLowerCase();
@@ -129,14 +129,14 @@ export default function SavedPage({ userSavedPosts }) {
             <div className="col-span-full md:col-span-12 lg:col-span-13">
               <div className="px-5 py-4 bg-white border border-gray-200 rounded-md">
                 {Array.isArray(filteredPost) && filteredPost.length > 0 ? (
-                  filteredPost.map((p, i) => {
+                  filteredPost.map((fp, i) => {
                     return (
                       <div className="flex gap-4 mb-8" key={i}>
                         <Link passHref href="/kwadoskii">
                           <a>
                             <div className="relative w-8 h-8 border rounded-full cursor-pointer">
                               <Image
-                                src={p.author.profileImage}
+                                src={fp.author.profileImage}
                                 objectFit="cover"
                                 layout="fill"
                                 className="rounded-full"
@@ -146,27 +146,27 @@ export default function SavedPage({ userSavedPosts }) {
                         </Link>
 
                         <div className="flex flex-col flex-grow gap-1">
-                          <Link passHref href={`/${p.author.username}/${p.slug}`}>
+                          <Link passHref href={`/${fp.author.username}/${fp.slug}`}>
                             <a className="hover:text-blue-800">
-                              <h3 className="text-lg font-bold">{p.title}</h3>
+                              <h3 className="text-lg font-bold">{fp.title}</h3>
                             </a>
                           </Link>
 
                           <div className="flex flex-col gap-2 text-gray-500 text-sm md:flex-row md:items-center">
-                            <Link passHref href={`/${p.author.username}`}>
+                            <Link passHref href={`/${fp.author.username}`}>
                               <a className="hover:text-blue-800 text-gray-800">
                                 <p className="text-sm font-semibold">
-                                  {`${p.author?.firstname} ${p.author.lastname}`}
+                                  {`${fp.author?.firstname} ${fp.author.lastname}`}
                                 </p>
                               </a>
                             </Link>
                             <p>
                               <span className="hidden text-gray-300 md:inline">• </span>
-                              {" " + dayjs(p.createdAt).format("MMM DD 'YY") + " "}
+                              {" " + dayjs(fp.createdAt).format("MMM DD 'YY") + " "}
                               <span className="hidden text-gray-300 md:inline">• </span>
                             </p>
                             <div className="flex gap-2">
-                              {p.tags?.map((tag, i) => (
+                              {fp.tags?.map((tag, i) => (
                                 <Link passHref href={`/t/${tag.name}`} key={i}>
                                   <a className="hover:text-gray-900">
                                     <p key={tag._id}>{`#${tag.name}`}</p>
@@ -212,6 +212,8 @@ export async function getServerSideProps({ req }) {
   } = await savedPosts(req.cookies.token);
 
   return {
-    props: { userSavedPosts: userSavedPosts.map((usp) => usp.postId) },
+    props: {
+      userSavedPosts: userSavedPosts.map((usp) => ({ ...usp.postId, savedDate: usp.savedDate })),
+    },
   };
 }
