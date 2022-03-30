@@ -10,8 +10,10 @@ import hljs from "highlight.js";
 import Title from "../components/Title";
 import authService from "../apis/authService";
 import { create } from "../apis/post";
+import { getTags } from "../apis/tag";
+import { toast } from "react-toastify";
 
-export default function Write({ token }) {
+export default function Write({ token, tags }) {
   const titleRef = useRef(null);
   const router = useRouter();
   const contentDivRef = useRef(null);
@@ -26,8 +28,17 @@ export default function Write({ token }) {
   const [bannerBase64, setBannerBase64] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const [_tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [isFieldActive, setIsFieldActive] = useState(false);
+  const tagInputRef = useRef();
+
+  const [titleHeight, setTitleHeight] = useState();
+
   useEffect(() => {
     titleRef.current?.focus();
+    setTags(tags);
+    setTitleHeight(titleRef.current?.style.height);
   }, []);
 
   //route protection
@@ -48,18 +59,72 @@ export default function Write({ token }) {
   const handleSavePost = async () => {
     const contents = {
       title,
-      tags: ["61b292f38561f0c5550ca78c", "61e19280ea75da2f52656706"],
+      tags: selectedTags.map((st) => st._id),
       content,
       banner: bannerLink,
-      // author: authService.getCurrentUser()._id,
     };
 
     const { data, status } = await create(contents, token);
 
     if (status === 201 && data.status === "success")
       return router.push(authService.getCurrentUser().username + "/" + data.data.slug);
-    console.log(data);
+
+    toast.info("Something went wrong, please retry.");
   };
+
+  const selectTag = (tag) => {
+    if (selectedTags.length < 4) {
+      const oldSelectedTags = selectedTags;
+      oldSelectedTags.push(tag);
+
+      let oldTags = _tags;
+      oldTags = oldTags.filter((oldTag) => oldTag._id !== tag._id);
+
+      setPostTags("");
+      setTags([...oldTags]);
+      setSelectedTags([...oldSelectedTags]);
+      tagInputRef.current?.focus();
+    }
+  };
+
+  const removeSelectedTag = (tag) => {
+    let oldSelectedTags = selectedTags;
+    let oldTags = _tags;
+
+    oldSelectedTags = oldSelectedTags.filter((oldTag) => oldTag._id !== tag._id);
+    oldTags.push(tag);
+    oldTags.sort((a, b) => {
+      let fa = a.name.toLowerCase(),
+        fb = b.name.toLowerCase();
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
+
+    setTags([...oldTags]);
+    setSelectedTags([...oldSelectedTags]);
+    tagInputRef.current?.focus();
+  };
+
+  const getData = () => {
+    let value = postTags.toLowerCase().trim().replace(/\\/g, "");
+    let filtered = isFieldActive && selectedTags.length === 4 ? _tags : [];
+
+    if (value || isFieldActive) {
+      filtered = _tags.filter((t) => {
+        if (t.name.toLowerCase().startsWith(postTags.toLowerCase()) === true) return t;
+      });
+    }
+
+    return { data: filtered };
+  };
+
+  const { data: filteredData } = getData();
 
   return loading ? null : (
     <>
@@ -190,41 +255,67 @@ export default function Write({ token }) {
                     )}
                   </div>
 
-                  <div className="flex flex-col flex-grow gap-1 md:gap-3">
+                  <div className="relative flex flex-col flex-grow gap-1 md:gap-3">
                     <textarea
                       ref={titleRef}
+                      style={{ height: titleHeight }}
                       type="text"
                       placeholder="New post title here..."
-                      className="placeholder-gray-400 h-[40px] md:h-[66px] text-2xl font-extrabold leading-snug rounded-md outline-none overflow-y-hidden resize-none md:text-5xl"
+                      className="placeholder-gray-400 h-[40px] md:min-h-[60px] text-2xl font-extrabold leading-snug rounded-md outline-none resize-none md:text-5xl"
                       data-gramm_editor="false"
-                      value={title}
                       maxLength={80}
                       onChange={(e) => {
                         setTitle(e.target.value);
 
                         //used below code to make the textarea dynamic
-                        // titleRef.current.style.height = minHeight;
-                        titleRef.current.style.minHeight = titleRef.current.clientHeight + "px";
-                        titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+                        // titleRef.current.style.minHeight = titleRef.current.clientHeight + "px";
+                        // titleRef.current.style.height = titleRef.current.scrollHeight + "px";
+                        setTitleHeight(titleRef.current.scrollHeight + "px");
                       }}
                     />
 
-                    <input
-                      type="text"
-                      className="placeholder-gray-400 font-mono rounded-md outline-none"
-                      placeholder="Add up to 4 tags..."
-                      value={postTags}
-                      onChange={(e) => {
-                        setPostTags(e.target.value);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === ",") {
-                          e.preventDefault();
-                          setPostTags(postTags + ", ");
-                        }
-                        if (e.key === " " || e.key === "#") e.preventDefault();
-                      }}
-                    />
+                    <div className="relative flex flex-wrap gap-y-1.5 w-full">
+                      {selectedTags.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {selectedTags?.map((t, i) => MiniSelectedTag(i, t, removeSelectedTag))}
+                        </div>
+                      )}
+
+                      <input
+                        type="text"
+                        className="placeholder-gray-400 flex-1 pl-2 font-mono rounded-md outline-none"
+                        placeholder="Add up to 4 tags..."
+                        value={postTags}
+                        onChange={(e) => {
+                          setPostTags(e.target.value);
+                        }}
+                        onKeyDown={(e) => {
+                          // if (e.key === ",") {
+                          //   e.preventDefault();
+                          //   setPostTags(postTags + ", ");
+                          // }
+                          if (e.key === " " || e.key === "#" || e.key === ",") e.preventDefault();
+                        }}
+                        onBlur={() => setIsFieldActive(false)}
+                        onFocus={() => setIsFieldActive(true)}
+                        ref={tagInputRef}
+                      />
+
+                      <ul
+                        className={`bg-white rounded mt-1 overflow-hidden max-h-80 shadow-md border-gray-400 absolute md:top-8 top-12 overflow-y-hidden p-1 ${
+                          selectedTags.length < 4 && isFieldActive ? "" : " hidden "
+                        }`}
+                      >
+                        {/* <ul
+                        className={`bg-white rounded mt-1 overflow-hidden max-h-80 w-full shadow-md overflow-y-auto border-gray-400 absolute ${
+                          selectedTags.length < 4 && isFieldActive ? "" : " hidden p-1"
+                        }`}
+                      > */}
+                        {Array.isArray(filteredData) &&
+                          filteredData.length > 0 &&
+                          filteredData?.map((t, i) => SuggestedTag(i, selectTag, t))}
+                      </ul>
+                    </div>
 
                     <div
                       className="flex-grow h-full"
@@ -233,7 +324,7 @@ export default function Write({ token }) {
                     >
                       <textarea
                         className="placeholder-gray-400 flex-grow mt-3 w-full h-full placeholder-shown:font-mono text-lg rounded-md outline-none resize-none"
-                        data-gramm_editor="false"
+                        // data-gramm_editor="false"
                         onChange={(e) => {
                           setContent(e.target.value);
                           setMinHeight(contentRef.current.scrollHeight + "px");
@@ -241,7 +332,6 @@ export default function Write({ token }) {
                         placeholder="Write your post content here..."
                         ref={contentRef}
                         type="text"
-                        value={content}
                       />
                     </div>
                   </div>
@@ -264,8 +354,8 @@ export default function Write({ token }) {
                 <div className="flex flex-col mt-8 mx-auto w-10/12">
                   <h2 className="text-black text-5xl font-extrabold">{title}</h2>
                   <div className="flex gap-2 mb-8 mt-4 text-gray-500 text-sm">
-                    {postTags.split(",").map((tag) => {
-                      tag = tag.trim().toLowerCase();
+                    {selectedTags.map((tag) => {
+                      tag = tag.name.trim().toLowerCase();
                       return tag !== "" ? (
                         <span className="text-gray-600">
                           <span className="opacity-85 text-gray-400">#</span>
@@ -308,10 +398,54 @@ export default function Write({ token }) {
   );
 }
 
+function SuggestedTag(i, selectTag, t) {
+  return (
+    <li
+      className="hover:bg-gray-200/70 duration-50 group px-3 py-2.5 rounded hover:shadow cursor-pointer transition-all ease-in-out"
+      key={i}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        selectTag(t);
+      }}
+    >
+      <p className="text-base font-bold">{"#" + t.name}</p>
+      <p className="line-clamp-2 text-sm leading-tight to-gray-800">
+        {t.description && t.description}
+      </p>
+
+      <div className="divide-gray-200/70 divide-y"></div>
+    </li>
+  );
+}
+
+function MiniSelectedTag(i, t, removeSelectedTag) {
+  return (
+    <div className="bg-lime-300/20 flex rounded shadow overflow-hidden" key={i}>
+      <div className="flex gap-0.5 items-center">
+        <p className="flex gap-0.5 px-2 py-1 text-sm">
+          <span className="text-gray-500">#</span> {t.name}
+        </p>
+        <div
+          className="text-slate-800 bg-red-600/60 flex-1 px-2 py-1 hover:text-white font-semibold hover:bg-red-900 cursor-pointer"
+          onClick={() => removeSelectedTag(t)}
+        >
+          <span>x</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export async function getServerSideProps({ req: { cookies } }) {
   const token = cookies.token;
 
+  const {
+    data: { data: tags },
+  } = await getTags();
+
   return {
-    props: { token },
+    props: { token, tags },
   };
 }
