@@ -27,13 +27,16 @@ export default function Navbar({ hideSearch = false }) {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    router.push({ pathname: "/search", query: { q: searchValue } });
+    router.push({
+      pathname: "/search",
+      query: { q: searchValue },
+    });
   };
 
   const handleInputChange = (e) => setSearchValue(e.target.value);
 
   return (
-    <nav className="z-10 border-b border-gray-300 select-none">
+    <nav className="z-10 px-1.5 border-b border-gray-300 select-none">
       <div className="h-[56px] relative flex gap-2 justify-between m-0 mx-auto px-1 py-1 w-full max-w-7xl bg-white lg:px-6 lg:py-5">
         <div className="flex flex-1 gap-2 items-center justify-start">
           <Link href="/">
@@ -76,12 +79,12 @@ export default function Navbar({ hideSearch = false }) {
           {!user && (
             <div className="flex gap-2 items-center">
               <Link href="/enter" passHref>
-                <a className="text hover:bg-blue-100/90 hidden items-center px-4 py-3 h-10 hover:text-blue-500 text-gray-600 font-medium border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
+                <a className="text hover:bg-blue-100/90 items-center px-4 py-2 hover:text-blue-500 text-gray-600 font-medium border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out md:flex md:text-sm">
                   Log in
                 </a>
               </Link>
               <Link href="/enter?state=new" passHref>
-                <a className="text hidden items-center px-4 py-3 h-10 text-blue-600 hover:text-white text-xl font-bold hover:bg-blue-600 bg-white border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out ring-1 ring-blue-600 md:flex md:text-sm">
+                <a className="text items-center px-4 py-2 text-blue-600 hover:text-white text-xl font-bold hover:bg-blue-600 bg-white border-none rounded-md outline-none cursor-pointer transition duration-100 ease-out ring-1 ring-blue-600 md:flex md:text-sm">
                   Create account
                 </a>
               </Link>
