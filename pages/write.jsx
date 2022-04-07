@@ -260,6 +260,7 @@ export default function Write({ token, tags }) {
                       ref={titleRef}
                       style={{ height: titleHeight }}
                       type="text"
+                      value={title}
                       placeholder="New post title here..."
                       className="placeholder-gray-400 h-[40px] md:min-h-[60px] text-2xl font-extrabold leading-snug rounded-md outline-none resize-none md:text-5xl"
                       data-gramm_editor="false"
@@ -332,6 +333,7 @@ export default function Write({ token, tags }) {
                         placeholder="Write your post content here..."
                         ref={contentRef}
                         type="text"
+                        value={content}
                       />
                     </div>
                   </div>
