@@ -51,6 +51,11 @@ const getCurrentUser = (token = "") => {
   }
 };
 
+const forgotPassword = (email) => api.post(`${apiEndpoint}/forgotPassword`, { email });
+
+const resetPassword = (resetPasswordToken, password) =>
+  api.post(`${apiEndpoint}/resetPassword`, { resetPasswordToken, password });
+
 const getJwt = () => localStorage.getItem(tokenKey) || Cookies.get(tokenKey);
 
 export default {
@@ -59,4 +64,6 @@ export default {
   login,
   loginWithJwt,
   logout,
+  forgotPassword,
+  resetPassword,
 };

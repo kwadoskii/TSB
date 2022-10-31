@@ -303,7 +303,7 @@ export default function Write({ token, tags }) {
                       />
 
                       <ul
-                        className={`bg-white rounded mt-1 overflow-hidden max-h-80 shadow-md border-gray-400 absolute md:top-8 top-12 overflow-y-hidden p-1 ${
+                        className={`bg-white rounded mt-1 overflow-hidden max-h-80 shadow-md border-gray-400 absolute md:top-8 top-12 overflow-y-scroll p-1 ${
                           selectedTags.length < 4 && isFieldActive ? "" : " hidden "
                         }`}
                       >

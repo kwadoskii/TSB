@@ -23,9 +23,9 @@ export default function Comment({ comment }) {
   };
 
   const commentMenuData = [
-    { name: "Copy link", url: "/copy" },
-    { name: "Settings", url: "/settings" },
-    { name: "Report abuse", url: "/report_abuse" },
+    // { name: "Copy link", url: "/copy" },
+    // { name: "Settings", url: "/settings" },
+    // { name: "Report abuse", url: "/report_abuse" },
     { name: "Edit", url: "/edit" },
     { name: "Delete", url: "/delete" },
   ];
@@ -75,10 +75,10 @@ export default function Comment({ comment }) {
   }, []);
 
   return (
-    <div className="my-3 p-0 bg-white">
+    <div className="my-1.5 p-0 bg-white">
       <details className="relative" open>
         <summary
-          className={`cursor-pointer text-gray-500 italic text-sm bg-gray-50 p-2 rounded-md ${
+          className={`cursor-pointer text-gray-500 italic text-sm bg-gray-50 p-1.5 rounded-md ${
             isOpen && "absolute top-10 bg-transparent left-0 py-0"
           }`}
           onClick={() => {
@@ -90,7 +90,7 @@ export default function Comment({ comment }) {
             {!isOpen && `${comment.userId.firstname + " " + comment.userId.lastname}`}
           </span>
         </summary>
-        <div className="flex gap-1">
+        <div className="flex gap-1 mt-1.5">
           <Link passHref href={`/${comment.userId.username}`}>
             <a className="h-0">
               <div className="relative left-0 top-0 w-8 h-8">
@@ -137,11 +137,9 @@ export default function Comment({ comment }) {
                       <ul>
                         {commentMenuData.map((menu, i) => (
                           <Link passHref href={menu.url} key={i}>
-                            <a>
-                              <li className="p-2 hover:text-purple-500 hover:bg-gray-100 rounded cursor-pointer">
-                                {menu.name}
-                              </li>
-                            </a>
+                            <li className="p-2 hover:text-purple-500 hover:bg-gray-100 rounded cursor-pointer">
+                              {menu.name}
+                            </li>
                           </Link>
                         ))}
                       </ul>
@@ -157,7 +155,7 @@ export default function Comment({ comment }) {
               </div>
             </div>
 
-            <div className="flex mb-5 mt-1 px-1.5 space-x-1">
+            <div className="flex mb-2 px-1.5 space-x-1">
               <div
                 className={`flex items-center p-1 px-1.5 text-gray-600 hover:text-gray-700 text-sm hover:bg-gray-50  rounded-md cursor-pointer space-x-1 md:px-2 ${
                   liked && "bg-red-100"

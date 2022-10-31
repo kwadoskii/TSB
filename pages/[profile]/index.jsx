@@ -89,6 +89,7 @@ export default function ProfilePage({
                   layout="fill"
                   objectFit="cover"
                   className="rounded-full"
+                  priority={true}
                 />
               </div>
 
