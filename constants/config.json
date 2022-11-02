@@ -10,6 +10,8 @@
   ],
   "appName": {
     "long": "The Story Board",
-    "short": "TSB"
+    "short": "TSB",
+    "description": "A forum to write, learn and earn",
+    "keywords": ["news", "tech", "politics", "football", "events", "and more."]
   }
 }
